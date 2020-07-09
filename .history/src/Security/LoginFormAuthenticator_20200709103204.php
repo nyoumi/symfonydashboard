@@ -33,9 +33,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     private $csrfTokenManager;
     private $passwordEncoder;
 
-    private $apikey ;
-
-
     public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
@@ -72,44 +69,29 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
-        if (empty($credentials["password"])) {
-            throw new CustomUserMessageAuthenticationException('Le mot de passe ne peut être vide!');
 
-        }
-        if (empty($credentials["phone_number"])) {
-            throw new CustomUserMessageAuthenticationException('Le numéro de téléphone  ne peut être vide!');
+        $salt='';
+        $roles=[];
 
-        }
-        if (empty($credentials["country_code"])) {
-            throw new CustomUserMessageAuthenticationException('Le code pays  ne peut être vide!');
 
-        }
-        if (!is_int( (int)$credentials["country_code"] )) {
-            throw new CustomUserMessageAuthenticationException('Le code pays  doit être un nombre!');
+        $login= new WebserviceUser($credentials["country_code"] ,$credentials["phone_number"],$credentials["password"]  ,$salt, $roles);
 
-        }
-
-        $login= new WebserviceUser();
-        //$credentials["country_code"] ,$credentials["phone_number"],$credentials["password"]  ,$salt, $roles
-        $login->setCountryCode($credentials["country_code"] );
-        $login->setPhoneNumber($credentials["phone_number"]);
-        $login->setPassword($credentials["password"]);
-
-        $user= $userProvider->loadUserByUsername($login);
+        $user= $userProvider->refreshUser($login);
 
         if (!$user) {
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Identifiant ou mot de passe incorrect!');
         }
-        var_dump($user);
-
 
         return $user;
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-
+        var_dump($user);
+        if (!$user instanceof WebserviceUser) {
+            return false;
+        }
         return true;
     }
 
@@ -127,7 +109,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('home'));
+        return new RedirectResponse($this->urlGenerator->generate('homezz'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 

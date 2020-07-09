@@ -17,7 +17,7 @@ security:
             form_login:
                 login_path: login
                 check_path: login
-                #failure_path: /somewhere
+                failure_path: /login
                 default_target_path: /dashboard
             logout:
                 path: app_logout
@@ -38,7 +38,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, roles: [IS_AUTHENTICATED_FULLY, ROLE_USER] }
+        - { path: ^/somewhere, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: [IS_AUTHENTICATED_FULLY] }
 
         # - { path: ^/profile, roles: ROLE_USER }
 
@@ -47,6 +48,7 @@ security:
         
     role_hierarchy:
         ROLE_CUSTOMER:    ROLE_USER
+        ROLE_MOBILE_CLIENT: ROLE_USER
         ROLE_TECH_AGENT:  ROLE_USER
         ROLE_COM_AGENT:   ROLE_USER
         ROLE_BUSINESS:    ROLE_CUSTOMER

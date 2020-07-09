@@ -29,10 +29,8 @@ class DashboardController extends Controller
     }
     public function make_get_request(array $parameters,array $header,$endpoint){
         $this->site_url = $this->getParameter('app.site_url');
-        $this->apikey = $this->getParameter('app.apikey');
 
-
-
+        
         $params="";
         foreach($parameters as $key=>$value)
         {
@@ -169,7 +167,7 @@ class DashboardController extends Controller
        }
        
 
-       //$this->get('twig')->addGlobal('App.today', date('Y-m-d'));
+       $this->get('twig')->addGlobal('App.today', date('Y-m-d'));
 
         return $this->render('pages/dashboard.html.twig', [
             'total_balance' =>$this->total_balance,
