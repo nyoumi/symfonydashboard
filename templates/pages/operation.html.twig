@@ -1,0 +1,195 @@
+{% extends "base.html.twig" %}
+
+{% block navbar %}
+   {% include "body/navbar.html.twig" ignore missing %}
+{% endblock %}
+
+{% block sidebar %}
+   {% include "body/sidebar.html.twig" ignore missing %}
+{% endblock %}
+
+{% block content_header %}
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Operation</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Operation</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+{% endblock %}
+
+{% block content_main %}
+<div class="content">
+    <div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;" >
+        <div class="card-header d-flex justify-content-between" style="align-items: center;">
+            <h3 class="card-title" style="margin: 1rem auto 1rem; align-self: center;">Send To&nbsp;&nbsp;<span id="country_name"></span></h3>
+            <p id="country_img"></p>
+            <div class="send-feedback m-2" style="position: absolute;width: 93%;"></div>
+        </div>
+        
+        <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">								  
+            <small id="allow_reset-feedback"></small>
+            <form class="form" method="post" style="margin: auto;" action="http://api.daticash.com/api/mobilemoney/new">
+                <input type="hidden" name="type" id="type" value="withdraw">
+                <input type="hidden" name="imput_account_ref" id="imput_account_ref" value="default">
+                <input type="hidden" name="mode" id="mode" value="mobilemoney">
+
+                <p class="waiting_text"></p>
+                <div class="row">				
+                <input type="hidden" name="sender_country_code" id="sender_country_code" value="1">
+                    <div class="col-md-6">
+                    <div class="form-group form-group-sender_phone">
+                    <label for="sender_phone" style="width: 100%; margin-bottom: .5rem;">
+                        <font style="vertical-align: inherit;">Sender Phone&nbsp</font>
+                        <small id="sender_phone-feedback" style="display: block;"></small>											
+                    </label>
+                        <input type="tel" name="sender_phone" id="sender_phone" class="form-control">
+                    </div>
+                    </div>
+                    <div class="col-md-6">
+                    <div class="form-group form-group-recipient_phone">
+                        <label for="recipient_phone" style="width: 100%; margin-bottom: .5rem;">
+                            <font style="vertical-align: inherit;">Recipient Phone&nbsp</font>
+                            <small id="recipient_phone-feedback" style="display: block;"></small>											
+                        </label>							
+                        <input type="hidden" name="recipient_country_code" id="recipient_country_code" value="237">
+                        <input type="text" name="recipient_phone" id="recipient_phone" class="form-control">
+                    </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                    <div class="form-group ">
+                        <label for="amount_sent" style="width: 100%; margin-bottom: .5rem;">
+                            <font style="vertical-align: inherit;">Send Amount&nbsp <sapn id="currency_sent_txt">(USD)</sapn></font>
+                            <small id="amount_sent-feedback" style="display: block;"></small>											
+                        </label>
+                        <input type="text" name="amount_sent" id="amount_sent" class="form-control sent" value="">
+                        <input type="hidden" name="currency_sent" id="currency_sent" value="USD">
+                    </div>
+                    </div>						  
+                    <div class="col-md-2" id="div_wait_convertion">
+                    <span id="span_wait_convertion" style="text-align: -webkit-center; align-items: center;"></span>
+                    <img id="mannuel_convert" src="'.DATI_PLUGIN_URL.'/img/fleches.png" style="position: relative;width: 70px; cursor: pointer;" /> 
+                    </div>
+                    <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="amount_received" style="width: 100%; margin-bottom: .5rem;">
+                            <font style="vertical-align: inherit;">Receive Amount&nbsp <sapn id="currency_received_txt">(XAF)</sapn></font>
+                            <small id="amount_received-feedback" style="display: block;"></small>											
+                        </label>
+                        <input type="text" name="amount_received" id="amount_received" class="form-control receive" value="100">
+                        <input type="hidden" name="currency_received" id="currency_received" value="XAF">
+                    </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                    <div class="form-group ">
+                        <label for="imput_reason">What is the reason for the transfer ? (optional)</label>
+                        <input type="text" name="imput_reason" id="imput_reason" class="form-control sent" maxlength="30" placeholder="This message will be sent to the receiver">							  						
+                    </div>
+                    </div>	
+                </div>
+                <div class="card mt-2 mb-2">
+                    <div class="card-body p-1 m-0 font-weight-bold">
+                    <div class="float-left">Send Amount</div>
+                    <div class="float-right"><span id="span_amount_sent_currency">$</span>&nbsp;<span id="span_amount_sent">0.0</span></div>
+                    </div>
+                    <div class="card-body p-1 m-0 font-weight-bold">
+                    <div class="float-left">Fees</div>
+                    <input type="hidden" name="fees" id="fees" value="0.0">
+                    <div class="float-right"><span id="span_fees_currency">$</span>&nbsp;<span id="span_fees">0.0</span></div>
+                    </div>
+                    <div class="card-body m-0 p-1 font-weight-bold">
+                    <div class="float-left">Total Pay:</div>
+                    <input type="hidden" name="total_pay" id="total_pay" value="0.0">	
+                    <div class="float-right"><span id="span_total_pay_currency">$</span>&nbsp;<span id="span_total_pay">0.0</span></div>
+                    </div>
+                    <div class="card-body m-0 p-1 font-weight-bold">
+                    <div class="float-left">Your Recipient Gets</div>
+                    <div class="float-right"><span id="span_amount_received_currency">$</span>&nbsp;<span id="span_amount_received">0.0</span></div>
+                    </div>
+                </div>
+                <div class="mt-2 mb-2">											
+                    <button type="button" class="daticash_btn btn-daticash btn-block sendBtn" style="background-color:#1B5368">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+    $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- ChartJS -->
+    <script src="{{ asset('adminLTE/plugins/chart.js/Chart.min.js') }}"></script>
+    <!-- Sparkline -->
+    <script src="{{ asset('adminLTE/plugins/sparklines/sparkline.js') }}"></script>
+    <!-- JQVMap -->
+    <script src="{{ asset('adminLTE/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+    <script src="{{ asset('adminLTE/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="{{ asset('adminLTE/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+    <!-- daterangepicker -->
+    <script src="{{ asset('adminLTE/plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('adminLTE/plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="{{ asset('adminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    <!-- Summernote -->
+    <script src="{{ asset('adminLTE/plugins/summernote/summernote-bs4.min.js') }}"></script>
+    <!-- overlayScrollbars -->
+    <script src="{{ asset('adminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{{ asset('adminLTE/dist/js/pages/dashboard.js') }}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script> 
+
+
+<script src="plugins/jquery/jquery.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+    <!-- Waves Effect Plugin Js -->
+    <script src="plugins/node-waves/waves.js"></script>
+
+    <!-- SweetAlert Plugin Js -->
+    <script src="plugins/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Custom Js -->
+    <script src="js/pages/ui/dialogs.js"></script>
+<!--////////////////////////////////////////////////////////////////////////////////////////////////////////-->	
+
+	
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.min.js"></script>
+
+<!-- demo -->
+<script src="dist/js/demo.js"></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+<script src="js/keypad/jquery.plugin.min.js"></script>
+<script src="js/keypad/jquery.keypad.js"></script>	
+<script src="js/intlTelInput/intlTelInput.js"></script>
+<script src="js/confirm-user.modal.js"></script>
+
+
+{% endblock %}
+    

@@ -1,0 +1,172 @@
+{# {% set _transactions = transactions %} #}
+    {%
+        set _categories = [
+            {
+            'id': "12",    
+            'label': "Transfert d'argent",
+            'services':[ 
+                    {
+                    'id': '14',
+                    'label': 'Withdraw',
+                    'description': '',
+                    'status': '1'
+                    },
+                    {
+                    'id': '15',
+                    'label': 'Deposit',
+                    'description': '',
+                    'status': '1'
+                    },
+                ]
+            },
+            {
+            'id': "13", 
+            'label': "Achat de Credit/Internet",
+            'services':[ 
+                    {
+                    'id': '16',
+                    'label': 'Credit',
+                    'description': '',
+                    'status': '1'
+                    },
+                    {
+                    'id': '18',
+                    'label': 'Internet 100 Mo',
+                    'description': 'Forfait internet 100 Mo valable 24 Heures',
+                    'status': '1'
+                    },
+                    {
+                    'id': '19',
+                    'label': 'Internet 1.8 Go',
+                    'description': 'Forfait internet 1.8 Go valable 7 jours',
+                    'status': '1'
+                    },
+                ]
+            },
+            {
+            'id': "14", 
+            'label': "Paiement de factures",
+            'services': [
+                    {
+                    'id': '20',
+                    'label': 'ENEO',
+                    'description': '',
+                    'status': '1'
+                    },
+                    {
+                    'id': '21',
+                    'label': 'CANAL+',
+                    'description': '',
+                    'status': '1'
+                    },
+                    {
+                    'id': '22',
+                    'label': 'CAMWATER',
+                    'description': 'Forfait internet 100 Mo valable 24 Heures',
+                    'status': '1'
+                    },
+                    {
+                    'id': '23',
+                    'label': 'IMPOTS',
+                    'description': 'Forfait internet 1.8 Go valable 7 jours',
+                    'status': '1'
+                    },
+                ]
+            },
+            {
+            'id': "15", 
+            'label': "Achat de Service/Produit",
+            'services': [
+                    {
+                    'id': '24',
+                    'label': 'Assurance',
+                    'description': '',
+                    'status': '1'
+                    },
+                    {
+                    'id': '25',
+                    'label': 'Bouquet TV',
+                    'description': '',
+                    'status': '1'
+                    },
+                    {
+                    'id': '26',
+                    'label': 'Frais Scolaire',
+                    'description': '',
+                    'status': '1'
+                    }
+                ]
+            },
+        ]
+    %}  
+  
+  
+  
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link">
+       <!--<img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+           style="opacity: .8">-->
+      <span class="brand-text font-weight-light">DatiCash System</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+		  <li class="nav-item">
+			<a href="{{ path('dashboard.index') }}" class="nav-link {% if current_menu is defined and current_menu == 'dashboard' %} active {% endif %}">
+			  <i class="fas fa-tachometer-alt nav-icon"></i>
+			  
+			  <p> Dashboard</p>
+			</a>
+		  </li>	
+          <li class="nav-item">
+            <a href="{{ path('history.index') }}" class="nav-link {% if current_menu is defined and current_menu == 'history' %} active {% endif %}">
+              <i class="nav-icon fas fa-th"></i>
+              <p> History</p>
+            </a>
+          </li>	
+          <li class="nav-item has-treeview {% if current_menu is defined and current_menu == 'operation' %}menu-open{% endif %}">
+            <a href="#" class="nav-link {% if current_menu is defined and current_menu == 'operation' %} active {% endif %}">
+              <i class="nav-icon fas fa-circle"></i>
+              <p>
+                Operations
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+            {% for categorie in _categories %}		
+              <li class="nav-item has-treeview {% if category_id is defined and category_id == categorie.id %} menu-open {% endif %}">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    {{ categorie.label }} 
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                {% for service in categorie.services %}
+                  <li class="nav-item">
+                    <a href="{{ path('operation.index', {'cid': categorie.id, 'sid': service.id}) }}" class="nav-link {% if service_id is defined and service_id == service.id %} active {% endif %}">
+                      <i class="far fa-dot-circle nav-icon"></i>
+                      <p>{{ service.label }}</p>
+                    </a>
+                  </li>
+                {% endfor %}
+                </ul>
+              </li>
+            {% endfor %}  
+            </ul>
+          </li>
+
+		</ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>

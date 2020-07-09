@@ -1,0 +1,332 @@
+{% set _balance = total_balance %}
+{% set _withdraw_amount = withdraw_amount %}
+{% set _deposit_amount = deposit_amount %}
+{% set _currency = 'XAF' %}
+
+ {% set _accounts = accounts %} 
+  {#    {%
+      set _accounts = [
+            {
+            'id': 12,
+            'name': 'Default',
+            'balance': '250000',
+            'description': 'The DatiCash Default Account'
+            },
+            {
+            'id': 14,
+            'name': 'Easy School',
+            'balance': '122000',
+            'description': 'My School application account.'
+            },
+        ] 
+    %} #}
+    
+	
+ {% set _transactions = transactions %} 
+   {#  {%
+        set _transactions = [
+            {
+            'id': 'TR9842',
+            'type': 'Withdraw',
+            'amount': '50000',
+            'status': 'Complete',
+            'sender_account_ref': 'Default',
+            'receive_account_ref': 'Default',
+            'date': '03/06/2020',
+            'time': '11:55'
+            },
+            {
+            'id': 'TR2513',
+            'type': 'Withdraw',
+            'amount': '150000',
+            'status': 'failed',
+            'sender_account_ref': 'Easy School',
+            'receive_account_ref': 'Default',
+            'date': '20/06/2020',
+            'time': '15:25'
+            },
+            {
+            'id': 'TR2253',
+            'type': 'Deposit',
+            'amount': '35000',
+            'status': 'Processing',
+            'sender_account_ref': 'Default',
+            'receive_account_ref': 'Default',
+            'date': '30/06/2020',
+            'time': '22:03'
+            }
+        ]
+    %}	#}
+
+{% extends "base.html.twig" %}
+
+{% block navbar %}
+   {% include "body/navbar.html.twig" ignore missing %}
+{% endblock %}
+
+{% block sidebar %}
+   {% include "body/sidebar.html.twig" ignore missing %}
+{% endblock %}
+
+{% block content_header %}
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Dashboard</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+{% endblock %}
+
+{% block content_main %}
+	<!-- Main content -->
+	<section class="content">
+	  <div class="container-fluid">
+		<!-- Small boxes (Stat box) -->
+		<div class="row">
+		  <div class="col-lg-4 col-6">
+			<!-- small box -->
+			<div class="small-box bg-info">
+			  <div class="inner">
+				<h3>{{ _balance }}<sup style="font-size: 20px">{{ _currency }}</sup></h3>
+				<p>Balance</p>
+			  </div>
+			  <div class="icon">
+				<i class="ion ion-bag"></i>
+			  </div>
+			  <a href="#" class="small-box-footer">TopUp Now <i class="fas fa-arrow-circle-down"></i></a>
+			</div>
+		  </div>
+		  <!-- ./col -->
+		  <div class="col-lg-4 col-6">
+			<!-- small box -->
+			<div class="small-box bg-success">
+			  <div class="inner">
+				<h3>{{ _withdraw_amount }}<sup style="font-size: 20px">{{ _currency }}</sup></h3>
+
+				<p>Deposit</p>
+			  </div>
+			  <div class="icon">
+				<i class="fa fa-arrow-down"></i>
+			  </div>
+			  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+			</div>
+		  </div>
+		  <!-- ./col -->
+		  <div class="col-lg-4 col-6">
+			<!-- small box -->
+			<div class="small-box bg-warning">
+			  <div class="inner">
+				<h3>{{ _deposit_amount }}<sup style="font-size: 20px">{{ _currency }}</sup></h3>
+
+				<p>Withdraw</p>
+			  </div>
+			  <div class="icon">
+				<i class="fa fa-arrow-up"></i>
+			  </div>
+			  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+			</div>
+		  </div>
+		</div>
+		<!-- /.row -->
+		
+		<!-- Main row -->
+		<div class="row">
+		  <!-- Left col -->
+		  <div class="col-md-4">
+			<!-- PRODUCT LIST -->
+			<div class="card">
+			  <div class="card-header">
+				<h3 class="card-title">My Accounts</h3>
+
+				<div class="card-tools">
+				  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+					<i class="fas fa-minus"></i>
+				  </button>
+				  <button type="button" class="btn btn-tool" data-card-widget="remove">
+					<i class="fas fa-times"></i>
+				  </button>
+				</div>
+			  </div>
+			  <!-- /.card-header -->
+			  <div class="card-body p-0">
+				<ul class="products-list product-list-in-card pl-2 pr-2">
+				{% for account in _accounts %}
+				  <li class="item">
+					<div class="product-img">
+					  <img src="{{ asset('adminLTE/dist/img/default-150x150.png') }}" alt="Product Image" class="img-size-50">
+					</div>
+					<div class="product-info">
+					  <a id="{{ account.id }}" href="javascript:void(0)" class="product-title">{{ account.name }}
+						<span class="badge badge-info float-right">{{ account.balance }}<sup style="font-size: 10px">{{ _currency }}</sup></span></a>
+					  <span class="product-description">
+						{{ account.description }}
+					  </span>
+					</div>
+				  </li>
+				{% endfor %} 
+				</ul>
+			  </div>
+			  <!-- /.card-body -->
+              <div class="card-footer text-center">
+			    <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Add account</a>
+              </div>
+			  <!-- /.card-footer -->
+			</div>
+			<!-- /.card -->		  
+		  </div>
+		  <!-- /.col -->
+		  <!-- Left col -->
+		  <div class="col-md-8">
+			<!-- TABLE: LATEST ORDERS -->
+			<div class="card">
+			  <div class="card-header border-transparent">
+				<h3 class="card-title">Latest Transactions</h3>
+
+				<div class="card-tools">
+				  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+					<i class="fas fa-minus"></i>
+				  </button>
+				  <button type="button" class="btn btn-tool" data-card-widget="remove">
+					<i class="fas fa-times"></i>
+				  </button>
+				</div>
+			  </div>
+			  <!-- /.card-header -->
+			  <div class="card-body p-0">
+				<div class="table-responsive">
+				  <table class="table m-0 table table-striped">
+					<thead>
+                    <tr>
+					  <th>ID</th>
+					  <th>Type</th>
+					  <th>Status</th>
+					  <th>Sender</th>
+					  <th>Receiver</th>
+					  <th>Date</th>
+                    </tr>
+					</thead>
+					<tbody>
+					{% for transaction in _transactions %}
+						<tr>
+						  <td><a href="pages/examples/invoice.html">{{ transaction.id }}</a></td>
+						  <td>
+                          {% if (transaction.type)|lower == 'withdraw' %}
+ 									<span class="badge badge-warning">Withdraw</span>
+									  <small class="text-warning mr-1">
+										<i class="fas fa-arrow-up"></i>
+									  </small><br>
+									  {{ transaction.amount }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                             
+                                {% elseif (transaction.type)|lower == 'deposit' %}
+                                            <span class="badge badge-success">Deposit</span>
+                                            <small class="text-success mr-1">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </small><br>
+                                            {{ transaction.amount }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                              
+                                {% else %}
+                                            <span class="badge badge-default">{{ transaction.type }}</span>
+                                            <small class="text-default mr-1">
+                                                <i class="far fa-dot-circle"></i>
+                                            </small><br>
+                                            {{ transaction.amount }}<sup style="font-size: 10px">{{ _currency }}</sup></span>	
+                          {% endif %}
+
+                    {#
+                            {% set loopIndex = loop.index %}
+                            {% switch transaction.type %}
+								{% case 'withdraw' %}
+									<span class="badge badge-warning">Withdraw</span>
+									  <small class="text-warning mr-1">
+										<i class="fas fa-arrow-up"></i>
+									  </small><br>
+									  10,000<sup style="font-size: 10px">{{ _currency }}</sup></span>
+								{% case 'deposit' %}
+									<span class="badge badge-success">Deposit</span>
+									  <small class="text-success mr-1">
+										<i class="fas fa-arrow-down"></i>
+									  </small><br>
+									  75,000<sup style="font-size: 10px">{{ _currency }}</sup></span>
+								{% default %}
+									<span class="badge badge-default">{{ transaction.type }}</span>
+									  <small class="text-default mr-1">
+										<i class="fas fa-arrow-down"></i>
+									  </small><br>
+									  75,000<sup style="font-size: 10px">{{ _currency }}</sup></span>		
+							{% endswitch %}		
+                    #}		
+
+						  </td>
+						  <td>{{ transaction.status }}</td>
+						  <td>
+							<div class="sparkbar" data-color="#00a65a" data-height="20">{{ transaction.sender_account_ref }}</div>
+						  </td>
+						  <td>
+							<div class="sparkbar" data-color="#00a65a" data-height="20">{{ transaction.receive_account_ref }}</div>
+						  </td>
+						  <td>{{ transaction.date }}-{{ transaction.time }}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				  </table>
+				</div>
+				<!-- /.table-responsive -->
+			  </div>
+			  <!-- /.card-body -->
+			  <div class="card-footer clearfix">
+				<a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All History</a>
+			  </div>
+			  <!-- /.card-footer -->
+			</div>
+			<!-- /.card -->
+		  </div>
+		  <!-- /.col -->
+
+		</div>
+		<!-- /.row -->		
+		
+		<!-- /.row (main row) -->
+	  </div><!-- /.container-fluid -->
+	</section>
+	<!-- /.content -->
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+    $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- ChartJS -->
+    <script src="{{ asset('adminLTE/plugins/chart.js/Chart.min.js') }}"></script>
+    <!-- Sparkline -->
+    <script src="{{ asset('adminLTE/plugins/sparklines/sparkline.js') }}"></script>
+    <!-- JQVMap -->
+    <script src="{{ asset('adminLTE/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+    <script src="{{ asset('adminLTE/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="{{ asset('adminLTE/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+    <!-- daterangepicker -->
+    <script src="{{ asset('adminLTE/plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('adminLTE/plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="{{ asset('adminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    <!-- Summernote -->
+    <script src="{{ asset('adminLTE/plugins/summernote/summernote-bs4.min.js') }}"></script>
+    <!-- overlayScrollbars -->
+    <script src="{{ asset('adminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{{ asset('adminLTE/dist/js/pages/dashboard.js') }}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script>    
+{% endblock %}

@@ -1,0 +1,22 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+dashboard.index:
+    path: /dashboard
+    controller: App\Controller\DashboardController::view
+home:
+    path: /dashboard
+    controller: App\Controller\DashboardController::view
+homepage:
+    path: /dashboard
+    controller: App\Controller\DashboardController::view
+login:
+    path: /login
+    controller: App\Controller\SecurityController::login
+    methods: GET|POST
+history.index:
+    path: /dashboard
+    controller: App\Controller\DashboardController::view
+operation.index:
+    path: /dashboard
+    controller: App\Controller\DashboardController::view

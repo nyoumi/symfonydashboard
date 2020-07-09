@@ -1,0 +1,64 @@
+    {%
+        set _profile = {
+            'user_id': '12',
+            'firtsname': 'EXEMPLE',
+            'lastname': 'User',
+            'email': 'Exempleuser@gmail.com',
+            'country_code': '237',
+            'phone_number': '6995566854',
+            'currency': 'XAF',
+        }
+    %}
+
+{% set _username = _profile.firtsname ~ _profile.lastname %}
+{% set _user_phone = '+' ~ _profile.country_code ~ _profile.phone_number %}
+
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+    </ul>
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+		<li class="nav-item dropdown">
+			<a class="nav-link" data-toggle="dropdown" href="#" style="display: inline;">
+					<span class="mr-2"> Hi {{ _username}}</span><i class="fas fa-user"><i class="fas fa-caret-down mr-2"></i></i>
+			</a>
+			<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+				<span class="dropdown-item dropdown-header">YOUR ACCOUNT</span>
+				<a href="#" class="dropdown-item">
+					<div class="media">
+						<img src="{{ asset('adminLTE/dist/img/avatar.png') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+						<div class="media-body">
+							<h3 class="dropdown-item-title">
+								{{ _username }}
+							</h3>
+							<p class="text-sm">{{ _profile.email }}</p>
+							<p class="text-sm text-muted"><i class="fas fa-phone mr-1"></i>{{ _user_phone}}</p>
+						</div>
+					</div>
+				</a>
+
+				<div class="dropdown-divider"></div>
+				<a href="#" class="dropdown-item">
+					<i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+				</a>
+				<div class="dropdown-divider"></div>
+				<a id="{{ _profile.user_id }}" href="#" class="dropdown-item">
+					<i class="fas fa-user mr-2"></i> Profile
+				</a>
+				<div class="dropdown-divider"></div>
+				<div class="dropdown-divider">
+				<a href="#" class="dropdown-item">
+					<i class="fas fa-user mr-2"></i> TopUp Now
+				</a>				
+				</div>
+				<button id="logout_btn" name="logout_btn" action="logout" type="submit" class="btn btn-danger btn-block" id="login-form-btn" name="login-form-btn" >Sign out</button>
+			</div>
+
+			
+		</li>				
+    </ul>
+  </nav>

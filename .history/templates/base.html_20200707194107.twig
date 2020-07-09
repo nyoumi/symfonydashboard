@@ -1,0 +1,79 @@
+{% set _locale = 'fr' %}
+{% extends '@AdminLTE/layout/default-layout.html.twig' %}
+<!DOCTYPE html>
+<html lang="{{ _locale }}">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <title>{% block title %}DatiCash - {% endblock %}</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        {% block stylesheets %}
+            <!-- Font Awesome -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+            <!-- Ionicons -->
+            <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+            <!-- Tempusdominus Bbootstrap 4 -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }} ">
+            <!-- iCheck -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+            <!-- JQVMap -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/jqvmap/jqvmap.min.css') }}">
+            <!-- Theme style -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+            <!-- overlayScrollbars -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+            <!-- Daterange picker -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/daterangepicker/daterangepicker.css') }}">
+            <!-- summernote -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/summernote/summernote-bs4.css') }}">
+            <!-- Google Font: Source Sans Pro -->
+            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">		
+
+        {% endblock %}
+    </head>
+    <body class="hold-transition sidebar-mini layout-fixed">
+    {% block body %}
+        <div class="wrapper">
+            <!-- Navbar -->
+            {% block navbar %}{% endblock %}
+            <!-- /.navbar --> 
+
+            <!-- Main Sidebar Container -->
+            {% block sidebar %}{% endblock %}
+            <!-- /.sidebar --> 
+        
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+
+                <!-- Content Header (Page header) -->
+                {% block content_header %}{% endblock %}
+                <!-- /.content-header -->
+
+                <!-- Main content -->
+                {% block content_main %}{% endblock %}
+                <!-- /.content -->	
+
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <strong>Copyright &copy; 2019-2020 <a href="https://daticash.com">DatiCash System</a>.</strong>
+                All rights reserved.
+                <div class="float-right d-none d-sm-inline-block">
+                    <b>Version</b> 1.0.0
+                </div>
+            </footer>	
+        </div>
+        <!-- ./wrapper -->
+    {% endblock body %}
+
+        <!-- jQuery -->
+        <script src="{{ asset('adminLTE/plugins/jquery/jquery.min.js') }}"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="{{ asset('adminLTE/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+            {% block javascripts %}{% endblock %}	
+
+    </body>
+</html>
