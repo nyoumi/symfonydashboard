@@ -1,4 +1,4 @@
-# symfonydashboard
+# symfony dashboard
 a symfony dashboard with authentication from an api (custom provider). 
 - user log in this platform by providing login(phone number)/password. 
 - symfony user auth utils make some verifications 
