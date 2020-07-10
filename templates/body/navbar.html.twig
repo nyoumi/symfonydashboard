@@ -1,17 +1,9 @@
     {%
-        set _profile = {
-            'user_id': '12',
-            'firtsname': 'EXEMPLE',
-            'lastname': 'User',
-            'email': 'Exempleuser@gmail.com',
-            'country_code': '237',
-            'phone_number': '6995566854',
-            'currency': 'XAF',
-        }
+        set _profile = app.user
     %}
 
-{% set _username = _profile.firtsname ~ _profile.lastname %}
-{% set _user_phone = '+' ~ _profile.country_code ~ _profile.phone_number %}
+{% set _username = _profile.firstname ~ ' ' ~ _profile.lastname %}
+{% set _user_phone = '+' ~ _profile.countryCode ~ _profile.phoneNumber %}
 
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -46,19 +38,16 @@
 					<i class="fas fa-tachometer-alt mr-2"></i> Dashboard
 				</a>
 				<div class="dropdown-divider"></div>
-				<a id="{{ _profile.user_id }}" href="#" class="dropdown-item">
+				<a id="{{ _profile.id }}" href="#" class="dropdown-item">
 					<i class="fas fa-user mr-2"></i> Profile
 				</a>
 				<div class="dropdown-divider"></div>
-				<div class="dropdown-divider">
-				<a href="#" class="dropdown-item">
-					<i class="fas fa-user mr-2"></i> TopUp Now
-				</a>				
-				</div>
-				<button id="logout_btn" name="logout_btn" action="logout" type="submit" class="btn btn-danger btn-block" id="login-form-btn" name="login-form-btn" >Sign out</button>
+				<div class="dropdown-divider"></div>
+				<a  href="{{ path('app_logout') }}"><button id="logout_btn" name="logout_btn" action="logout" type="submit" class="btn btn-danger btn-block" id="login-form-btn" name="login-form-btn" >Sign out</button></a>
 			</div>
-
-			
-		</li>				
+		</li>	
+        <li class="nav-item">
+            <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">TopUp Now</a>      
+        </li>			
     </ul>
   </nav>

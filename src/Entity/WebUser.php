@@ -1,13 +1,14 @@
 <?php
-// src/Security/User/WebserviceUser.php
-namespace App\Security\User;
+namespace App\Entity;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 
-
-class WebserviceUser implements UserInterface, EquatableInterface
+/**
+ * @UniqueEntity(fields={"phone_number"}, message="There is already an account with this phone_number")
+ */
+class WebUser implements UserInterface, EquatableInterface
 {
     private $username;
     private $phone_number;
@@ -146,15 +147,7 @@ class WebserviceUser implements UserInterface, EquatableInterface
     {
         return $this->password;
     }
-    public function getPlainPassword()
-    {
-        return $this->password;
-    }
 
-    public function setPlainPassword($password): void
-    {
-        $this->password = $password;
-    }
     public function getSalt()
     {
         return $this->salt;
@@ -207,9 +200,7 @@ class WebserviceUser implements UserInterface, EquatableInterface
 
     public function isEqualTo(UserInterface $user)
     {
-        if (!$user instanceof WebserviceUser) {
-            return false;
-        }
+
 
         if ($this->password !== $user->getPassword()) {
             return false;

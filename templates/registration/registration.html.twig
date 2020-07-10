@@ -1,0 +1,540 @@
+
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+            <!-- Font Awesome -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+            <!-- Ionicons -->
+            <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+            <!-- Theme style -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+            <!-- Google Font: Source Sans Pro -->
+            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">		
+            <!-- Datiuser style-->
+	        <link href="{{ asset('assets/css/confirm-user-popup.css') }}" rel="stylesheet">
+            <!-- Numeric Keypad -->
+            <link href="{{ asset('assets/css/jquery.keypad.css') }}" rel="stylesheet">
+            <!-- International Telephone Input -->
+            <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block head_javascripts %}
+            <!-- Sweet alert scripts-->
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>	
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="chat-popup" id="daticash_connexion_popUp">
+    <div id="ib-center" class="dati_popup">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">
+                    <div class="login-logo">
+                        <a href="http://daticash.com/" target="_blank" style="color: #fff;">
+                            <img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>
+                        </a>
+                    </div>
+                    <div class="login-feedback">
+                        {% for flashError in app.flashes('error') %}
+                            <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+                        {% endfor %}
+                        {% for message in app.flashes('notice') %}
+                            <div class="flash-notice">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+
+                        {# read and display several types of flash messages #}
+                        {% for label, messages in app.flashes(['success']) %}
+                            {% for message in messages %}
+                                <div class="alert alert-success">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+
+                    </div>
+                    <div class="card body_card_daticash_login">
+                        <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">
+                            <small id="allow_reset-feedback"></small>
+                            <form method="post" class="form login-form">
+                                <label for="phone_number" style="width: 100%; margin-bottom: .5rem;">
+                                    <font style="vertical-align: inherit;">Phone number&nbsp</font>
+                                    <small id="phone-feedback" style="display: block;"></small>
+                                </label>
+                                <div class="input-group mb-3 form-daticash_phone">
+                                    <input type="hidden" class="form-control" id="country_code" name="country_code">
+                                    <input type="phone" class="form-control" id="phone_number" name="phone_number">
+                                    <div class="input-group-append" id="input_group_appendto_phone" name="input_group_appendto_phone">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="new_password-group">
+                                    <label id="new_password_label" for="new_password" style="width: 100%; margin-bottom: .5rem;">
+                                        <font style="vertical-align: inherit;">New PIN Code&nbsp</font>
+                                        <small id="new_password-feedback"  style = "display: block;"></small>
+                                    </label>
+                                    <small class="show_or_hide_pin_for_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">
+                                        <i class="show_or_hide_pin_for_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>
+                                    <div class="input-group mb-3">
+                                        <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Choose New PIN Code" maxlength="6">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-key"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="retype_new_password-group">
+                                    <label id="retype_new_password_label" for="retype_new_password" style="width: 100%; margin-bottom: .5rem;">
+                                        <font style="vertical-align: inherit;">Retype new PIN Code&nbsp</font>
+                                        <small id="retype_new_password-feedback" style = "display: block;"></small>
+                                    </label>
+                                    <small class="show_or_hide_pin_for_retype_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">
+                                        <i class="show_or_hide_pin_for_retype_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_retype_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>
+                                    <div class="input-group mb-3">
+                                        <input type="password" class="form-control" id="retype_new_password" name="retype_new_password" placeholder="Retype new PIN code" maxlength="6">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-key"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <small class="text-center" id="check_password_correspondance-feedback" style = "display: block;"></small>
+                                <div id="re_captcha_container" class="text-center mb-2">
+                                    <div id="g-recaptcha"></div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-12 form-group_daticash_register_btn">
+                                        <input type="hidden" name="action" class="action" value="daticash_register">
+                                        <button type="submit" class="daticash_btn btn-daticash btn-block" id="daticash_request_register_btn" name="daticash_request_register_btn">Register</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+    <!-- jQuery -->
+    <script src="{{ asset('adminLTE/plugins/jquery/jquery.min.js') }}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Waves Effect Plugin Js -->
+    <script src="{{ asset('adminLTE/plugins/node-waves/waves.js') }}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script>
+    <!-- numeric keypad jQuery-->
+    <script src="{{ asset('assets/js/jquery.plugin.min.js') }}"></script>
+    <!-- numeric keypad script-->
+    <script src="{{ asset('assets/js/jquery.keypad.js') }}"></script>
+    <!-- International Telephone Input-->
+    <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
+
+    <script type="text/javascript"><!--
+
+        var daticash_current_phone_number;
+        function configure_intlTelInput(){
+            var phone_number = document.querySelector("#phone_number");
+            daticash_current_phone_number = window.intlTelInput(phone_number, {
+                // allowDropdown: false,
+                // autoHideDialCode: false,
+                // autoPlaceholder: "off",
+                // dropdownContainer: document.body,
+                // excludeCountries: ["us"],
+                // formatOnDisplay: false,
+                geoIpLookup: function(callback) {
+                    $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+                        var countryCode = (resp && resp.country) ? resp.country : "";
+                        callback(countryCode);
+                    });
+                },
+                // hiddenInput: "full_number",
+                // initialCountry: "auto",
+                // localizedCountries: { 'de': 'Deutschland' },
+                nationalMode: true,
+                // onlyCountries: ['cm', 'ng', 'eg', 'ci', 'sn'],
+                // placeholderNumberType: "MOBILE",
+                // preferredCountries: ['cn', 'jp'],
+                separateDialCode: true,
+                utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",//get value
+            });
+
+            var output = document.querySelector("#phone-feedback");
+
+            var handleChange = function() {
+                //impose the numeric characters
+                var value = jQuery(this).val();
+                value = value.replace(/[^0-9]+/g, '');
+                jQuery(this).val(value);
+
+                //show message if incorrect phone number
+                var text = (daticash_current_phone_number.isValidNumber()) ? 'International: ' + daticash_current_phone_number.getNumber() + ' ✓ Valid': "Please enter a valid number below";
+                var textNode = document.createTextNode(text);
+                output.innerHTML = "";
+                output.appendChild(textNode);
+
+                /* change style color*/
+                if(daticash_current_phone_number.isValidNumber()){
+                    $("#phone-feedback").attr("class",'text-success');
+                    $("#phone_number").removeClass("error").addClass("success");
+
+                }else{
+                    $("#phone-feedback").attr("class",'text-danger');
+                    $("#phone_number").addClass("error").removeClass("success");
+                    $(this).parent().find("#input-group-text").css("color: #ff7c7c; border-color:#ff7c7c");
+                }
+
+            };
+
+            // listen to "keyup", but also "change" to update when the user selects a country
+            phone_number.addEventListener('change', handleChange);
+            phone_number.addEventListener('keyup', handleChange);
+        }
+
+        function autoChoose_country_code(country_code){
+            configure_intlTelInput()
+            $("#input_group_appendto_phone").remove()
+            $('#phone_number').after('<div class="input-group-append"><div class="input-group-text" style="border-bottom-left-radius: 0;border-top-left-radius: 0;"><span class="fas fa-phone"></span></div></div>');
+
+            $(".iti__selected-flag").trigger("click");
+            $(".iti__country[data-dial-code='"+country_code+"']").trigger("click");
+        }
+
+
+        function passwordLength(element, value){
+            //alert(element)
+            //alert(value)
+            var n = value.length;
+            if(n != 6){
+                $(element).empty().text("Invalid PIN, left characters: "+ (6 - value.length)).attr("class", "text-danger")
+                return false;
+            }else{
+                $(element).empty().text("Good! your pin is ✓ Valid").attr("class", "text-success");
+            }
+            return true;
+        }
+
+        function emailIsValid (email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        }
+
+        let tampon_data = {};
+        var daticash_register_if_not_exist_popUp = (
+            '<div class="chat-popup" id="daticash_register_if_not_exist_popUp">'+
+            '<div id="ib-center" class="dati_popup">'+
+            '<div class="dati_user_status_login"></div>'+
+            '<div class="container">'+
+            '<div class="row d-flex justify-content-center">'+
+            '<div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">'+
+            '<div class="login-logo">'+
+            '<a href="http://daticash.com/" style="color: #fff;">'+
+            '<img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>'+
+            '</a>'+
+            '</div>'+
+            '<div class="login-feedback"></div>'+
+            '<div class="card body_card_daticash_login">'+
+            '<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+
+            '<form method="post" action="{{ path('register') }}" class="form login-form">'+
+            '<small style="float: right;">For an optimal experience with the daticash system, tell us who you are. We respect your privacy.&nbsp</small>'+
+            '<div class="input-group mb-3">'+
+            '<label for="lastname" style="width: 100%; margin-bottom: .5rem;">'+
+            '<font style="vertical-align: inherit;">Last Name</font>'+
+            '<small id="lastname-feedback"></small>'+
+            '</label>'+
+            '<input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name">'+
+            '<div class="input-group-append">'+
+            '<div class="input-group-text">'+
+            '<span class="fas fa-user"></span>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+
+            '<div class="input-group mb-3">'+
+            '<label for="firstname" style="width: 100%; margin-bottom: .5rem;">'+
+            '<font style="vertical-align: inherit;">First Name&nbsp</font>'+
+            '<small id="firstname-feedback"></small>'+
+            '</label>'+
+            '<input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name">'+
+            '<div class="input-group-append">'+
+            '<div class="input-group-text">'+
+            '<span class="fas fa-user"></span>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+
+            '<div class="input-group mb-3">'+
+            '<label for="email" style="width: 100%; margin-bottom: .5rem;">'+
+            '<font style="vertical-align: inherit;">Email</font>'+
+            '<small id="email-feedback"></small>'+
+            '</label>'+
+            '<input type="email" class="form-control" id="email" name="email" placeholder="Email">'+
+            '<div class="input-group-append">'+
+            '<div class="input-group-text">'+
+            '<span class="fas fa-envelope"></span>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+
+            '<div id="re_captcha_container" class="text-center mb-2">'+
+            '<div id="g-recaptcha"></div>'+
+            '</div>'+
+            '<hr>'+
+
+            '<div class="form-group_daticash_register_if_not_exist">'+
+            '<div class="row">'+
+            '<div class="col-12">'+
+            '<input type="hidden" name="action" class="action" value="daticash_register_if_not_exist">'+
+            '<button type="submit" class="daticash_btn btn-daticash btn-block" id="daticash_register_if_not_exist_btn" name="daticash_register_if_not_exist_btn">Continue</button>'+
+            '</div>'+
+            '</div>'+
+
+            '<div class="col-12 " >'+
+            '<div class="icheck-primary" style="font-weight: 100;">'+
+            '<input type="checkbox" checked id="agree" name="agree">'+
+            '<label for="agreement"  style="margin:5px; color:#7A7A7A; display: inline;">'+
+            'I agree to the <a href="https://app.termly.io/document/terms-of-use-for-saas/9697da89-93b4-427a-ad5b-d41243fe5436" target="_blank"><b style="color:#3C424F; font-weight: 700;"> Terms and Conditions </a></b> and the <a href="https://app.termly.io/document/privacy-policy/6957bc16-55f2-427c-8e66-64d1d4c387a9" target="_blank"><b style="color:#3C424F; font-weight: 700;"> Privacy Policy</b></a>'+
+            '</label></br>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+
+            '</form>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>'
+        );
+
+        $(document).ready(function(){
+            /*Textbox Events*/
+            $("body")
+                .on('click', '.iti__country' , function(e) {
+                    let sender_country_code = "1";
+                    let recipient_country_code = "237";
+                    let default_country_code = "cm";
+
+                    var $this = $(this);
+                    let _currency_received_txt = false;
+                    default_country_code = $($this).attr("data-country-code");
+                    var pid = $($this).attr("id")
+
+                    sender_country_code = $this.find(".iti__dial-code").text();
+                    sender_country_code = sender_country_code.substring(1, sender_country_code.length);
+
+                    recipient_country_code = $this.find(".iti__dial-code").text();
+                    recipient_country_code = recipient_country_code.substring(1, recipient_country_code.length);
+
+                    if(_currency_received_txt = !$this.parents('.form-group-sender_phone').length){
+                        $('#country_img').html("<img src='https://www.countryflags.io/"+default_country_code+"/flat/32.png'>");
+                        $('#country_name').html($("#"+pid).children(".iti__country-name").text());
+                    }
+                    if(_currency_received_txt = $this.parents('.form-daticash_phone').length){
+                        //alert(recipient_country_code)
+                        $('#country_code').val(recipient_country_code);
+                    }
+                    if(_currency_received_txt = $this.parents('.form-group_topup_by_mobile_money_source').length){
+                        //alert(recipient_country_code)
+                        $('#topup_by_mobile_money_source_country_code').val(recipient_country_code);
+                    }
+
+                    //alert($this.parents('.form-daticash_phone').length)
+                    //alert(default_country_code)
+                    //alert(_currency_received_txt)
+
+                })
+                .on('click', '#show_or_hide_pin_for_new_password_id', function(){
+                    if($('#show_or_hide_pin_for_new_password_id').prop("checked") == true) {
+                        $('#new_password').attr("type", "text");
+                        $('.show_or_hide_pin_for_new_password_text_js').text("Hide");
+                    } else {
+                        $('#new_password').attr("type", "password");
+                        $('.show_or_hide_pin_for_new_password_text_js').text("Show");
+                    }
+                })
+                .on('click', '#show_or_hide_pin_for_retype_new_password_id', function(){
+                    if($('#show_or_hide_pin_for_retype_new_password_id').prop("checked") == true) {
+                        $('#retype_new_password').attr("type", "text");
+                        $('.show_or_hide_pin_for_retype_new_password_text_js').text("Hide");
+                    } else {
+                        $('#retype_new_password').attr("type", "password");
+                        $('.show_or_hide_pin_for_retype_new_password_text_js').text("Show");
+                    }
+                })
+                .on('change', '#new_password' , function(e) {
+                    passwordLength("#new_password-feedback", $('#new_password').val());
+                    e.stopImmediatePropagation;
+                    var new_password_length = $("#new_password").val(); //alert(new_password_length.length)
+                    if(new_password_length.length === 6){
+                        $(".keypad-close").trigger("click");
+                        $("#new_password").trigger("blur");
+                    }
+                })
+                .on('change', '#retype_new_password' , function(e) {
+                    passwordLength("#retype_new_password-feedback", $('#retype_new_password').val());
+                    e.stopImmediatePropagation;
+                    var retype_new_password_length = $("#retype_new_password").val(); //alert(new_password_length.length)
+                    if(retype_new_password_length.length === 6){
+                        $(".keypad-close").trigger("click");
+                        $("#retype_new_password").trigger("blur");
+                    }
+                })
+                .on('click', '#agree', function(){
+                    if($('#agree').prop("checked") == true) {
+                        $('#create_account_btn').prop("disabled", false);
+                        $('#daticash_login_btn').prop("disabled", false);
+                        $('#daticash_register_if_not_exist_btn').prop("disabled", false);
+                    } else {
+                        $('#create_account_btn').prop("disabled", true);
+                        $('#daticash_login_btn').prop("disabled", true);
+                        $('#daticash_register_if_not_exist_btn').prop("disabled", true);
+                    }
+                })
+                .on('click', '#daticash_request_register_btn', function(e) {
+                    e.preventDefault()
+                    var validate = this;
+
+                    var $form = $(this).closest(".login-form");
+                    var phone_number = $form.find("#phone_number").val().replace(/[^0-9]+/g, '');
+                    var country_code = $form.find("#country_code").val();
+                    var new_password = $form.find("#new_password").val();
+                    var retype_new_password = $form.find("#retype_new_password").val();
+                    var action = $form.find(".action").val();
+//alert(phone_number)
+//alert(country_code)
+//alert(new_password)
+//alert(retype_new_password)
+//alert(action)
+
+                    if (daticash_current_phone_number.isValidNumber() && passwordLength('#new_password-feedback', new_password) && passwordLength('#retype_new_password-feedback', retype_new_password)) {
+                        if (new_password !== retype_new_password) {
+                            $("#new_password_label").addClass('text-danger');
+                            $("#retype_new_password_label").addClass('text-danger');
+                            $("#check_password_correspondance-feedback").empty().append("<div class='text-danger'>Given PIN Code does not match.</div>");
+
+                        }else{
+                            tampon_data = {
+                                'phone_number' : phone_number,
+                                'country_code' : country_code,
+                                'new_password' : new_password
+                            }
+
+                            $(".chat-popup").remove();
+
+                            $('#body_mask').after(daticash_register_if_not_exist_popUp);
+
+                        }
+                    }else{
+                        if(new_password==""){
+                            $('#new_password-feedback').html("<div class='text-danger'>Please enter a valid PIN Code below</div>");
+                        }
+                        if(retype_new_password==""){
+                            $('#retype_new_password-feedback').html("<div class='text-danger'>Please enter a valid PIN Code below</div>");
+                        }
+
+                        if(!passwordLength('#new_password-feedback', new_password)){
+                            $('#new_password-feedback').html("<div class='text-danger'>PIN must be 6 characters</div>")
+                        }
+                        if(!passwordLength('#retype_new_password-feedback', retype_new_password)){
+                            $('#retype_new_password-feedback').html("<div class='text-danger'>PIN must be 6 characters</div>")
+                        }
+
+                        if(new_password==""){
+                            $('#phone-feedback').html("<div class='text-danger'>Please enter a valid number below</div>");
+                        }
+                        if(!daticash_current_phone_number.isValidNumber()){
+                            $('#phone-feedback').html("<div class='text-danger'>Please enter a valid number below</div>");
+                        }
+
+                    }
+
+                })
+                .on('click', '#daticash_register_if_not_exist_btn' , function(e) {
+                    e.preventDefault()
+                    var validate_create = this;
+
+                    var $form = $(this).closest(".login-form");
+                    var phone_number = tampon_data.phone_number;
+                    var country_code = tampon_data.country_code;
+                    var email = $form.find("#email").val();
+                    var plain_password = tampon_data.new_password;
+                    var firstname = $form.find("#firstname").val();
+                    var lastname = $form.find("#lastname").val();
+                    var action = $form.find(".action").val();;
+
+                    $(".login-form").append(
+                        '<input type="hidden" name="phone_numer" value="'+ tampon_data.phone_number +'">'+
+                        '<input type="hidden" name="country_code" value="'+ tampon_data.country_code +'">'+
+                        '<input type="hidden" name="new_password"  value="'+ tampon_data.new_password +'">'
+                    );
+                    //alert(tampon_data.phone_number)
+                    //alert(tampon_data.country_code)
+                    //alert(tampon_data.new_password)
+
+                    $(".alert").remove()
+
+                    if (emailIsValid(email)) {
+                        $('#email-feedback').html("<div class='text-success' style='display:inline;'> ✓ Valid</div>");
+                        $('.form-group_daticash_register_if_not_exist').empty();
+
+                        $(validate_create).prop('disabled', true);
+                        $("#loading_image").remove();
+                        $(".login-form").append(
+                            '<div class="spinner" id="loading_image" style="display: hidden;">'+
+                            '<div class="bounce1"></div>'+
+                            '<div class="bounce2"></div>'+
+                            '<div class="bounce3"></div>'+
+                            '<h4>Please wait...</h4>'+
+                            '</div>'
+                        );
+
+
+                        let total_pay = $("#total_pay").text();
+                        let fees = $("#fees").text();
+
+                        $('.form').submit();
+                        e.preventDefault();
+
+
+                    }else{
+                        $('#email-feedback').html("<div class='text-danger'>Invalid Email</div>");
+                    }
+                })
+
+
+            $('<div />').prependTo('body').prop('id', 'body_mask').addClass("body_mask");
+
+
+            $('#password').attr('placeholder', 'Choose PIN Code');
+            autoChoose_country_code(237);
+
+            $('#new_password').keypad();
+            $('#retype_new_password').keypad();
+
+
+        });
+
+
+        //--></script>
+
+{% endblock %}

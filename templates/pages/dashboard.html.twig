@@ -1,11 +1,11 @@
-{% set _balance = total_balance %}
-{% set _withdraw_amount = withdraw_amount %}
-{% set _deposit_amount = deposit_amount %}
+{% set _balance = '150' %}
+{% set _withdraw_amount = '285000' %}
+{% set _deposit_amount = '150000' %}
 {% set _currency = 'XAF' %}
 
- {% set _accounts = accounts %} 
-  {#    {%
-      set _accounts = [
+{# {% set _accounts = accounts %} #}
+    {%
+        set _accounts = [
             {
             'id': 12,
             'name': 'Default',
@@ -19,11 +19,112 @@
             'description': 'My School application account.'
             },
         ] 
-    %} #}
-    
+    %}
+
+{# {% set _categories = user.services %} #}
+    {%
+        set _categories = [
+            {
+            'id': "12",    
+            'label': "Transfert d'argent",
+            'services':[ 
+                    {
+                    'id': '14',
+                    'label': 'Withdraw',
+                    'description': '',
+                    'status': '1'
+                    },
+                    {
+                    'id': '15',
+                    'label': 'Deposit',
+                    'description': '',
+                    'status': '1'
+                    },
+                ]
+            },
+            {
+            'id': "13", 
+            'label': "Achat de Credit/Internet",
+            'services':[ 
+                    {
+                    'id': '16',
+                    'label': 'Credit de communication',
+                    'description': '',
+                    'status': '1'
+                    },
+                    {
+                    'id': '18',
+                    'label': 'Internet 100 Mo',
+                    'description': 'Forfait internet 100 Mo valable 24 Heures',
+                    'status': '1'
+                    },
+                    {
+                    'id': '19',
+                    'label': 'Internet 1.8 Go',
+                    'description': 'Forfait internet 1.8 Go valable 7 jours',
+                    'status': '1'
+                    },
+                ]
+            },
+            {
+            'id': "14", 
+            'label': "Paiement de factures",
+            'services': [
+                    {
+                    'id': '20',
+                    'label': 'ENEO',
+                    'description': '',
+                    'status': '1'
+                    },
+                    {
+                    'id': '21',
+                    'label': 'CANAL+',
+                    'description': '',
+                    'status': '1'
+                    },
+                    {
+                    'id': '22',
+                    'label': 'CAMWATER',
+                    'description': 'Forfait internet 100 Mo valable 24 Heures',
+                    'status': '1'
+                    },
+                    {
+                    'id': '23',
+                    'label': 'IMPOTS',
+                    'description': 'Forfait internet 1.8 Go valable 7 jours',
+                    'status': '1'
+                    },
+                ]
+            },
+            {
+            'id': "15", 
+            'label': "Achat de Service/Produit",
+            'services': [
+                    {
+                    'id': '24',
+                    'label': 'Assurance',
+                    'description': '',
+                    'status': '1'
+                    },
+                    {
+                    'id': '25',
+                    'label': 'Bouquet TV',
+                    'description': '',
+                    'status': '1'
+                    },
+                    {
+                    'id': '26',
+                    'label': 'Frais Scolaire',
+                    'description': '',
+                    'status': '1'
+                    }
+                ]
+            },
+        ]
+    %}      
 	
- {% set _transactions = transactions %} 
-   {#  {%
+{# {% set _transactions = transactions %} #}
+    {%
         set _transactions = [
             {
             'id': 'TR9842',
@@ -56,7 +157,7 @@
             'time': '22:03'
             }
         ]
-    %}	#}
+    %}	
 
 {% extends "base.html.twig" %}
 
@@ -88,7 +189,25 @@
 
 {% block content_main %}
 	<!-- Main content -->
-	<section class="content">
+    {% for flashError in app.flashes('error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+    {% for message in app.flashes('notice') %}
+        <div class="flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {# read and display several types of flash messages #}
+    {% for label, messages in app.flashes(['success']) %}
+        {% for message in messages %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <section class="content">
 	  <div class="container-fluid">
 		<!-- Small boxes (Stat box) -->
 		<div class="row">
@@ -125,7 +244,7 @@
 			<!-- small box -->
 			<div class="small-box bg-warning">
 			  <div class="inner">
-				<h3>{{  _withdraw_amount}}<sup style="font-size: 20px">{{ _currency }}</sup></h3>
+				<h3>{{ _withdraw_amount }}<sup style="font-size: 20px">{{ _currency }}</sup></h3>
 
 				<p>Withdraw</p>
 			  </div>
@@ -224,13 +343,13 @@
 									  <small class="text-warning mr-1">
 										<i class="fas fa-arrow-up"></i>
 									  </small><br>
-									  {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                             
+									  {{ transaction.amount }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                             
                                 {% elseif (transaction.type)|lower == 'deposit' %}
                                             <span class="badge badge-success">Deposit</span>
                                             <small class="text-success mr-1">
                                                 <i class="fas fa-arrow-down"></i>
                                             </small><br>
-                                            {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                              
+                                            {{ transaction.amount }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                              
                                 {% else %}
                                             <span class="badge badge-default">{{ transaction.type }}</span>
                                             <small class="text-default mr-1">
@@ -266,12 +385,12 @@
 						  </td>
 						  <td>{{ transaction.status }}</td>
 						  <td>
-							<div class="sparkbar" data-color="#00a65a" data-height="20">{{ transaction.account_ref }}</div>
+							<div class="sparkbar" data-color="#00a65a" data-height="20">{{ transaction.sender_account_ref }}</div>
 						  </td>
 						  <td>
-							<div class="sparkbar" data-color="#00a65a" data-height="20">{{ transaction.account_ref }}</div>
+							<div class="sparkbar" data-color="#00a65a" data-height="20">{{ transaction.receive_account_ref }}</div>
 						  </td>
-						  <td>{{ transaction.created_at|date("d/m/Y h:m") }}</td>
+						  <td>{{ transaction.date }}-{{ transaction.time }}</td>
 						</tr>
 					{% endfor %}
 					</tbody>
