@@ -132,25 +132,10 @@
             <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
             <!-- Ionicons -->
             <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-            <!-- Tempusdominus Bbootstrap 4 -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }} ">
-            <!-- iCheck -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-            <!-- JQVMap -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/jqvmap/jqvmap.min.css') }}">
             <!-- Theme style -->
             <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
-            <!-- overlayScrollbars -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
-            <!-- Daterange picker -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/daterangepicker/daterangepicker.css') }}">
-            <!-- summernote -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/summernote/summernote-bs4.css') }}">
             <!-- Google Font: Source Sans Pro -->
-            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">		
-
-            <!-- Numeric Keypad -->
-            <link href="{{ asset('assets/css/keypad/jquery.keypad.css') }}" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">	
             <!-- International Telephone Input -->
             <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
             <!-- Sweet alert stylesheet-->
@@ -192,9 +177,6 @@
 
                 .body_card_daticash_quick_sent{
                     background-color: rgba(255, 255, 255, 0.74);
-                    border-style: solid;
-                    border-width: 1px 1px 1px 1px;
-                    border-color: #000000;
                     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
                     transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
                     margin: 0px 0px 0px 0px;
@@ -241,6 +223,7 @@
             <!-- Sweet alert scripts-->
             <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>	
             <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
+
 {% endblock %}
 
 {% block navbar %}
@@ -264,7 +247,7 @@
               <li class="breadcrumb-item active">Operation</li>
                 {% for categorie in _categories %}
                     {% for service in categorie.services %}
-                        {% if service_id is defined and service_id == service.id %} 
+                        {% if app.request.get('sid') is defined and app.request.get('sid') == service.id %} 
                             <li class="breadcrumb-item active">{{  service.label  }}</li>
                         {% endif %}
                     {% endfor %}
@@ -277,546 +260,430 @@
 {% endblock %}
                 
 {% block content_main %}
-<section class="content">
-      <div class="container-fluid">
-        <div class="row">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-2"></div>
 
 
 
-          <!-- left column -->
-          <div class="col-md-6">
-            <!-- general form elements -->
-            <div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;" >
-                <div class="card-header d-flex justify-content-between" style="align-items: center;">
-                    <div class="col-md-6">
-                        <select class="swal2-select" style="display: flex;" name="operation_type" id="operation_type">
-                            <option value="" disabled="">Select Operation Type</option>                    
-                            {% for categorie in _categories %}
-                                <optgroup label="{{ categorie.label }}">
-                                {% for service in categorie.services %}
-                                    <option value="{{  service.id  }}" {% if service_id is defined and service_id == service.id %}selected{% endif %}>{{  service.label  }}</option>
-                                {% endfor %}
-                            {% endfor %}
-                        </select>
-                    </div>
 
-                    <div class="col-md-6">
-                        <select class="swal2-select" style="display: flex;" name="account_ref" id="account_ref">
-                            <option value="" disabled="">Select Account Reference</option>
-                            <optgroup label="Daticash Account">
-                            {% for categorie in _categories %}
-                                {% for service in categorie.services %}
-                                    {% if service_id is defined and service_id == service.id and (service.label)|lower is not same as('deposit') %}
-                                        <option value="" selected >Default</option>
-                                    {% endif %}
-    
-                                    {% if service_id is defined and service_id == service.id and (service.label)|lower == 'deposit' %}
-                                        {% for account in _accounts %}
-                                            <option value="{{  account.id  }}">{{  account.name  }}</option>
-                                        {% endfor %}  
-                                    {% endif %}
-                                {% endfor %}
-                            {% endfor %}         
-                            </optgroup>
-                            {% for categorie in _categories %}
-                                {% for service in categorie.services %}
-                                    {% if service_id is defined and service_id == service.id and ((service.label)|lower == 'withdraw' or (service.label)|lower == 'deposit') %}
-                                    <optgroup label="Other Account">
-                                        <option value="mobilemoney">Mobile Money</option>
-                                        <option value="creditcard">Credit Card</option>
-                                        <option value="bankaccount">Bank Account</option>
-                                        <option value="paypal">Paypal</option>
+                <div class="col-md-8">
+
+                    <div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;" >
+                        <div class="card-header d-flex justify-content-between" style="align-items: center;">
+                            <div class="col-md-6">
+                                <select class="swal2-select" style="display: flex;" name="operation_type" id="operation_type">
+                                    <option value="" disabled="">Select Operation Type</option>                    
+                                    {% for categorie in _categories %}
+                                        <optgroup label="{{ categorie.label }}">
+                                        {% for service in categorie.services %}
+                                            <option value="{{  service.id  }}" {% if app.request.get('sid') is defined and app.request.get('sid') == service.id %}selected{% endif %}>{{  service.label  }}</option>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <select class="swal2-select" style="display: flex;" name="account_ref" id="account_ref">
+                                    <option value="" disabled="">Select Account Reference</option>
+                                    <optgroup label="Daticash Account">
+                                    {% for categorie in _categories %}
+                                        {% for service in categorie.services %}
+                                            {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and (service.label)|lower is not same as('deposit') %}
+                                                <option value="" selected >Default</option>
+                                            {% endif %}
+            
+                                            {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and (service.label)|lower == 'deposit' %}
+                                                {% for account in _accounts %}
+                                                    <option value="{{  account.id  }}">{{  account.name  }}</option>
+                                                {% endfor %}  
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}         
                                     </optgroup>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endfor %}
-                            
-                        </select>  
-                    </div>                              
-                </div>
-                
-                <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">
-
-                    <small id="allow_reset-feedback"></small>
-                    <form class="form" method="post" style="margin: auto;" action="http://api.daticash.com/api/mobilemoney/new">
-                        <input type="hidden" name="type" id="type" value="withdraw">
-                        <input type="hidden" name="imput_account_ref" id="imput_account_ref" value="default">
-
-                        <p class="waiting_text"></p>
-                        <div class="row">				
+                                    {% for categorie in _categories %}
+                                        {% for service in categorie.services %}
+                                            {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and ((service.label)|lower == 'withdraw' or (service.label)|lower == 'deposit') %}
+                                            <optgroup label="Other Account">
+                                                <option value="mobilemoney">Mobile Money</option>
+                                                <option value="creditcard">Credit Card</option>
+                                                <option value="bankaccount">Bank Account</option>
+                                                <option value="paypal">Paypal</option>
+                                            </optgroup>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                    
+                                </select>  
+                            </div>                              
+                        </div>
+                    </div>
                         
-                            <div class="col-md-6">
-                            <div class="form-group form-group-sender_phone">
-                            <label for="sender_phone" style="width: 100%; margin-bottom: .5rem;">
-                                <font style="vertical-align: inherit;">Sender Phone&nbsp</font>
-                                <small id="sender_phone-feedback" style="display: block;"></small>											
-                            </label>
-                                <input type="hidden" name="sender_country_code" id="sender_country_code" value="{{ _profile.country_code  }}">
-                                <input type="tel" name="sender_phone" id="sender_phone" class="form-control">
-                            </div>
-                            </div>
-                            <div class="col-md-6">
-                            <div class="form-group form-group-recipient_phone">
-                                <label for="recipient_phone" style="width: 100%; margin-bottom: .5rem;">
-                                    <font style="vertical-align: inherit;">Recipient Phone&nbsp</font>
-                                    <small id="recipient_phone-feedback" style="display: block;"></small>											
-                                </label>							
-                                <input type="hidden" name="recipient_country_code" id="recipient_country_code" value="237">
-                                <input type="text" name="recipient_phone" id="recipient_phone" class="form-control">
-                            </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                            <div class="form-group ">
-                                <label for="amount_sent" style="width: 100%; margin-bottom: .5rem;">
-                                    <font style="vertical-align: inherit;">Send Amount&nbsp <sapn id="currency_sent_txt">(USD)</sapn></font>
-                                    <small id="amount_sent-feedback" style="display: block;"></small>											
-                                </label>
-                                <input type="text" name="amount_sent" id="amount_sent" class="form-control sent" value="">
-                                <input type="hidden" name="currency_sent" id="currency_sent" value="USD">
-                            </div>
-                            </div>						  
-                            <div class="col-md-2" id="div_wait_convertion">
-                            <span id="span_wait_convertion" style="text-align: -webkit-center; align-items: center;"></span>
-                            <img id="mannuel_convert" src="'.DATI_PLUGIN_URL.'/img/fleches.png" style="position: relative;width: 70px; cursor: pointer;" /> 
-                            </div>
-                            <div class="col-md-5">
-                            <div class="form-group">
-                                <label for="amount_received" style="width: 100%; margin-bottom: .5rem;">
-                                    <font style="vertical-align: inherit;">Receive Amount&nbsp <sapn id="currency_received_txt">(XAF)</sapn></font>
-                                    <small id="amount_received-feedback" style="display: block;"></small>											
-                                </label>
-                                <input type="text" name="amount_received" id="amount_received" class="form-control receive" value="100">
-                                <input type="hidden" name="currency_received" id="currency_received" value="XAF">
-                            </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                            <div class="form-group ">
-                                <label for="imput_reason">What is the reason for the transfer ? (optional)</label>
-                                <input type="text" name="imput_reason" id="imput_reason" class="form-control sent" maxlength="30" placeholder="This message will be sent to the receiver">							  						
-                            </div>
-                            </div>	
-                        </div>
-                        <div class="card mt-2 mb-2">
-                            <div class="card-body p-1 m-0 font-weight-bold">
-                            <div class="float-left">Send Amount</div>
-                            <div class="float-right"><span id="span_amount_sent_currency">$</span>&nbsp;<span id="span_amount_sent">0.0</span></div>
-                            </div>
-                            <div class="card-body p-1 m-0 font-weight-bold">
-                            <div class="float-left">Fees</div>
-                            <input type="hidden" name="fees" id="fees" value="0.0">
-                            <div class="float-right"><span id="span_fees_currency">$</span>&nbsp;<span id="span_fees">0.0</span></div>
-                            </div>
-                            <div class="card-body m-0 p-1 font-weight-bold">
-                            <div class="float-left">Total Pay:</div>
-                            <input type="hidden" name="total_pay" id="total_pay" value="0.0">	
-                            <div class="float-right"><span id="span_total_pay_currency">$</span>&nbsp;<span id="span_total_pay">0.0</span></div>
-                            </div>
-                            <div class="card-body m-0 p-1 font-weight-bold">
-                            <div class="float-left">Your Recipient Gets</div>
-                            <div class="float-right"><span id="span_amount_received_currency">$</span>&nbsp;<span id="span_amount_received">0.0</span></div>
-                            </div>
-                        </div>
-                        <div class="mt-2 mb-2">											
-                            <button type="button" class="daticash_btn btn-daticash btn-block sendBtn" style="background-color:#1B5368">Send</button>
-                        </div>
-                    </form>
-                </div>
-            </div>            
-          </div> 
+                    <div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;" >
+                        <div class="card-header d-flex justify-content-between" style="align-items: center;">
+                            <h3 class="card-title" style="margin: 1rem auto 1rem; align-self: center;">Send To&nbsp;&nbsp;<span id="country_name"></span></h3>
+                            <p id="country_img"></p>
+                            <div class="send-feedback m-2" style="position: absolute;width: 93%;"></div>
+						</div>
 
+                        <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">
+                            <small id="allow_reset-feedback"></small>
+                            <form class="form" method="post" style="margin: auto;" action="http://api.daticash.com/api/mobilemoney/new">
+                                <input type="hidden" name="type" id="type" value="withdraw">
+                                <input type="hidden" name="imput_account_ref" id="imput_account_ref" value="default">
+                                <input type="hidden" name="mode" id="mode" value="mobilemoney">
 
-
-
-{#
-          <!-- rigth column -->
-          <div class="col-md-6">
-            <!-- general form elements -->
-            <div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;" >
-                <div class="card-header d-flex justify-content-between" style="align-items: center;">
-                    <h3 class="card-title" style="margin: 1rem auto 1rem; align-self: center;">Send To&nbsp;&nbsp;<span id="country_name"></span></h3>
-                    <p id="country_img"></p>
-                    <div class="send-feedback m-2" style="position: absolute;width: 93%;"></div>
-                </div>
-                
-                <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">								  
-
-                                    <div class="text-center mb-4">
-                                        <label for="payment_type">Select Money Source</label>
-                                        <select class="form-control" name="paymentMethod" id="paymentMethod">
-                                        <option value="momo">Mobile Money</option>
-                                        <!--<option value="cc">Credit Card</option>
-                                        <option value="bank">Bank Account</option>
-                                        <option value="pp">Paypal</option> -->
-                                        </select>
-                                    </div>	
-
-                        <!-- Form Mobile Method -->
-                                        <form class="form mb-3" method="post" action="" id="mobileMethodForm">
-                                      
-                                            <label for="username" style="width: 100%; margin-bottom: .5rem;">
-                                                <font style="vertical-align: inherit;">Phone number&nbsp</font>
-                                                <small id="phone-feedback" style="display: block;"></small>												
+                                <p class="waiting_text"></p>
+                                <div class="row">				
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-sender_phone">
+                                        <label for="sender_phone" style="width: 100%; margin-bottom: .5rem;">
+                                            <font style="vertical-align: inherit;">Sender Phone&nbsp</font>
+                                            <small id="sender_phone-feedback" style="display: block;"></small>											
+                                        </label>
+                                            <input type="hidden" name="sender_country_code" id="sender_country_code" value="{{ app.user.countryCode  }}">
+                                            <input type="tel" name="sender_phone" id="sender_phone" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                    <div class="form-group form-group-recipient_phone">
+                                        <label for="recipient_phone" style="width: 100%; margin-bottom: .5rem;">
+                                            <font style="vertical-align: inherit;">Recipient Phone&nbsp</font>
+                                            <small id="recipient_phone-feedback" style="display: block;"></small>											
+                                        </label>							
+                                        <input type="hidden" name="recipient_country_code" id="recipient_country_code" value="237">
+                                        <input type="text" name="recipient_phone" id="recipient_phone" class="form-control">
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group ">
+                                            <label for="amount_sent" style="width: 100%; margin-bottom: .5rem;">
+                                                <font style="vertical-align: inherit;">Send Amount&nbsp <sapn id="currency_sent_txt">(USD)</sapn></font>
+                                                <small id="amount_sent-feedback" style="display: block;"></small>											
                                             </label>
-                                            <div class="input-group mb-3 form-daticash_phone">
-                                                <input type="hidden" class="form-control" id="country_code" name="country_code">
-                                                <input type="phone" class="form-control" id="username" name="username">
-                                                <div class="input-group-append" id="input_group_appendto_phone" name="input_group_appendto_phone">
-                                                <div class="input-group-text">
-                                                    <span class="fas fa-user"></span>
-                                                </div>
-                                                </div>
-                                            </div>
-                                        
-                                            <div class="form-group form-group_topup_by_mobilemoney_currency">
-                                                <label for="topup_by_mobile_money_amount" style="width: 100%; margin-bottom: .5rem;">
-                                                <font style="vertical-align: inherit;">Amount to recharge&nbsp</font>
-                                                <small id="topup_by_mobile_money_amount-feedback" style = "display: -webkit-inline-box;"></small>
-                                                </label>					
-                                                <div class="input-group mb-3">
-                                                <input type="text" class="form-control" placeholder="Amount" aria-label="Amount to recharge" aria-describedby="basic-addon2" name="topup_by_mobile_money_amount" id="topup_by_mobile_money_amount" required="required">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text" id="topup_by_mobilemoney_currency_txt" name="topup_by_mobilemoney_currency_txt"></span>
-                                                </div>
-                                                </div>
-                                                <input type="hidden" name="" id="topup_by_mobilemoney_currency" name="topup_by_mobilemoney_currency">
-                                            </div>
-                                            
-                                            <div class="form-group">
-                                                <button type="submit" class="daticash_btn btn-daticash btn-block" id="topup_process_by_mobile_money_btn" name="topup_process_by_mobile_money_btn" >Recharge</button>
-                                            </div>
-                                            <div class="form-group" id="topup_by_mobile_money_log" style="background: currentColor;">
-                                            </div>
-                                            </form>	
-
-
-                        <!-- Form Credit Card Method -->
-                                        <form action="charge.php" method="post" id="payment-form">
-                                            <div class="form-row">
-                                            <input type="text" name="fist_name" class="form-control mb-3 StripeElement StripeElement--empty" placeholder="First Name">
-                                            <input type="text" name="last_name" class="form-control mb-3 StripeElement StripeElement--empty" placeholder="Last Name">
-                                            <input type="email" name="email" class="form-control mb-3 StripeElement StripeElement--empty" placeholder="Email">
-                                            <div id="card-element" class="form-control">
-                                            <!-- a Stripe Element will be inserted here. -->
-                                            </div>
-
-                                            <!-- Used to display form errors -->
-                                            <div id="card_errors" role="alert"></div>
-                                            </div>
-                                            <button type="submit" class="daticash_btn btn-daticash btn-block" id="recharge-form-btn" name="recharge-form-btn" >Recharge</button>
-                                        </form>
-
-
-                        <!-- Form PayPal Method -->
-                                        <form class="form" method="post" action="" id="paypalMethodFrom">
+                                            <input type="text" name="amount_sent" id="amount_sent" class="form-control sent" value="">
+                                            <input type="hidden" name="currency_sent" id="currency_sent" value="USD">
+                                        </div>
+                                    </div>						  
+                                    <div class="col-md-2" id="div_wait_convertion">
+                                        <span id="span_wait_convertion" style="text-align: -webkit-center; align-items: center;"></span>
+                                        <img id="mannuel_convert" src="{{ asset('assets/img/fleches.png') }}" style="position: relative;width: 70px; cursor: pointer;" /> 
+                                    </div>
+                                    <div class="col-md-5">
                                         <div class="form-group">
-                                            <input type="email" name="topup_by_paypal_email" id="topup_by_paypal_email" placeholder="Enter you email" class="form-control">
+                                            <label for="amount_received" style="width: 100%; margin-bottom: .5rem;">
+                                                <font style="vertical-align: inherit;">Receive Amount&nbsp <sapn id="currency_received_txt">(XAF)</sapn></font>
+                                                <small id="amount_received-feedback" style="display: block;"></small>											
+                                            </label>
+                                            <input type="text" name="amount_received" id="amount_received" class="form-control receive" value="100">
+                                            <input type="hidden" name="currency_received" id="currency_received" value="XAF">
                                         </div>
-                                        <div class="form-group">
-                                            <input type="text" name="topup_pp_amount" id="topup_pp_amount" placeholder="Enter amount to recharge" class="form-control">
-                                            <input type="hidden" name="topup_pp_amount_hidden">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group ">
+                                            <label for="imput_reason">What is the reason for the transfer ? (optional)</label>
+                                            <input type="text" name="imput_reason" id="imput_reason" class="form-control sent" maxlength="30" placeholder="This message will be sent to the receiver">							  						
                                         </div>
-                                        <div class="form-group">
-                                            <div id="paypal-button-container"></div>
-                                        </div>
-                                        </form>
-                                        
+                                    </div>	
+                                </div>
+                                <div class="card mt-2 mb-2">
+                                    <div class="card-body p-1 m-0 font-weight-bold">
+                                        <div class="float-left">Send Amount</div>
+                                        <div class="float-right"><span id="span_amount_sent_currency">$</span>&nbsp;<span id="span_amount_sent">0.0</span></div>
+                                    </div>
+                                    <div class="card-body p-1 m-0 font-weight-bold">
+                                        <div class="float-left">Fees</div>
+                                        <input type="hidden" name="fees" id="fees" value="0.0">
+                                    <div class="float-right"><span id="span_fees_currency">$</span>&nbsp;<span id="span_fees">0.0</span></div>
+                                    </div>
+                                    <div class="card-body m-0 p-1 font-weight-bold">
+                                        <div class="float-left">Total Pay:</div>
+                                        <input type="hidden" name="total_pay" id="total_pay" value="0.0">	
+                                    <div class="float-right"><span id="span_total_pay_currency">$</span>&nbsp;<span id="span_total_pay">0.0</span></div>
+                                    </div>
+                                    <div class="card-body m-0 p-1 font-weight-bold">
+                                        <div class="float-left">Your Recipient Gets</div>
+                                        <div class="float-right"><span id="span_amount_received_currency">$</span>&nbsp;<span id="span_amount_received">0.0</span></div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 mb-2">											
+                                    <button type="button" class="daticash_btn btn-daticash btn-block sendBtn" style="background-color:#1B5368">Send</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>            
 
-                                        <!--<form action="https://www.paypal.com/cgi-bin/webscr" method="post" id="paypalMethodFrom">
-                                        <div class="form-row">
-                                            <input type="email" name="topup_pp_email" id="topup_pp_email" class="form-control" placeholder="Enter Your PayPal E-mail address">
-                                        </div>
-                                        <div class="form-row">
-                                            <input type="text" name="topup_pp_amount" id="topup_pp_amount" class="form-control" placeholder="Amount">
-                                        </div>
-                                        <input type="hidden" name="no_shipping" value="0">
-                                        <input type="hidden" name="no_note" value="1">
-                                        <input type="hidden" name="currency_code" value="USD">
-                                        <input type="hidden" name="lc" value="AU">
-                                        <input type="hidden" name="bn" value="PP-BuyNowBF">
-                                        <input type="hidden" name="return" value="https://net.tutsplus.com/payment-complete/">
-                                            <button type="submit" class="daticash_btn btn-daticash btn-block" id="recharge-form-btn" name="recharge-form-btn" >Recharge</button>
-                                        </form>-->
-                                        
-                        <!-- Form Bank Method -->			  
-                                        <form action="" method="post" id="bankPaymentMethod">
-                                            <input type="hidden" name="localisation" id="localisation" value="<?= $arr_result->country_code; ?>">
-                                        </form>			
 
                 </div>
-            </div>            
-          </div> 
-
-
-#}
 
 
 
 
-          
-                
-        </div>            
-      </div>           
-</section>
-{#
-<script>
-Swal.fire({
-  title: "Select field validation",
-  input: "select",
-  inputOptions: {
-	"Fruits": {
-	  apples: "Apples",
-	  bananas: "Bananas",
-	  grapes: "Grapes",
-	  oranges: "Oranges"
-	},
-	"Vegetables": {
-	  potato: "Potato",
-	  broccoli: "Broccoli",
-	  carrot: "Carrot"
-	},
-	"icecream": "Ice cream"
-  },
-  inputPlaceholder: "Select a fruit",
-  showCancelButton: true,
-  inputValidator: (value) => {
-	return new Promise((resolve) => {
-	  if (value === "oranges") {
-		Swal.fire(`You selected: ${value}`)
-	  } else {
-		resolve("You need to select oranges :)")
-	  }
-	})
-  }
-})
-</script>
-#}
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+    </section>
+
 {% endblock %}
 
 {% block javascripts %}
-                <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-                <script>$.widget.bridge('uibutton', $.ui.button)</script>
-                <!-- Bootstrap 4 -->
-                <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-                <!-- ChartJS -->
-                <script src="{{ asset('adminLTE/plugins/chart.js/Chart.min.js') }}"></script>
-                <!-- Sparkline -->
-                <script src="{{ asset('adminLTE/plugins/sparklines/sparkline.js') }}"></script>
-                <!-- JQVMap -->
-                <script src="{{ asset('adminLTE/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
-                <script src="{{ asset('adminLTE/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
-                <!-- jQuery Knob Chart -->
-                <script src="{{ asset('adminLTE/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
-                <!-- daterangepicker -->
-                <script src="{{ asset('adminLTE/plugins/moment/moment.min.js') }}"></script>
-                <script src="{{ asset('adminLTE/plugins/daterangepicker/daterangepicker.js') }}"></script>
-                <!-- Tempusdominus Bootstrap 4 -->
-                <script src="{{ asset('adminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-                <!-- Summernote -->
-                <script src="{{ asset('adminLTE/plugins/summernote/summernote-bs4.min.js') }}"></script>
-                <!-- overlayScrollbars -->
-                <script src="{{ asset('adminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
-                <!-- AdminLTE App -->
-                <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
-                <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-                <script src="{{ asset('adminLTE/dist/js/pages/dashboard.js') }}"></script>
-                <!-- AdminLTE for demo purposes -->
-                <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script> 
-                <!-- Waves Effect Plugin Js -->
-                <script src="{{ asset('adminLTE/plugins/node-waves/waves.js') }}"></script>
-                <!-- numeric keypad jQuery-->
-                <script src="{{ asset('assets/js/keypad/jquery.plugin.min.js') }}"></script>
-                <!-- numeric keypad script-->
-                <script src="{{ asset('assets/js/keypad/jquery.keypad.js') }}"></script>
-                <!-- International Telephone Input-->	
-                <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
 
+            <!-- Waves Effect Plugin Js -->
+            <script src="{{ asset('adminLTE/plugins/node-waves/waves.js') }}"></script>
+            <!-- AdminLTE App -->
+            <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
+            <!-- AdminLTE for demo purposes -->
+            <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script> 
+            <!-- International Telephone Input-->	
+            <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
+            <!-- Daticash QS-->	
+            <script src="{{ asset('assets/js/daticashQS.js') }}"></script>
 
-
-
-<script type="text/javascript"><!--
-
-var current_sender_phone;  
-function configure_sender_phone_intlTelInput(){
-	var sender_phone = document.querySelector("#sender_phone");
-	current_sender_phone = window.intlTelInput(sender_phone, {
-	  // allowDropdown: false,
-	  // autoHideDialCode: false,
-	  // autoPlaceholder: "off",
-	  // dropdownContainer: document.body,
-	  // excludeCountries: ["us"],
-	  // formatOnDisplay: false,
-	   geoIpLookup: function(callback) {
-	    $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
-	      var countryCode = (resp && resp.country) ? resp.country : "";
-	       callback(countryCode);
-	     });
-	   },
-	  // hiddenInput: "full_number",
-	  // initialCountry: "auto",
-	  // localizedCountries: { 'de': 'Deutschland' },
-	   nationalMode: true,
-	  // onlyCountries: ['cm', 'ng', 'eg', 'ci', 'sn'],
-	  // placeholderNumberType: "MOBILE",
-	  // preferredCountries: ['cn', 'jp'],
-	  separateDialCode: true,
-	  utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",//get value
-	});
-
-	var output = document.querySelector("#sender_phone-feedback");
-		
-	var handleChange = function() {
-		//impose the numeric characters
-		var value = jQuery(this).val();
-		value = value.replace(/[^0-9]+/g, '');
-		jQuery(this).val(value);		
-		
-	  //show message if incorrect phone number	
-	  var text = (current_sender_phone.isValidNumber()) ? 'International: ' + current_sender_phone.getNumber() + ' ✓ Valid': "Please enter a valid number below";
-	  var textNode = document.createTextNode(text);
-	  output.innerHTML = "";
-	  output.appendChild(textNode);
-	  
-		  /* change style color*/
-		  if(current_sender_phone.isValidNumber()){
-			$("#sender_phone-feedback").attr("class",'text-success');
-			$("#sender_phone").removeClass("error").addClass("success");
+            <script>
+				var input_sender_phone = document.querySelector("#sender_phone");		
+				var input_recipient_phone = document.querySelector("#recipient_phone");
+				
+				var sender_phone_feedback = document.querySelector("#sender_phone-feedback");
+				var recipient_phone_feedback = document.querySelector("#recipient_phone-feedback");
+				
+				// initialise plugin
+				var iti_sender_phone = window.intlTelInput(input_sender_phone, {
+					// allowDropdown: false,
+					// autoHideDialCode: false,
+					// autoPlaceholder: "off",
+					// dropdownContainer: document.body,
+					// excludeCountries: ["us"],
+					// formatOnDisplay: false,
+					// geoIpLookup: function(callback) {
+					//   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+					//     var countryCode = (resp && resp.country) ? resp.country : "";
+					//     callback(countryCode);
+					//   });
+					// },
+					// hiddenInput: "full_number",
+					// initialCountry: "auto",
+					// localizedCountries: { 'de': 'Deutschland' },
+					nationalMode: true,
+					// onlyCountries: ["cm", "ng", "eg", "ci", "sn"],
+					// placeholderNumberType: "MOBILE",
+					// preferredCountries: ['cn', 'jp'],
+					separateDialCode: true,
+					utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",				
+				});
+				
+				// initialise plugin
+				var iti_recipient_phone = window.intlTelInput(input_recipient_phone, {
+					// allowDropdown: false,
+					// autoHideDialCode: false,
+					// autoPlaceholder: "off",
+					// dropdownContainer: document.body,
+					// excludeCountries: ["us"],
+					// formatOnDisplay: false,
+					// geoIpLookup: function(callback) {
+					//   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+					//     var countryCode = (resp && resp.country) ? resp.country : "";
+					//     callback(countryCode);
+					//   });
+					// },
+					// hiddenInput: "full_number",
+					// initialCountry: "auto",
+					// localizedCountries: { 'de': 'Deutschland' },
+					// nationalMode: false,
+					onlyCountries: ["cm", "ng", "eg", "ci", "sn"],
+					// placeholderNumberType: "MOBILE",
+					// preferredCountries: ['cn', 'jp'],
+					separateDialCode: true,
+					utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",
+				});
+				
+			var handleChange_input_sender_phone = function() {
+				//impose the numeric characters
+				var value = jQuery(this).val();
+				value = value.replace(/[^0-9]+/g, "");
+				jQuery(this).val(value);		
+				
+			  //show message if incorrect phone number	
+			  var text = (iti_sender_phone.isValidNumber()) ? iti_sender_phone.getNumber() + " ✓ Valid": "Please enter a valid Sender Phone Number below";
+			  var textNode = document.createTextNode(text);
+			  sender_phone_feedback.innerHTML = "";
+			  sender_phone_feedback.appendChild(textNode);
+			  
+				  /* change style color*/
+				  if(iti_sender_phone.isValidNumber()){
+					$("#sender_phone-feedback").attr("class","text-success");
+					$("#sender_phone").removeClass("error").addClass("success");
+				  }else{
+					$("#sender_phone-feedback").attr("class","text-danger");		  
+					$("#sender_phone").removeClass("success").addClass("error");
+				  } 	
 			
-		  }else{
-			$("#sender_phone-feedback").attr("class",'text-danger');		  
-			$("#sender_phone").addClass("error").removeClass("success");
-			$(this).parent().find("#input-group-text").css("color: #ff7c7c; border-color:#ff7c7c");
-		  } 	
-	
-	};
-	
-	// listen to "keyup", but also "change" to update when the user selects a country
-	sender_phone.addEventListener('change', handleChange);
-	sender_phone.addEventListener('keyup', handleChange);
-}
-
-
-var current_recipient_phone;  
-function configure_recipient_phone_intlTelInput(){
-	var recipient_phone = document.querySelector("#recipient_phone");
-	current_recipient_phone = window.intlTelInput(recipient_phone, {
-	  // allowDropdown: false,
-	  // autoHideDialCode: false,
-	  // autoPlaceholder: "off",
-	  // dropdownContainer: document.body,
-	  // excludeCountries: ["us"],
-	  // formatOnDisplay: false,
-	   geoIpLookup: function(callback) {
-	    $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
-	      var countryCode = (resp && resp.country) ? resp.country : "";
-	       callback(countryCode);
-	     });
-	   },
-	  // hiddenInput: "full_number",
-	  // initialCountry: "auto",
-	  // localizedCountries: { 'de': 'Deutschland' },
-	   nationalMode: true,
-	  // onlyCountries: ['cm', 'ng', 'eg', 'ci', 'sn'],
-	  // placeholderNumberType: "MOBILE",
-	  // preferredCountries: ['cn', 'jp'],
-	  separateDialCode: true,
-	  utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",//get value
-	});
-
-	var output = document.querySelector("#recipient_phone-feedback");
-		
-	var handleChange = function() {
-		//impose the numeric characters
-		var value = jQuery(this).val();
-		value = value.replace(/[^0-9]+/g, '');
-		jQuery(this).val(value);		
-		
-	  //show message if incorrect phone number	
-	  var text = (current_recipient_phone.isValidNumber()) ? 'International: ' + current_recipient_phone.getNumber() + ' ✓ Valid': "Please enter a valid number below";
-	  var textNode = document.createTextNode(text);
-	  output.innerHTML = "";
-	  output.appendChild(textNode);
-	  
-		  /* change style color*/
-		  if(current_recipient_phone.isValidNumber()){
-			$("#recipient_phone-feedback").attr("class",'text-success');
-			$("#recipient_phone").removeClass("error").addClass("success");
+			};	
 			
-		  }else{
-			$("#recipient_phone-feedback").attr("class",'text-danger');		  
-			$("#recipient_phone").addClass("error").removeClass("success");
-			$(this).parent().find("#input-group-text").css("color: #ff7c7c; border-color:#ff7c7c");
-		  } 	
+			var handleChange_input_recipient_phone = function() {
+				//impose the numeric characters
+				var value = jQuery(this).val();
+				value = value.replace(/[^0-9]+/g, "");
+				jQuery(this).val(value);		
+				
+			  //show message if incorrect phone number	
+			  var text = (iti_recipient_phone.isValidNumber()) ? iti_recipient_phone.getNumber() + " ✓ Valid": "Please enter a valid Phone Number below";
+			  var textNode = document.createTextNode(text);
+			  recipient_phone_feedback.innerHTML = "";
+			  recipient_phone_feedback.appendChild(textNode);
+			  
+				  /* change style color*/
+				  if(iti_recipient_phone.isValidNumber()){
+					$("#recipient_phone-feedback").attr("class","text-success");
+					$("#recipient_phone").removeClass("error").addClass("success");
+				  }else{
+					$("#recipient_phone-feedback").attr("class","text-danger");		  
+					$("#recipient_phone").removeClass("success").addClass("error");
+				  } 	
+			
+			};	
+
+
+			// listen to "keyup", but also "change" to update when the user selects a country
+			input_sender_phone.addEventListener("change", handleChange_input_sender_phone);
+			input_sender_phone.addEventListener("keyup", handleChange_input_sender_phone);
+			
+			input_recipient_phone.addEventListener("change", handleChange_input_recipient_phone);
+			input_recipient_phone.addEventListener("keyup", handleChange_input_recipient_phone);	
+
+			$("body")
+				.on("focus", "input", ".login-form input, .login-form textarea" , function() {
+					//$("#pin_code-feedback").empty();
+					$("#password-feedback").empty();
+					$("#username-feedback").empty();
+					$("#email-feedback").empty();
+					$(".send-feedback").empty();
+					
+				// daticash reset or change pin	
+					$("#amount_sent-feedback").empty();
+				})
+				.on("keyup", "#amount_sent", function(event){
 	
-	};
+						event.stopImmediatePropagation();
+					var value = jQuery(this).val();
+					value = value.replace(/[^0-9]+/g, "");
+					jQuery(this).val(value);
+				})	
+				.on("keyup", "#amount_received", function(event){
 	
-	// listen to "keyup", but also "change" to update when the user selects a country
-	recipient_phone.addEventListener('change', handleChange);
-	recipient_phone.addEventListener('keyup', handleChange);
-}
-
-function autoChoose_country_code(country_code, element){
-     //alert(element)
-     //alert(country_code)
-			$("#input_group_appendto_phone").remove()
-			$('#'+ element).after('<div class="input-group-append"><div class="input-group-text" style="border-bottom-left-radius: 0;border-top-left-radius: 0;"><span class="fas fa-phone"></span></div></div>');
-
-	$(".iti__selected-flag").trigger("click");
-	$(".iti__country[data-dial-code='"+country_code+"']").trigger("click");						
-}
+						event.stopImmediatePropagation();
+					var value = jQuery(this).val();
+					value = value.replace(/[^0-9]+/g, "");
+					jQuery(this).val(value);
+				});		
+			</script>
 
 
-    $(document).ready(function(){
-        /*Textbox Events*/
-        $("body")
+			<script>
+				$(document).ready(function() {
+					processConvert();
 
-        
-                .on('click', '.iti__country' , function(e) {
-                    var $this = $(this);
-                        let _currency_received_txt = false;  
+					$("#amount_sent,#amount_received,#currency_received,#currency_sent").change(function(e) {
+					  e.stopImmediatePropagation;
+					  let _this = $(this);
+					  let amount_sent = _this.hasClass("sent") ? $("#amount_sent").val() : "";
+					  let amount_received = _this.hasClass("receive") ? $("#amount_received").val() : "";
+					  
+					  let currency_sent = jQuery("#currency_sent").val();
+					  let currency_received = jQuery("#currency_received").val();
+					  
+						update(amount_sent, amount_received, currency_sent, currency_received);
+					})
+
+					$("body")
+							.on("click", "#mannuel_convert", function(e){
+							  processConvert();
+							})
+							.on("click", ".iti__country", function(e){
                                 
-                        country_code = $this.find(".iti__dial-code").text();
-                        country_code = country_code.substring(1, country_code.length);
+								  $("#mannuel_convert").trigger("click");							
+	
+							})
+                            
+					function processConvert(){
+					  let _this = $(this);
+					  let amount_sent = "";
+					  let amount_received = $("#amount_received").val();
+					  
+					  let currency_sent = $("#currency_sent").val();
+					  let currency_received = $("#currency_received").val();
 
-                    /** Exemple
-                     *  if(_currency_received_txt = $this.parents('.[parent_element_of_input]').length){
-                     *       $('#[imput_element]').val(country_code);
-                     *   }   
-                     */                     
+					  update(amount_sent, amount_received, currency_sent, currency_received);						
+					}
+					function update(amount_sent, amount_received, currency_sent, currency_received){
+					  let socketclienttype = "DATICASH_CLIENT";
+					  let type = "convert";
+					  $("#mannuel_convert").remove();
+					  $("#span_wait_convertion").html('<img id="mannuel_convert" src="{{ asset("assets/img/loader-status.gif") }}" style="position: relative;width: 70px; cursor: pointer;" />');
+					  
+					  $.ajax({
+						url: "{{ asset('assets/classes/action.php') }}",
+						dataType: "JSON",
+						method: "POST",
+						data:{"action": "convert", "currency_sent": currency_sent, "currency_received":currency_received, "amount_sent": amount_sent, "amount_received":amount_received},
+						success:function(response){
+							if(response.match === true){
+	/* 							alert("response.details.amount_received = "+response.details.amount_received)
+								alert("response.details.amount_sent = "+response.details.amount_sent)
+								alert("response.details.fees = "+response.details.fees)
+								alert("esponse.details.currency_sent = "+esponse.details.currency_sent)
+								alert("response.details.currency_received = "+response.details.currency_received)
+								alert("response.details.total_pay = "+response.details.total_pay)
+								alert("response.details.get = "+response.details.amount_received) */
+								
+								//text values
+								$("#span_amount_received").empty().text(response.details.amount_received).trigger("blur");
+								$("#span_amount_received_currency").empty().text(response.details.currency_received)
+								
+								$("#span_amount_sent").empty().text(response.details.amount_sent).trigger("blur");
+								$("#span_amount_sent_currency").empty().text(response.details.currency_sent)
+								
+								$("#span_fees").empty().text(response.details.fees)
+								$("#span_fees_currency").text(response.details.currency_sent)	
+								
+								$("#span_total_pay").empty().text(response.details.total_pay).trigger("blur")
+								$("#span_total_pay_currency").empty().text(response.details.currency_sent)
+								
+								//imput values
+								$("#amount_received").empty().val(response.details.amount_received)
+								$("#amount_sent").empty().val(response.details.amount_sent)
+								$("#total_pay").empty().val(response.details.total_pay)
+								$("#fees").empty().val(response.details.fees)
+								
+								$("#span_wait_convertion").empty();
+								$("#mannuel_convert").remove();								
+								$("#div_wait_convertion").append('<img id="mannuel_convert" src="{{ asset("assets/img/fleches.png") }}" style="position: relative;width: 70px; cursor: pointer;" />');
+													
+									
+							}else{
+								$(".send-feedback").html('<div class="alert alert-danger text-center">'+response.details+'</div>');
+								$("#span_wait_convertion").empty();
+								$("#mannuel_convert").remove();
+								$("#div_wait_convertion").append('<img id="mannuel_convert" src="{{ asset("assets/img/fleches.png") }}" style="position: relative;width: 70px; cursor: pointer;" />');
+																			
+							
+							}
+						},
+						
+						error:function(){
+							alert("error: convert, please contact the Administrator")			
+						}
+					  })
+					}
+				})
+			</script>
 
-                        if(_currency_received_txt !== $this.parents('.form-group-recipient_phone').length){
-                            ///alert("form-group-recipient_phone existe")
-                            //alert($this.parents('.form-group-recipient_phone').length)
-                            $('#recipient_country_code').val(country_code);
-                        }
-
-                        if(_currency_received_txt !== $this.parents('.form-group-sender_phone').length){
-                            //alert("form-group-sender_phone existe")
-                            //alert($this.parents('.form-group-sender_phone').length)
-                            $('#sender_country_code').val(country_code);
-                        }
-
-                    //alert($this.parents('.form-daticash_phone').length)
-                    //alert(country_code)
-                    //alert(_currency_received_txt)
-            
-                    })
-                configure_recipient_phone_intlTelInput();
-                autoChoose_country_code({{ _profile.country_code}}, "recipient_phone");
-
-
-                configure_sender_phone_intlTelInput();
-                autoChoose_country_code({{ _profile.country_code}}, "sender_phone");
-
-
-
-          
-    });
-				  
-
+            <script>
 			$(document).ready(function() {			
 				$(".sendBtn").on("click", function(e) {
 					e.preventDefault();	
@@ -857,43 +724,8 @@ function autoChoose_country_code(country_code, element){
 			alert(mode);
 
  */
-
-
-		let recipient_username = "EXEMPLE Username";
 		
-Swal.fire({
-  title: "Select field validation",
-  input: "select",
-  inputOptions: {
-	"Fruits": {
-	  apples: "Apples",
-	  bananas: "Bananas",
-	  grapes: "Grapes",
-	  oranges: "Oranges"
-	},
-	"Vegetables": {
-	  potato: "Potato",
-	  broccoli: "Broccoli",
-	  carrot: "Carrot"
-	},
-	"icecream": "Ice cream"
-  },
-  inputPlaceholder: "Select a fruit",
-  showCancelButton: true,
-  inputValidator: (value) => {
-	return new Promise((resolve) => {
-	  if (value === "oranges") {
-		Swal.fire(`You selected: ${value}`)
-	  } else {
-		resolve("You need to select oranges :)")
-	  }
-	})
-  }
-})
-                    iti_sender_phone="23799999"
-                    iti_recipient_phone ="237888888"
-												
-						if (amount_sent > 0 && iti_sender_phone  && iti_recipient_phone  ) {
+						if (amount_sent > 0 && iti_sender_phone.isValidNumber() === true && iti_recipient_phone.isValidNumber() === true ) {
 							$(".sendBtn").text("Processing...").prop("disabled", true);			
 
 								var sub_request = {
@@ -912,7 +744,7 @@ Swal.fire({
 								};
 												
 							  $.ajax({
-								url: "https://127.0.0.1:8000/transactions",
+								url: "https://api.daticash.com/api/mobilemoney/new",
 								dataType: "JSON",
 								method: "POST",
 								data:{
@@ -1153,10 +985,7 @@ Swal.fire({
 				  
 				  
 				})	
-			})
-
-//--></script>
-
+			})				
+			</script>
+            
 {% endblock %}
-
-

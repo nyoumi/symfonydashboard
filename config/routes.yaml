@@ -22,18 +22,18 @@ history.index:
     path: /dashboard
     controller: App\Controller\DashboardController::view
 operation.index:
-    path: /dashboard
-    controller: App\Controller\DashboardController::view
+    path: /operation
+    controller: App\Controller\TransactionsController::start
 
-transactions_init:
-    path:     /transactions/{id}/{number}
-    controller: App\Controller\TransactionsController::init
-    methods:  [GET]
-    requirements:
-            id: '\d+'
+#transactions_init:
+#    path:     /transactions/{id}/{number}
+#    controller: App\Controller\TransactionsController::start
+#    methods:  [GET]
+#    requirements:
+#            id: '\d+'
 
 transactions_view:
-    path:     /transactions/view/{id}
+    path:     /transactions/{id}
     controller: App\Controller\TransactionsController::view
     methods:  [GET]
 transactions_create:

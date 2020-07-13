@@ -56,27 +56,10 @@ class TransactionsController extends AbstractController
             "apikey"=> $this->apikey
         ];
 
-        $tansaction_details=$this->make_get_request((array)$params,$headers,$endpoint);
-        if(is_int($tansaction_details)){
-            $var='{
-    "code": 404,
-    "message": "empty list returned"}';
-            return json_encode($var);
-        }
-
-
-        $transaction = new Transaction();
-        $transaction
-            ->setAmountSent(100)
-            ->setRecipientAccountNum('6999999999.')
-            ->setId($id)
-        ;
-        $data = $this->serializer->serialize($transaction, 'json');
-
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
-
+        $response=$this->make_get_request((array)$params,$headers,$endpoint);
+        $response=$this->handle_response($response);
         return $response;
+
     }
 
 
@@ -87,6 +70,7 @@ class TransactionsController extends AbstractController
         $this->site_url = $this->getParameter('app.site_url');
         $data = $request->getContent();
         $data=json_decode($data);
+        //var_dump($data);
         $params=$data;
         $endpoint="mobilemoney/new";
         $headers=[
@@ -96,12 +80,13 @@ class TransactionsController extends AbstractController
 
 
         $response=$this->make_get_request((array)$params,$headers,$endpoint);
+        $response=$this->handle_response($response);
+        return $response;
 
 
-        return new Response(json_decode($response), Response::HTTP_CREATED);
     }
 
-    public function init()
+    public function start()
     {
         return $this->render('pages/operation.html.twig', [
 
@@ -194,61 +179,51 @@ class TransactionsController extends AbstractController
                 ]
             );
 
-            if($response->getStatusCode()==200){
+            if($response->getStatusCode()==200 && $response->getStatusCode()==201){
 
                 return $response->toArray();
                 //return $response->toArray();
-            };
-            if($response->getStatusCode()==400){
-                $this->addFlash(
-                    'error',
-                    'Echec lors de l\'enregistrement. Vérifiez qur vous avez rempli tous les champs!'
-                );
+            }else{
+                var_dump($response->getInfo());
                 return $response->getStatusCode();
-            };
-            if($response->getStatusCode()==500){
-                $this->addFlash(
-                    'error',
-                    'Echec lors de l\'enregistrement. Vérifiez qur vous avez rempli tous les champs!'
-                );
-                return $response->getStatusCode();
-            };
-            if($response->getStatusCode()==409){
-                $this->addFlash(
-                    'error',
-                    'Echec de l\'opération ce numéro de téléphone ou cet email existe déjà'
-                );
-                return null;
-            };
+
+            }
 
 
 
 
-        } catch (TransportExceptionInterface $e) {
+        } catch (TransportExceptionInterface |DecodingExceptionInterface
+        |ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
 
             $this->addFlash(
                 'error',
                 'Une erreur interne s\'est produite veuillez réessayer plus tard'
             );
             return null;
-        } catch (ClientExceptionInterface $e) {
-
-        } catch (DecodingExceptionInterface $e) {
-
-            return null;
-        } catch (RedirectionExceptionInterface $e) {
-        } catch (ServerExceptionInterface $e) {
         }
 
 
-        /*     $statusCode = $response->getStatusCode();
-             if ($statusCode != 200) {
-                 var_dump($statusCode);
-             }
-             $contents = $response->getContent();
-             if ($statusCode == 200) return $response->toArray();
-             return 1000;*/
+    }
 
+    private function handle_response($response)
+    {
+        if(isset($response) && is_int($response)){
+            $res =[
+                "code"=>(string)$response
+            ];
+        }
+        if(isset($response) && is_array($response)){
+            $res = $response;
+        }
+        if(!isset($response)){
+            $res =[
+                "code"=>(string)0,
+                "message" => 'erreur interne au serveur'
+            ];
+        }
 
+        return new Response(json_encode($res), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
     }
 }

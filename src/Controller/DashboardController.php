@@ -48,13 +48,47 @@ class DashboardController extends Controller
                     'headers' => $header,
                 ]
             );
+            if($response->getStatusCode()==200){
+
+                return $response->toArray();
+            };
+            if($response->getStatusCode()==400){
+                $this->addFlash(
+                    'error',
+                    'Echec 400 !'.$endpoint
+                );
+                $resp=[
+                    'code' => 400,
+
+                ];
+                return $resp;
+            };
+            if($response->getStatusCode()==404){
+                $this->addFlash(
+                    'error',
+                    'Echec 404!'.$endpoint
+                );
+                $resp=[
+                    'code' => 404,
+
+                ];
+
+                return $resp;
+            };
+            if($response->getStatusCode()==409){
+                $this->addFlash(
+                    'error',
+                    'Echec 409 '.$endpoint
+                );
+                return  $resp=[
+                    'code' => 409,
+
+                ];
+            };
         } catch (\Throwable $th) {
             //throw $th;
         }
-        
-        $statusCode = $response->getStatusCode();
-        $contents = $response->getContent();
-        if($statusCode==200) return $response->toArray();
+
         return null;
 
 
@@ -112,22 +146,7 @@ class DashboardController extends Controller
             'limit'=>'10'
         ]; */
         //$services = $this->make_get_request($params,$headers,$endpoint);
-        $endpoint="secure/login";
-        $headers=[
-            'Accept' => 'application/json',
-        ];
-        $params=[
-            'pin_code' => 'asc',
-            'phone_number' => '236978756',
-            'country_code'=> '+237',
 
-        ];
-        try {
-            $login=$this->make_get_request($params,$headers,$endpoint);
-        var_dump($login);
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
        
 
 
@@ -141,10 +160,9 @@ class DashboardController extends Controller
        }
 
 
-       if( isset($this->transactions)){
+       if( isset($this->transactions) && !isset($this->transactions["code"])){
 
         foreach ($this->transactions as $transaction) {
-            var_dump($transaction);
             if($transaction["type"]=="withdraw") {
                 $this->withdraw_amount=$this->withdraw_amount+(float)$transaction["amount_sent"];
 
