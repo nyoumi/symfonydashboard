@@ -4,13 +4,10 @@ namespace App\Controller;
 
 use App\Form\RegistrationFormType;
 use App\Security\User\WebserviceUser;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -42,15 +39,21 @@ class RegistrationController extends Controller
         $user = new WebserviceUser();
 
 
+
         $form = $this->createForm(RegistrationFormType::class, $user);
 
-        $form->handleRequest($request);
+        //$form->handleRequest($request);
 
-        if ($form->isSubmitted() ) {
-            $user=$form->getData();
 
-           // $password=$form->get('password')->getData();
-           // $user->setPassword($password );
+        if ($request->getMethod() == "POST" ) {
+            $user->setPhoneNumber($request->request->get('phone_number'));
+            $user->setCountryCode($request->request->get('country_code'));
+            $user->setPassword($request->request->get('new_password'));
+            $user->setLastname($request->request->get('lastname'));
+            $user->setFirstname($request->request->get('firstname'));
+            $user->setEmail($request->request->get('email'));
+
+
             $endpoint="user/new";
             $headers=[
                 'Accept' => 'application/json',
@@ -69,8 +72,10 @@ class RegistrationController extends Controller
 
             ];
             $this->user_id=$this->make_get_request($params,$headers,$endpoint);
-            if(isset($this->user_id) && !empty($this->user_id))
+            if(isset($this->user_id) && !empty($this->user_id)){
                 return $this->redirectToRoute('home');
+            }
+
 
 
 
@@ -116,16 +121,16 @@ class RegistrationController extends Controller
                     'Utilisateur crée avec succès!'
                 );
                 return "id";
-                return $response->toArray();
+                //return $response->toArray();
             };
             if($response->getStatusCode()==400){
                 $this->addFlash(
                     'error',
-                    'erreur 400 echec lors de l\'enregistrement. Vérifiez qur vous avez rempli tous les champs!'
+                    'Echec lors de l\'enregistrement. Vérifiez qur vous avez rempli tous les champs!'
                 );
                 return null;
             };
-            if($response->getStatusCode()==404){
+            if($response->getStatusCode()==409){
                 $this->addFlash(
                     'error',
                     'Echec de l\'opération ce numéro de téléphone ou cet email existe déjà'

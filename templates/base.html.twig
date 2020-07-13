@@ -1,4 +1,17 @@
 {% set _locale = 'fr' %}
+
+    {%
+        set _profile = {
+            'user_id': '12',
+            'firtsname': 'EXEMPLE',
+            'lastname': 'User',
+            'email': 'Exempleuser@gmail.com',
+            'country_code': '237',
+            'phone_number': '695255410',
+            'currency': 'XAF',
+        }
+    %}
+
 <!DOCTYPE html>
 <html lang="{{ _locale }}">
     <head>
@@ -9,6 +22,7 @@
         <title>{% block title %}DatiCash - {% endblock %}</title>
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+     
         {% block stylesheets %}
             <!-- Font Awesome -->
             <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
@@ -32,6 +46,71 @@
             <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">		
 
         {% endblock %}
+        <style>
+            .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+                background-color: #84A8AC;
+                color: #fff;
+            }
+
+            [class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active, [class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active:focus, [class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active:hover {
+                background-color: rgba(132, 168, 168, 0.4);
+                color: #fefeff;
+            }
+
+            [class*=sidebar-dark-] {
+                background-color: #1F4051;
+            }
+
+            .datibox-bg-light {
+                background-color: #84A8AC!important;
+            }
+            .datibox-bg-light, .datibox-bg-light>a {
+                color: #fff!important;
+            }
+            
+            .datibox-bg-dark {
+                background-color: #84A8AC!important;
+            }
+            .datibox-bg-dark, .datibox-bg-dark>a {
+                color: #fff!important;
+            }
+            
+            .datibox-bg-primary {
+                background-color: #2C6FB7!important;
+            }
+            .datibox-bg-primary, .datibox-bg-primary>a {
+                color: #fff!important;
+            }
+
+            a {
+                color: #1f4051;
+                text-decoration: none;
+                background-color: transparent;
+            }
+
+            a:hover {
+                color: #2C6FB7;
+                text-decoration: none;
+            }
+
+            .datibadge-primary {
+                color: #fff;
+                background-color: #2C6FB7;
+            }
+
+            .datibadge-dark {
+                color: #fff;
+                background-color: #1F4051;
+            }
+            .datitext-primary {
+                color: #2C6FB7!important;
+            }
+            .datitext-dark {
+                color: #1F4051!important;
+            }
+
+        </style>
+        {% block head_javascripts %}{% endblock %}
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
     {% block body %}
@@ -72,7 +151,7 @@
         <script src="{{ asset('adminLTE/plugins/jquery/jquery.min.js') }}"></script>
         <!-- jQuery UI 1.11.4 -->
         <script src="{{ asset('adminLTE/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
-            {% block javascripts %}{% endblock %}	
+        {% block javascripts %}{% endblock %}	
 
     </body>
 </html>

@@ -58,7 +58,7 @@
                     <div class="card body_card_daticash_login">
                         <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">
                             <small id="allow_reset-feedback"></small>
-                            <form method="post" class="form login-form">
+                            <form method="post" class="form login-form" >
                                 <label for="phone_number" style="width: 100%; margin-bottom: .5rem;">
                                     <font style="vertical-align: inherit;">Phone number&nbsp</font>
                                     <small id="phone-feedback" style="display: block;"></small>
@@ -252,7 +252,7 @@
             '<div class="login-feedback"></div>'+
             '<div class="card body_card_daticash_login">'+
             '<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+
-            '<form method="post" action="{{ path('register') }}" class="form login-form">'+
+            '<form method="post" name="registration_form" action="{{ path('register') }}" class="form login-form">'+
             '<small style="float: right;">For an optimal experience with the daticash system, tell us who you are. We respect your privacy.&nbsp</small>'+
             '<div class="input-group mb-3">'+
             '<label for="lastname" style="width: 100%; margin-bottom: .5rem;">'+
@@ -483,8 +483,8 @@
                     var action = $form.find(".action").val();;
 
                     $(".login-form").append(
-                        '<input type="hidden" name="phone_numer" value="'+ tampon_data.phone_number +'">'+
-                        '<input type="hidden" name="country_code" value="'+ tampon_data.country_code +'">'+
+                        '<input type="hidden" name="phone_number" value="'+ tampon_data.phone_number +'">'+
+                        '<input type="hidden" name="country_code" id="registration_form_country_code" value="'+ tampon_data.country_code +'">'+
                         '<input type="hidden" name="new_password"  value="'+ tampon_data.new_password +'">'
                     );
                     //alert(tampon_data.phone_number)
@@ -512,7 +512,10 @@
                         let total_pay = $("#total_pay").text();
                         let fees = $("#fees").text();
 
-                        $('.form').submit();
+                       // $('#registration_form').submit();
+                        $("[name='registration_form']")[0].submit();
+                        $("[name='registration_form']").submit();
+
                         e.preventDefault();
 
 

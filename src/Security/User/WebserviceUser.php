@@ -15,7 +15,17 @@ class WebserviceUser implements UserInterface, EquatableInterface
     private $password;
     private $salt;
     private $roles;
+    private $lastname ;
+    private $firstname ;
+    private $currency_code ;
+    private $accounts ;
+    private $services ;
 
+    
+    public function __construct( )
+    {
+
+    }
     /**
      * @param mixed $username
      */
@@ -121,18 +131,6 @@ class WebserviceUser implements UserInterface, EquatableInterface
     {
         $this->services = $services;
     }
-    private $lastname ;
-    private $firstname ;
-    private $currency_code ;
-    private $accounts ;
-    private $services ;
-
-    
-    public function __construct( )
-    {
-
-    }
-
 
     public function getRoles()
     {
@@ -141,6 +139,7 @@ class WebserviceUser implements UserInterface, EquatableInterface
         return array_unique($roles);
         //return $this->roles;
     }
+
 
     public function getPassword()
     {

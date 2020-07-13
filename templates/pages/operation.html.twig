@@ -24,12 +24,19 @@
             {
             'id': "12",    
             'label': "Transfert d'argent",
+            'description' : "",
             'services':[ 
                     {
                     'id': '14',
                     'label': 'Withdraw',
+                    'company':'orange',
+                    'countries':[
+                        {
+                            'country_code': "ng",
+                        }
+                    ],
                     'description': '',
-                    'status': '1'
+                    'status': '1',
                     },
                     {
                     'id': '15',
@@ -337,13 +344,14 @@
 
                         <p class="waiting_text"></p>
                         <div class="row">				
-                        <input type="hidden" name="sender_country_code" id="sender_country_code" value="1">
+                        
                             <div class="col-md-6">
                             <div class="form-group form-group-sender_phone">
                             <label for="sender_phone" style="width: 100%; margin-bottom: .5rem;">
                                 <font style="vertical-align: inherit;">Sender Phone&nbsp</font>
                                 <small id="sender_phone-feedback" style="display: block;"></small>											
                             </label>
+                                <input type="hidden" name="sender_country_code" id="sender_country_code" value="{{ _profile.country_code  }}">
                                 <input type="tel" name="sender_phone" id="sender_phone" class="form-control">
                             </div>
                             </div>
@@ -423,7 +431,7 @@
 
 
 
-
+{#
           <!-- rigth column -->
           <div class="col-md-6">
             <!-- general form elements -->
@@ -543,7 +551,7 @@
           </div> 
 
 
-
+#}
 
 
 
@@ -625,6 +633,529 @@ Swal.fire({
                 <script src="{{ asset('assets/js/keypad/jquery.keypad.js') }}"></script>
                 <!-- International Telephone Input-->	
                 <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
+
+
+
+
+<script type="text/javascript"><!--
+
+var current_sender_phone;  
+function configure_sender_phone_intlTelInput(){
+	var sender_phone = document.querySelector("#sender_phone");
+	current_sender_phone = window.intlTelInput(sender_phone, {
+	  // allowDropdown: false,
+	  // autoHideDialCode: false,
+	  // autoPlaceholder: "off",
+	  // dropdownContainer: document.body,
+	  // excludeCountries: ["us"],
+	  // formatOnDisplay: false,
+	   geoIpLookup: function(callback) {
+	    $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+	      var countryCode = (resp && resp.country) ? resp.country : "";
+	       callback(countryCode);
+	     });
+	   },
+	  // hiddenInput: "full_number",
+	  // initialCountry: "auto",
+	  // localizedCountries: { 'de': 'Deutschland' },
+	   nationalMode: true,
+	  // onlyCountries: ['cm', 'ng', 'eg', 'ci', 'sn'],
+	  // placeholderNumberType: "MOBILE",
+	  // preferredCountries: ['cn', 'jp'],
+	  separateDialCode: true,
+	  utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",//get value
+	});
+
+	var output = document.querySelector("#sender_phone-feedback");
+		
+	var handleChange = function() {
+		//impose the numeric characters
+		var value = jQuery(this).val();
+		value = value.replace(/[^0-9]+/g, '');
+		jQuery(this).val(value);		
+		
+	  //show message if incorrect phone number	
+	  var text = (current_sender_phone.isValidNumber()) ? 'International: ' + current_sender_phone.getNumber() + ' ✓ Valid': "Please enter a valid number below";
+	  var textNode = document.createTextNode(text);
+	  output.innerHTML = "";
+	  output.appendChild(textNode);
+	  
+		  /* change style color*/
+		  if(current_sender_phone.isValidNumber()){
+			$("#sender_phone-feedback").attr("class",'text-success');
+			$("#sender_phone").removeClass("error").addClass("success");
+			
+		  }else{
+			$("#sender_phone-feedback").attr("class",'text-danger');		  
+			$("#sender_phone").addClass("error").removeClass("success");
+			$(this).parent().find("#input-group-text").css("color: #ff7c7c; border-color:#ff7c7c");
+		  } 	
+	
+	};
+	
+	// listen to "keyup", but also "change" to update when the user selects a country
+	sender_phone.addEventListener('change', handleChange);
+	sender_phone.addEventListener('keyup', handleChange);
+}
+
+
+var current_recipient_phone;  
+function configure_recipient_phone_intlTelInput(){
+	var recipient_phone = document.querySelector("#recipient_phone");
+	current_recipient_phone = window.intlTelInput(recipient_phone, {
+	  // allowDropdown: false,
+	  // autoHideDialCode: false,
+	  // autoPlaceholder: "off",
+	  // dropdownContainer: document.body,
+	  // excludeCountries: ["us"],
+	  // formatOnDisplay: false,
+	   geoIpLookup: function(callback) {
+	    $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+	      var countryCode = (resp && resp.country) ? resp.country : "";
+	       callback(countryCode);
+	     });
+	   },
+	  // hiddenInput: "full_number",
+	  // initialCountry: "auto",
+	  // localizedCountries: { 'de': 'Deutschland' },
+	   nationalMode: true,
+	  // onlyCountries: ['cm', 'ng', 'eg', 'ci', 'sn'],
+	  // placeholderNumberType: "MOBILE",
+	  // preferredCountries: ['cn', 'jp'],
+	  separateDialCode: true,
+	  utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",//get value
+	});
+
+	var output = document.querySelector("#recipient_phone-feedback");
+		
+	var handleChange = function() {
+		//impose the numeric characters
+		var value = jQuery(this).val();
+		value = value.replace(/[^0-9]+/g, '');
+		jQuery(this).val(value);		
+		
+	  //show message if incorrect phone number	
+	  var text = (current_recipient_phone.isValidNumber()) ? 'International: ' + current_recipient_phone.getNumber() + ' ✓ Valid': "Please enter a valid number below";
+	  var textNode = document.createTextNode(text);
+	  output.innerHTML = "";
+	  output.appendChild(textNode);
+	  
+		  /* change style color*/
+		  if(current_recipient_phone.isValidNumber()){
+			$("#recipient_phone-feedback").attr("class",'text-success');
+			$("#recipient_phone").removeClass("error").addClass("success");
+			
+		  }else{
+			$("#recipient_phone-feedback").attr("class",'text-danger');		  
+			$("#recipient_phone").addClass("error").removeClass("success");
+			$(this).parent().find("#input-group-text").css("color: #ff7c7c; border-color:#ff7c7c");
+		  } 	
+	
+	};
+	
+	// listen to "keyup", but also "change" to update when the user selects a country
+	recipient_phone.addEventListener('change', handleChange);
+	recipient_phone.addEventListener('keyup', handleChange);
+}
+
+function autoChoose_country_code(country_code, element){
+     //alert(element)
+     //alert(country_code)
+			$("#input_group_appendto_phone").remove()
+			$('#'+ element).after('<div class="input-group-append"><div class="input-group-text" style="border-bottom-left-radius: 0;border-top-left-radius: 0;"><span class="fas fa-phone"></span></div></div>');
+
+	$(".iti__selected-flag").trigger("click");
+	$(".iti__country[data-dial-code='"+country_code+"']").trigger("click");						
+}
+
+
+    $(document).ready(function(){
+        /*Textbox Events*/
+        $("body")
+
+        
+                .on('click', '.iti__country' , function(e) {
+                    var $this = $(this);
+                        let _currency_received_txt = false;  
+                                
+                        country_code = $this.find(".iti__dial-code").text();
+                        country_code = country_code.substring(1, country_code.length);
+
+                    /** Exemple
+                     *  if(_currency_received_txt = $this.parents('.[parent_element_of_input]').length){
+                     *       $('#[imput_element]').val(country_code);
+                     *   }   
+                     */                     
+
+                        if(_currency_received_txt !== $this.parents('.form-group-recipient_phone').length){
+                            ///alert("form-group-recipient_phone existe")
+                            //alert($this.parents('.form-group-recipient_phone').length)
+                            $('#recipient_country_code').val(country_code);
+                        }
+
+                        if(_currency_received_txt !== $this.parents('.form-group-sender_phone').length){
+                            //alert("form-group-sender_phone existe")
+                            //alert($this.parents('.form-group-sender_phone').length)
+                            $('#sender_country_code').val(country_code);
+                        }
+
+                    //alert($this.parents('.form-daticash_phone').length)
+                    //alert(country_code)
+                    //alert(_currency_received_txt)
+            
+                    })
+                configure_recipient_phone_intlTelInput();
+                autoChoose_country_code({{ _profile.country_code}}, "recipient_phone");
+
+
+                configure_sender_phone_intlTelInput();
+                autoChoose_country_code({{ _profile.country_code}}, "sender_phone");
+
+
+
+          
+    });
+				  
+
+			$(document).ready(function() {			
+				$(".sendBtn").on("click", function(e) {
+					e.preventDefault();	
+	
+				  let action = "init_mobilemoney_transaction";
+				  let type = "deposit";
+				  let account_ref = $("#imput_account_ref").val();
+				  let amount_sent = $("#amount_sent").val();
+				  let currency_sent = $("#currency_sent").val();
+				  let recipient_phone = $("#recipient_phone").val();
+				  let recipient_country_code = $(".form-group-recipient_phone #countryCode").val();
+				  let sender_phone = $("#sender_phone").val();
+				  let sender_country_code = $(".form-group-sender_phone #countryCode").val();
+				  let reason = $("#imput_reason").val();
+
+/* 				  let currency_received = $("#currency_received").val();
+				  let amount_received = $("#amount_received").val();
+				  let total_pay = $("#total_pay").text();
+				  let fees = $("#fees").text();
+				  let mode = "mobilemoney";//$("#mode").val() 
+  			
+			alert(action);
+			alert(type);
+			alert(account_ref);
+			alert(amount_sent);
+			alert(currency_sent);
+			alert(recipient_phone);
+			alert(recipient_country_code);
+			alert(sender_phone);
+			alert(sender_country_code);
+			alert(reason);
+			alert(iti_sender_phone.isValidNumber());
+
+			alert(currency_received);
+			alert(amount_received);
+			alert(total_pay);
+			alert(fees);
+			alert(mode);
+
+ */
+
+
+		let recipient_username = "EXEMPLE Username";
+		
+Swal.fire({
+  title: "Select field validation",
+  input: "select",
+  inputOptions: {
+	"Fruits": {
+	  apples: "Apples",
+	  bananas: "Bananas",
+	  grapes: "Grapes",
+	  oranges: "Oranges"
+	},
+	"Vegetables": {
+	  potato: "Potato",
+	  broccoli: "Broccoli",
+	  carrot: "Carrot"
+	},
+	"icecream": "Ice cream"
+  },
+  inputPlaceholder: "Select a fruit",
+  showCancelButton: true,
+  inputValidator: (value) => {
+	return new Promise((resolve) => {
+	  if (value === "oranges") {
+		Swal.fire(`You selected: ${value}`)
+	  } else {
+		resolve("You need to select oranges :)")
+	  }
+	})
+  }
+})
+                    iti_sender_phone="23799999"
+                    iti_recipient_phone ="237888888"
+												
+						if (amount_sent > 0 && iti_sender_phone  && iti_recipient_phone  ) {
+							$(".sendBtn").text("Processing...").prop("disabled", true);			
+
+								var sub_request = {
+									withdraw:{
+										"action":"withdraw", 
+										"type":type, 
+										"account_ref":account_ref, 
+										"amount_sent":amount_sent,
+										"currency_sent":currency_sent,
+										"recipient_phone":recipient_phone,
+										"recipient_country_code":recipient_country_code, 								
+										"sender_phone":sender_phone,
+										"sender_country_code":sender_country_code, 
+										"reason":reason, 							
+									}
+								};
+												
+							  $.ajax({
+								url: "https://127.0.0.1:8000/transactions",
+								dataType: "JSON",
+								method: "POST",
+								data:{
+										"action":action, 
+										"type":type, 
+										"account_ref":account_ref, 
+										"amount_sent":amount_sent,
+										"currency_sent":currency_sent,
+										"recipient_phone":recipient_phone,
+										"recipient_country_code":recipient_country_code, 								
+										"sender_phone":sender_phone,
+										"sender_country_code":sender_country_code, 
+										"reason":reason,
+								},
+								success:function(response){
+									if(undefined !== response){
+									switch(response.code) {
+										case "201"://Action successfully
+												Swal.fire(
+												  "Complete!",
+												  "Your transaction Successfully Completed.",
+												  "success"
+												)
+											break;
+											
+										case "400"://BAD_REQUEST
+												Swal.fire(
+												  "ERROR!",
+												  "Something is wrong with the request, possibly missing or improperly formatted parameters",
+												  "error"
+												)
+											break;
+											
+										case "404"://ACCOUNT-NON-EXISTENT
+												var href = "https://api.daticash.com/login?type=register&sub_request=" + sub_request;
+												window.location = href;										
+											break;	
+											
+										case "409"://SUBACCOUNT-MULTIPLE-CHOICES							
+												Swal.fire({
+												  title: "Select field validation",
+												  input: "select",
+												  inputOptions: {
+													"Fruits": {
+													  apples: "Apples",
+													  bananas: "Bananas",
+													  grapes: "Grapes",
+													  oranges: "Oranges"
+													},
+													"Vegetables": {
+													  potato: "Potato",
+													  broccoli: "Broccoli",
+													  carrot: "Carrot"
+													},
+													"icecream": "Ice cream"
+												  },
+												  inputPlaceholder: "Select a fruit",
+												  showCancelButton: true,
+												  inputValidator: (value) => {
+													return new Promise((resolve) => {
+													  if (value === "oranges") {
+														Swal.fire(`You selected: ${value}`)
+													  } else {
+														resolve("You need to select oranges :)")
+													  }
+													})
+												  }
+												})										
+											break;	
+											
+										case "412"://CONFIRM-TOKEN-FORM 								
+												var href = "https://api.daticash.com/login?type=confirm-token-form&user_id="+response.user_id+"&email="+response.email+"&sub_request=" + sub_request;
+												window.location = href;												
+											break;
+											
+										case "422"://SERVICE-NOT-AVAILABLE							
+												Swal.fire(
+												  "Deleted!",
+												  "Service not available.",
+												  "error"
+												)
+											break;
+											
+										case ""://CONFIRM-PIN-CODE
+												let currency_sent = response.currency_sent;
+												let amount_sent = response.amount_sent;
+												let recipient_phone = response.recipient_phone;
+												let recipient_username = response.recipient_username;
+												
+												Swal.fire({
+												  title: "Confirm Transaction!",
+												  text: "Vous etes sur le point d\'effectuer une transaction de "+amount_sent+" "+currency_sent+" vers le "+recipient_phone+"("+recipient_username+"). entrer votre PIN pour confirmer la transaction:",
+												  input: "password",
+													//closeOnConfirm: true,
+													inputPlaceholder: "Your PIN Code",				  
+												  inputAttributes: {
+													autocapitalize: "off"
+												  },
+												  showCancelButton: false,				  
+												  showLoaderOnConfirm: true,
+												  focusConfirm: false,
+												  confirmButtonText:'<i class="fa fa-thumbs-up"></i> Confirm',
+												  confirmButtonAriaLabel: "Thumbs up, great!",
+												  cancelButtonText:'<i class="fa fa-thumbs-down"></i>',
+												  cancelButtonAriaLabel: "Thumbs down",				  
+												  preConfirm: (password) => {
+													return fetch(`//api.github.com/users/${password}`)//confirm-password url
+													  .then(response => {
+														if (!response.ok) {
+														  throw new Error(response.statusText)
+														}
+														return response.json()
+													  })
+													  .catch(error => {
+														Swal.showValidationMessage(
+														  `Request failed: ${error}`
+														)
+													  })
+												  },
+												  allowOutsideClick: () => !Swal.isLoading()
+												}).then((result) => {
+													if (result.value) {
+														let transaction_id = result.value.id
+														let status						
+														let timerInterval						
+														Swal.fire({
+														  title: "Traitement en cour",
+														  html: "STATUS : <b class=\"status_js\">Mise à jour de l\'historique de la transaction.</b>.",
+														  icon: "info",
+														  timer: 10000,
+														  timerProgressBar: true,
+														  onBeforeOpen: () => {
+															Swal.showLoading()
+															timerInterval = setInterval(() => {
+																return fetch(`https://api.daticash.com/api/mobilemoney/${transaction_id}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}})//confirm-password url
+																  .then(
+																	function(response) {
+																		console.log(response);
+																	  if (!response.ok) {
+																	  // Examine the text in the response
+																		  response.json().then(function(data) {
+																			 status = data.message
+																			console.log(data.message);
+																		})
+																	  }else{
+																		  // Examine the text in the response
+																		  response.json().then(function(data) {
+																			 status = data.step_description
+																			console.log(data.step_description);
+																		  });
+																	  }
+																	  
+																	  const content = Swal.getContent()
+																	  if (content) {
+																		const b = content.querySelector(".status_js")
+																		if (b) {
+																		  b.textContent = status
+																		}
+																	  }							  
+																	}
+																  )
+																  .catch(function(err) {
+																	console.log("Fetch Error :-S", err);
+																  });			  
+
+															}, 1000);							
+														  },						  
+														  showLoaderOnConfirm: true,
+														  onClose: () => {
+															clearInterval(timerInterval)
+															Swal.fire(
+															  "Aborded!",
+															  "Your session has been closed. But your transaction take too time...",
+															  "info"
+															)							
+														  }						  
+														}).then((result) => {
+														  // Read more about handling dismissals below 
+														  if (result.dismiss === Swal.DismissReason.timer) {
+															console.log("I was closed by the timer")
+															Swal.fire({
+															  title: "<strong>STATUS TRANSACTION</strong>",
+															  icon: "info",
+															  html:
+																"Was closed by the timer. Your transaction <b>take too time</b>, go to your " +
+																"<a href=\"//daticash.com/dashborad\" target=\"_blank\">dashborad</a> " +
+																"to check manually this transaction status",
+															  showCloseButton: true,
+															  showCancelButton: false,
+															  focusConfirm: false,
+															  confirmButtonText:"OK",
+															})														
+														  }
+														})	
+
+													}
+												})									
+											break;
+											
+										default :
+										
+									}										
+										
+										
+										
+										
+		
+									}else{
+										if(response.details === "transaction-initiated"){
+											
+										}else{
+											$(".send-feedback").html('<div class="alert alert-danger text-center">'+response.details+'</div>');
+											$(".sendBtn").text("Send").prop("disabled", false);																
+										}
+									}
+								},
+								error:function(){
+									alert("error: process transaction failed, please try again or contact the Administrator if this persit");
+									$(".sendBtn").text("Send").prop("disabled", false);
+								}
+							  });
+						}else{
+							$(".sendBtn").text("Send").prop("disabled", false);
+							
+							if(amount_sent <= 0){
+								$("#amount_sent-feedback").html('<div class="text-danger">Please enter a valid amount to send</div>');
+							}
+							
+							if(!iti_sender_phone.isValidNumber()){
+								$("#sender_phone-feedback").html('<div class="text-danger">Please enter a valid Phone Number below</div>');
+							}
+							
+							if(!iti_recipient_phone.isValidNumber()){
+								$("#recipient_phone-feedback").html('<div class="text-danger">Please enter a valid Phone Number below</div>');
+							}	
+													
+						} 
+				  
+				  
+				})	
+			})
+
+//--></script>
 
 {% endblock %}
 

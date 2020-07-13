@@ -28,8 +28,7 @@ class DashboardController extends Controller
 
     }
     public function make_get_request(array $parameters,array $header,$endpoint){
-        $this->site_url = $this->getParameter('app.site_url');
-        $this->apikey = $this->getParameter('app.apikey');
+
 
 
 
@@ -65,7 +64,7 @@ class DashboardController extends Controller
     {
         $this->apikey = $this->getParameter('app.apikey');
         $this->site_url = $this->getParameter('app.site_url');
-        $this->user_id="23";
+        $this->user_id=$this->getUser()->getid();
 
         $endpoint="mobilemoneys";
         $headers=[
@@ -74,13 +73,21 @@ class DashboardController extends Controller
         ];
         $params=[
             'order' => 'asc',
-            'user_id' => '23',
+            'user_id' => $this->user_id,
             'start_at'=> '2020-01-01 00:00:00',
             'end_at'=>'2021-01-01 00:00:00',
             'page'=> '1',
             'limit'=>'10'
         ];
-        $this->transactions=$this->make_get_request($params,$headers,$endpoint);
+        try {
+            $this->transactions=$this->make_get_request($params,$headers,$endpoint);
+            if($this->transactions["code"]== 404){
+                $this->transactions=[];
+            }
+
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
 
         $endpoint="user/".$this->user_id;
         $params=[];
@@ -122,24 +129,7 @@ class DashboardController extends Controller
             //throw $th;
         }
        
-        $this->accounts = [
-            [
-            'id'=> 12,
-            'name'=>'Default',
-            'balance'=> 250000,
-            'description'=> 'The DatiCash Default Account'
-           ],
-            [
-            'id'=> 14,
-            'name'=> 'Easy School',
-            'balance'=> 122000,
-            'description'=> 'My School application account.'
-           ]
-            ];
-            foreach ($this->accounts  as $account) {
-                $this->total_balance=$this->total_balance+(float) $account["balance"];
-     
-            }
+
 
        if( isset($user)){
         $this->accounts = $user["accounts"];
@@ -154,8 +144,8 @@ class DashboardController extends Controller
        if( isset($this->transactions)){
 
         foreach ($this->transactions as $transaction) {
-            if($transaction["type"]=="withdraw")
-            {
+            var_dump($transaction);
+            if($transaction["type"]=="withdraw") {
                 $this->withdraw_amount=$this->withdraw_amount+(float)$transaction["amount_sent"];
 
             }
