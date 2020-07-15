@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -19,12 +20,14 @@ class DashboardController extends Controller
     private $total_balance=0;
     private $withdraw_amount=0;
     private $deposit_amount=0;
+    private $security;
+    private $services;
 
 
-
-    public function __construct(HttpClientInterface $client)
+    public function __construct(HttpClientInterface $client,Security $security)
     {
         $this->client = $client;
+        $this->security=$security;
 
     }
     public function make_get_request(array $parameters,array $header,$endpoint){
@@ -51,40 +54,18 @@ class DashboardController extends Controller
             if($response->getStatusCode()==200){
 
                 return $response->toArray();
-            };
-            if($response->getStatusCode()==400){
+            }else{
                 $this->addFlash(
                     'error',
-                    'Echec 400 !'.$endpoint
+                    'Echec ! '.$response->getStatusCode()." ".$endpoint
                 );
                 $resp=[
-                    'code' => 400,
+                    'code' => $response->getStatusCode(),
 
                 ];
                 return $resp;
-            };
-            if($response->getStatusCode()==404){
-                $this->addFlash(
-                    'error',
-                    'Echec 404!'.$endpoint
-                );
-                $resp=[
-                    'code' => 404,
+            }
 
-                ];
-
-                return $resp;
-            };
-            if($response->getStatusCode()==409){
-                $this->addFlash(
-                    'error',
-                    'Echec 409 '.$endpoint
-                );
-                return  $resp=[
-                    'code' => 409,
-
-                ];
-            };
         } catch (\Throwable $th) {
             //throw $th;
         }
@@ -99,6 +80,8 @@ class DashboardController extends Controller
         $this->apikey = $this->getParameter('app.apikey');
         $this->site_url = $this->getParameter('app.site_url');
         $this->user_id=$this->getUser()->getid();
+        $user = $this->security->getUser();
+        $user_roles=$user->getRoles();
 
         $endpoint="mobilemoneys";
         $headers=[
@@ -115,9 +98,11 @@ class DashboardController extends Controller
         ];
         try {
             $this->transactions=$this->make_get_request($params,$headers,$endpoint);
-            if($this->transactions["code"]== 404){
+            if(!(isset($this->transactions) && isset($this->transactions[0]['id']))){
                 $this->transactions=[];
             }
+
+
 
         } catch (\Throwable $th) {
             //throw $th;
@@ -131,23 +116,61 @@ class DashboardController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
         }
-       
-  /*       $params=[
-            'user_id' => '23',
-        ];
-        $endpoint="services";
+        $endpoint="mobilemoney/services";
+        $params=[];
 
-        $params=[
-            'order' => 'asc',
-            'user_id' => '23',
-            'start_at'=> '2020-01-01 00:00:00',
-            'end_at'=>'2020-01-01 00:00:00',
-            'page'=> '1',
-            'limit'=>'10'
-        ]; */
-        //$services = $this->make_get_request($params,$headers,$endpoint);
+            $services = $this->make_get_request($params,$headers,$endpoint);
+            //var_dump($services);
+           // var_dump("+++++++++++++++++++++++++++++++++++++");
+            if (!isset($services['code'])){
 
-       
+
+                for ($i = 0; $i < sizeof($services); $i++) {
+
+
+                     if (isset($services[$i]["roles"])){
+
+                         echo("-------------->");
+                         foreach ($services[$i]["roles"] as $role){
+                             if (!in_array($role, $user_roles)) {
+                                 array_splice($services,$i,1);
+                             }
+                         }
+
+                     }
+                    else{
+
+                        for ( $j =0; $j < sizeof( array_values($services[$i]["services"]) ); $j++){
+                            $services_dispo=array_values($services[$i]["services"]);
+
+
+                        if (isset($services_dispo[$j]["roles"])){
+
+
+
+                            foreach ($services_dispo[$j]["roles"] as $role){
+                                if (!$this->security->isGranted($role))
+                                   {
+                                      array_splice($services[$i]["services"],$j,1);
+
+                                  }
+                              }
+
+                          }
+                      }
+                  }
+                }
+               // var_dump($services);
+
+
+            }
+            $this->services=$services;
+        $session = $this->get('session');
+        $session->set('services', $this->services);
+
+
+
+
 
 
        if( isset($user)){
@@ -175,9 +198,6 @@ class DashboardController extends Controller
 
         }
        }
-       
-
-       //$this->get('twig')->addGlobal('App.today', date('Y-m-d'));
 
         return $this->render('pages/dashboard.html.twig', [
             'total_balance' =>$this->total_balance,
@@ -185,6 +205,7 @@ class DashboardController extends Controller
             'deposit_amount' =>$this->deposit_amount,
             'accounts' =>$this->accounts,
             'transactions' =>$this->transactions,
+            'services' =>$this->services
 
 
         ]); 

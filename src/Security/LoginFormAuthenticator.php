@@ -32,6 +32,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     private $passwordEncoder;
 
     private $apikey ;
+    private $request;
 
 
     public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
@@ -50,6 +51,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     public function getCredentials(Request $request)
     {
+
         $credentials = [
             'country_code' => $request->request->get('country_code'),
             'username' => $request->request->get('phone_number'),
@@ -61,6 +63,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             Security::LAST_USERNAME,
             $credentials['phone_number']
         );
+        $request->getSession()->set(
+            "password",
+            $credentials['password']
+        );
         return $credentials;
     }
 
@@ -69,7 +75,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {
-            throw new InvalidCsrfTokenException();
+
+            return new RedirectResponse($this->urlGenerator->generate('login'));
+
+            //throw new InvalidCsrfTokenException();
         }
         if (empty($credentials["password"])) {
             throw new CustomUserMessageAuthenticationException('Le mot de passe ne peut être vide!');
@@ -100,7 +109,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Identifiant ou mot de passe incorrect!');
         }
-        var_dump($user);
 
 
         return $user;

@@ -1,10 +1,10 @@
-{% set _balance = '150' %}
-{% set _withdraw_amount = '285000' %}
-{% set _deposit_amount = '150000' %}
-{% set _currency = 'XAF' %}
+{% set _balance = total_balance %}
+{% set _withdraw_amount = withdraw_amount %}
+{% set _deposit_amount = deposit_amount %}
+{% set _currency = app.user.currency_code %}
 
-{# {% set _accounts = accounts %} #}
-    {%
+ {% set _accounts = app.user.accounts %}    
+{#  {%
         set _accounts = [
             {
             'id': 12,
@@ -19,145 +19,293 @@
             'description': 'My School application account.'
             },
         ] 
-    %}
+    %}  #}
 
-{# {% set _categories = user.services %} #}
-    {%
-        set _categories = [
-            {
-            'id': "12",    
-            'label': "Transfert d'argent",
-            'services':[ 
-                    {
-                    'id': '14',
-                    'label': 'Withdraw',
-                    'description': '',
-                    'status': '1'
-                    },
-                    {
-                    'id': '15',
-                    'label': 'Deposit',
-                    'description': '',
-                    'status': '1'
-                    },
-                ]
+ {% set _categories = app.session.get('services') %}
+
+{# {% set _categories = [
+  {
+    "id": 1,
+    "label": "Money transfer",
+    "description": "Money sending and receiving services",
+    "services": [
+      {
+        "id": 1,
+        "label": "Send Money",
+        "trans": [
+          {
+            "id": 2,
+            "carreer": {
+              "id": 2,
+              "countries": [
+                "CM"
+              ]
             },
-            {
-            'id': "13", 
-            'label': "Achat de Credit/Internet",
-            'services':[ 
-                    {
-                    'id': '16',
-                    'label': 'Credit de communication',
-                    'description': '',
-                    'status': '1'
-                    },
-                    {
-                    'id': '18',
-                    'label': 'Internet 100 Mo',
-                    'description': 'Forfait internet 100 Mo valable 24 Heures',
-                    'status': '1'
-                    },
-                    {
-                    'id': '19',
-                    'label': 'Internet 1.8 Go',
-                    'description': 'Forfait internet 1.8 Go valable 7 jours',
-                    'status': '1'
-                    },
-                ]
+            "description": "Orange deposit"
+          },
+          {
+            "id": 5,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
             },
-            {
-            'id': "14", 
-            'label': "Paiement de factures",
-            'services': [
-                    {
-                    'id': '20',
-                    'label': 'ENEO',
-                    'description': '',
-                    'status': '1'
-                    },
-                    {
-                    'id': '21',
-                    'label': 'CANAL+',
-                    'description': '',
-                    'status': '1'
-                    },
-                    {
-                    'id': '22',
-                    'label': 'CAMWATER',
-                    'description': 'Forfait internet 100 Mo valable 24 Heures',
-                    'status': '1'
-                    },
-                    {
-                    'id': '23',
-                    'label': 'IMPOTS',
-                    'description': 'Forfait internet 1.8 Go valable 7 jours',
-                    'status': '1'
-                    },
-                ]
-            },
-            {
-            'id': "15", 
-            'label': "Achat de Service/Produit",
-            'services': [
-                    {
-                    'id': '24',
-                    'label': 'Assurance',
-                    'description': '',
-                    'status': '1'
-                    },
-                    {
-                    'id': '25',
-                    'label': 'Bouquet TV',
-                    'description': '',
-                    'status': '1'
-                    },
-                    {
-                    'id': '26',
-                    'label': 'Frais Scolaire',
-                    'description': '',
-                    'status': '1'
-                    }
-                ]
-            },
+            "description": "mtn deposit - send money to any MTN CM mobile money account"
+          }
         ]
-    %}      
+      },
+      {
+        "id": 2,
+        "label": "Receive Money",
+        "trans": [
+          {
+            "id": 1,
+            "carreer": {
+              "id": 2,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "Orange Withdraw - retrieve money from any orange money account"
+          },
+          {
+            "id": 4,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "mtn Withdraw - retrieve money from any MTN mobile money account"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "label": "Telephone plans",
+    "description": "airtime & internet bundles",
+    "services": [
+      {
+        "id": 3,
+        "label": "900xaf week call + 30 SMS",
+        "trans": [
+          {
+            "id": 13,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "MTN Forfait Appels 900frs+30SMS Semaine"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "label": "3000xaf week call + 100 SMS",
+        "trans": [
+          {
+            "id": 14,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "MTN Forfait Appels 3000frs+100SMS Semaine"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "label": "3Go week internet",
+        "trans": [
+          {
+            "id": 11,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "MTN Forfait Internet 3Go Semaine"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "label": "750Mo week internet",
+        "trans": [
+          {
+            "id": 12,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "MTN Forfait Internet 750Mo Semaine"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "label": "30J unlimited SMS",
+        "trans": [
+          {
+            "id": 9,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "mtn forfait SMS illimite 30J"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "label": "24h unlimited SMS",
+        "trans": [
+          {
+            "id": 10,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "mtn forfait SMS illimite 24h"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "label": "Bill payment",
+    "description": "Pay Bills services",
+    "services": [
+      {
+        "id": 9,
+        "label": "Electricity Bill",
+        "trans": [
+          {
+            "id": 8,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "mtn eneo - electricity bill"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "label": "CNPS Employer",
+        "trans": [
+          {
+            "id": 6,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "mtn cnps employeur"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "label": "CNPS voluntary insured",
+        "trans": [
+          {
+            "id": 7,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "mtn cnps employeur"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "label": "Utilities",
+    "description": "Utility and complementary services",
+    "services": [
+      {
+        "id": 12,
+        "label": "Destockage",
+        "trans": [
+          {
+            "id": 3,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "Destockage. Remove money to cash from a business account free of fees "
+          }
+        ]
+      }
+    ]
+  }
+]
+
+%}#}
 	
-{# {% set _transactions = transactions %} #}
-    {%
+ {% set _transactions = transactions %}
+{#    {%
         set _transactions = [
             {
             'id': 'TR9842',
             'type': 'Withdraw',
-            'amount': '50000',
+            'amount_sent': '50000',
             'status': 'Complete',
-            'sender_account_ref': 'Default',
-            'receive_account_ref': 'Default',
+            'account_ref': 'Default',
+            'recipient_account_num': 'Default',
+            'created_at': '20/06/2020 11:55',
             'date': '03/06/2020',
             'time': '11:55'
             },
             {
             'id': 'TR2513',
             'type': 'Withdraw',
-            'amount': '150000',
+            'amount_sent': '150000',
             'status': 'failed',
-            'sender_account_ref': 'Easy School',
-            'receive_account_ref': 'Default',
+            'account_ref': 'Easy School',
+            'recipient_account_num': 'Default',
+            'created_at': '20/06/2020 15:25',
             'date': '20/06/2020',
             'time': '15:25'
             },
             {
             'id': 'TR2253',
             'type': 'Deposit',
-            'amount': '35000',
+            'amount_sent': '35000',
             'status': 'Processing',
-            'sender_account_ref': 'Default',
-            'receive_account_ref': 'Default',
+            'account_ref': 'Default',
+            'created_at': '20/06/2020 22:03',
+            'recipient_account_num': 'Default',
             'date': '30/06/2020',
             'time': '22:03'
             }
         ]
-    %}	
+    %} #}
 
 {% extends "base.html.twig" %}
 
@@ -187,39 +335,44 @@
     </div>
 {% endblock %}
 
-{% block content_main %}
-	<!-- Main content -->
+{% block content_main %}    
     {% for flashError in app.flashes('error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <i class="fa fa-exclamation-circle"></i>&nbsp{{ flashError }}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>    
     {% endfor %}
     {% for message in app.flashes('notice') %}
-        <div class="flash-notice">
-            {{ message }}
+        <div class="alert alert-warning alert-dismissible  flash-notice">
+            <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }}"</a>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
         </div>
     {% endfor %}
 
     {# read and display several types of flash messages #}
     {% for label, messages in app.flashes(['success']) %}
-        {% for message in messages %}
-            <div class="alert alert-success">
-                {{ message }}
+        {% for message in messages %}                            
+            <div class="alert alert-success alert-dismissible">
+                <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }} }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
             </div>
         {% endfor %}
     {% endfor %}
+	<!-- Main content -->
+	<section class="content">
 
-    <section class="content">
-	  <div class="container-fluid">
+		<div class="container-fluid">
 		<!-- Small boxes (Stat box) -->
 		<div class="row">
 		  <div class="col-lg-4 col-6">
 			<!-- small box -->
-			<div class="small-box bg-info">
+			<div class="small-box datibox-bg-primary">
 			  <div class="inner">
 				<h3>{{ _balance }}<sup style="font-size: 20px">{{ _currency }}</sup></h3>
 				<p>Balance</p>
 			  </div>
 			  <div class="icon">
-				<i class="ion ion-bag"></i>
+				<i class="fa"><img style="width: 70px;" src="{{ asset('assets/icon/balance_icon.png') }}"></img></i>
 			  </div>
 			  <a href="#" class="small-box-footer">TopUp Now <i class="fas fa-arrow-circle-down"></i></a>
 			</div>
@@ -227,14 +380,14 @@
 		  <!-- ./col -->
 		  <div class="col-lg-4 col-6">
 			<!-- small box -->
-			<div class="small-box bg-success">
+			<div class="small-box datibox-bg-light">
 			  <div class="inner">
 				<h3>{{ _deposit_amount }}<sup style="font-size: 20px">{{ _currency }}</sup></h3>
 
 				<p>Deposit</p>
 			  </div>
 			  <div class="icon">
-				<i class="fa fa-arrow-down"></i>
+				<i class="fa"><img style="width: 70px;" src="{{ asset('assets/icon/deposit_icon.png') }}"></img></i>
 			  </div>
 			  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 			</div>
@@ -242,14 +395,14 @@
 		  <!-- ./col -->
 		  <div class="col-lg-4 col-6">
 			<!-- small box -->
-			<div class="small-box bg-warning">
+			<div class="small-box datibox-bg-light">
 			  <div class="inner">
 				<h3>{{ _withdraw_amount }}<sup style="font-size: 20px">{{ _currency }}</sup></h3>
 
 				<p>Withdraw</p>
 			  </div>
 			  <div class="icon">
-				<i class="fa fa-arrow-up"></i>
+				<i class="fa"><img style="width: 70px;" src="{{ asset('assets/icon/withdraw_icon.png') }}"></img></i>
 			  </div>
 			  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 			</div>
@@ -285,7 +438,7 @@
 					</div>
 					<div class="product-info">
 					  <a id="{{ account.id }}" href="javascript:void(0)" class="product-title">{{ account.name }}
-						<span class="badge badge-info float-right">{{ account.balance }}<sup style="font-size: 10px">{{ _currency }}</sup></span></a>
+						<span class="badge datibadge-primary float-right">{{ account.balance }}<sup style="font-size: 10px">{{ _currency }}</sup></span></a>
 					  <span class="product-description">
 						{{ account.description }}
 					  </span>
@@ -338,25 +491,25 @@
 						<tr>
 						  <td><a href="pages/examples/invoice.html">{{ transaction.id }}</a></td>
 						  <td>
-                          {% if (transaction.type)|lower == 'withdraw' %}
- 									<span class="badge badge-warning">Withdraw</span>
-									  <small class="text-warning mr-1">
-										<i class="fas fa-arrow-up"></i>
-									  </small><br>
-									  {{ transaction.amount }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                             
-                                {% elseif (transaction.type)|lower == 'deposit' %}
-                                            <span class="badge badge-success">Deposit</span>
-                                            <small class="text-success mr-1">
-                                                <i class="fas fa-arrow-down"></i>
-                                            </small><br>
-                                            {{ transaction.amount }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                              
-                                {% else %}
-                                            <span class="badge badge-default">{{ transaction.type }}</span>
-                                            <small class="text-default mr-1">
-                                                <i class="far fa-dot-circle"></i>
-                                            </small><br>
-                                            {{ transaction.amount }}<sup style="font-size: 10px">{{ _currency }}</sup></span>	
-                          {% endif %}
+{% if (transaction.type)|lower == 'withdraw' %}
+                  <span class="badge datibadge-dark">Withdraw</span>
+                  <small class="datitext-dark mr-1">
+                    <i class="fas fa-arrow-up"></i>
+                  </small><br>
+                  {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                             
+      {% elseif (transaction.type)|lower == 'deposit' %}
+                  <span class="badge datibadge-primary">Deposit</span>
+                  <small class="datitext-primary mr-1">
+                      <i class="fas fa-arrow-down"></i>
+                  </small><br>
+                  {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                              
+      {% else %}
+                  <span class="badge badge-default">{{ transaction.type }}</span>
+                  <small class="text-default mr-1">
+                      <i class="far fa-dot-circle"></i>
+                  </small><br>
+                  {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>	
+{% endif %}
 
                     {#
                             {% set loopIndex = loop.index %}
@@ -385,12 +538,13 @@
 						  </td>
 						  <td>{{ transaction.status }}</td>
 						  <td>
-							<div class="sparkbar" data-color="#00a65a" data-height="20">{{ transaction.sender_account_ref }}</div>
+							<div class="sparkbar" data-color="#00a65a" data-height="20">{{ transaction.account_ref }}</div>
 						  </td>
 						  <td>
-							<div class="sparkbar" data-color="#00a65a" data-height="20">{{ transaction.receive_account_ref }}</div>
+							<div class="sparkbar" data-color="#00a65a" data-height="20">{{ transaction.recipient_account_num }}</div>
 						  </td>
-						  <td>{{ transaction.date }}-{{ transaction.time }}</td>
+						  <td>{{ transaction.created_at|date("d/m/Y h:m") }}</td>
+                          {#<td>{{ transaction.date ~" " ~transaction.time }}</td>#}
 						</tr>
 					{% endfor %}
 					</tbody>

@@ -42,7 +42,7 @@ security:
         - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/transactions, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
-        - { path: ^/, roles: [IS_AUTHENTICATED_FULLY] }
+        - { path: ^/, roles: [ROLE_MOBILE_CLIENT] }
 
         # - { path: ^/profile, roles: ROLE_USER }
 

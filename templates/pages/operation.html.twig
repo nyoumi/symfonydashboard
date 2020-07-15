@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 
-{# {% set _accounts = user.accounts %} #}
-    {%
+{% set _accounts = app.user.accounts %} 
+{# {%
         set _accounts = [
             {
             'id': 12,
@@ -17,9 +17,255 @@
             },
         ] 
     %}
+#}
 
-{# {% set _categories = user.services %} #}
-    {%
+ {% set _categories = app.session.get('services') %}
+{#{% set _categories = [
+  {
+    "id": 1,
+    "label": "Money transfer",
+    "description": "Money sending and receiving services",
+    "services": [
+      {
+        "id": 1,
+        "label": "Send Money",
+        "trans": [
+          {
+            "id": 2,
+            "carreer": {
+              "id": 2,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "Orange deposit"
+          },
+          {
+            "id": 5,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "mtn deposit - send money to any MTN CM mobile money account"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "label": "Receive Money",
+        "trans": [
+          {
+            "id": 1,
+            "carreer": {
+              "id": 2,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "Orange Withdraw - retrieve money from any orange money account"
+          },
+          {
+            "id": 4,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "mtn Withdraw - retrieve money from any MTN mobile money account"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "label": "Telephone plans",
+    "description": "airtime & internet bundles",
+    "services": [
+      {
+        "id": 3,
+        "label": "900xaf week call + 30 SMS",
+        "trans": [
+          {
+            "id": 13,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "MTN Forfait Appels 900frs+30SMS Semaine"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "label": "3000xaf week call + 100 SMS",
+        "trans": [
+          {
+            "id": 14,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "MTN Forfait Appels 3000frs+100SMS Semaine"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "label": "3Go week internet",
+        "trans": [
+          {
+            "id": 11,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "MTN Forfait Internet 3Go Semaine"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "label": "750Mo week internet",
+        "trans": [
+          {
+            "id": 12,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "MTN Forfait Internet 750Mo Semaine"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "label": "30J unlimited SMS",
+        "trans": [
+          {
+            "id": 9,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "mtn forfait SMS illimite 30J"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "label": "24h unlimited SMS",
+        "trans": [
+          {
+            "id": 10,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "mtn forfait SMS illimite 24h"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "label": "Bill payment",
+    "description": "Pay Bills services",
+    "services": [
+      {
+        "id": 9,
+        "label": "Electricity Bill",
+        "trans": [
+          {
+            "id": 8,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "mtn eneo - electricity bill"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "label": "CNPS Employer",
+        "trans": [
+          {
+            "id": 6,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "mtn cnps employeur"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "label": "CNPS voluntary insured",
+        "trans": [
+          {
+            "id": 7,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "mtn cnps employeur"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "label": "Utilities",
+    "description": "Utility and complementary services",
+    "services": [
+      {
+        "id": 12,
+        "label": "Destockage",
+        "trans": [
+          {
+            "id": 3,
+            "carreer": {
+              "id": 1,
+              "countries": [
+                "CM"
+              ]
+            },
+            "description": "Destockage. Remove money to cash from a business account free of fees "
+          }
+        ]
+      }
+    ]
+  }
+]
+
+%} #}
+
+{#    {%
         set _categories = [
             {
             'id': "12",    
@@ -126,7 +372,7 @@
             },
         ]
     %}  
-
+#}
 {% block stylesheets %}
             <!-- Font Awesome -->
             <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
@@ -270,155 +516,163 @@
 
 
                 <div class="col-md-8">
-
-                    <div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;" >
-                        <div class="card-header d-flex justify-content-between" style="align-items: center;">
-                            <div class="col-md-6">
-                                <select class="swal2-select" style="display: flex;" name="operation_type" id="operation_type">
-                                    <option value="" disabled="">Select Operation Type</option>                    
-                                    {% for categorie in _categories %}
-                                        <optgroup label="{{ categorie.label }}">
-                                        {% for service in categorie.services %}
-                                            <option value="{{  service.id  }}" {% if app.request.get('sid') is defined and app.request.get('sid') == service.id %}selected{% endif %}>{{  service.label  }}</option>
+                    
+                    <div id="operation_header_card">
+                        <div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;">
+                            <div class="card-header d-flex justify-content-between" style="align-items: center;">
+                                <div class="col-md-6">
+                                    <select class="swal2-select" style="display: flex;" name="operation_type" id="daticash__service-listbox">
+                                        <option value="" disabled="">Select Operation Type</option>                    
+                                        {% for categorie in _categories %}
+                                            <optgroup data-category_label = "{{  categorie.label  }}" data-category_description = "{{  categorie.description  }}"  data-category_id = "{{  categorie.id  }}" label="{{ categorie.label }}">
+                                            {% for service in categorie.services %}
+                                                <option class="dati_opt_item" data-service_description = "" data-service_label = "{{  service.label  }}" data-service_id = "{{  service.id  }}" value="{{  service.id  }}" {% if app.request.get('sid') is defined and app.request.get('sid') == service.id %}selected{% endif %}>{{  service.label  }}</option>
+                                            {% endfor %}
                                         {% endfor %}
-                                    {% endfor %}
-                                </select>
+                                    </select>
+                                </div>
+    
+                                <div class="col-md-6">
+                                    <select class="swal2-select" style="display: flex;" name="account_ref" id="account_ref">
+                                        <option value="" disabled="">Select Account Reference</option>
+                                        <optgroup label="Daticash Account">
+                                        {% for categorie in _categories %}
+                                            {% for service in categorie.services %}
+                                            
+                                                {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and (service.id == 1) %}
+                                                    <option value="daticash" selected >Daticash Account</option>
+                                                {% endif %}
+                                                
+                                                {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and (service.id > 2) %}
+                                                    <option value="daticash" selected >Default</option>
+                                                {% endif %}
+                
+                                                {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and service.id == 2 %}
+                                                    {% for account in _accounts %}
+                                                        <option value="{{  account.id  }}">{{  account.name  }}</option>
+                                                    {% endfor %}  
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}         
+                                        </optgroup>
+                                        {% for categorie in _categories %}
+                                            {% for service in categorie.services %}
+                                                {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and (service.id == 1 or service.id == 2) %}
+                                                <optgroup label="Other Account">
+                                                    <option value="mobilemoney">Mobile Money</option>
+                                                    <option value="creditcard">Credit Card</option>
+                                                    <option value="bankaccount">Bank Account</option>
+                                                    <option value="paypal">Paypal</option>
+                                                </optgroup>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                        
+                                    </select>  
+                                </div>                              
                             </div>
-
-                            <div class="col-md-6">
-                                <select class="swal2-select" style="display: flex;" name="account_ref" id="account_ref">
-                                    <option value="" disabled="">Select Account Reference</option>
-                                    <optgroup label="Daticash Account">
-                                    {% for categorie in _categories %}
-                                        {% for service in categorie.services %}
-                                            {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and (service.label)|lower is not same as('deposit') %}
-                                                <option value="" selected >Default</option>
-                                            {% endif %}
-            
-                                            {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and (service.label)|lower == 'deposit' %}
-                                                {% for account in _accounts %}
-                                                    <option value="{{  account.id  }}">{{  account.name  }}</option>
-                                                {% endfor %}  
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endfor %}         
-                                    </optgroup>
-                                    {% for categorie in _categories %}
-                                        {% for service in categorie.services %}
-                                            {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and ((service.label)|lower == 'withdraw' or (service.label)|lower == 'deposit') %}
-                                            <optgroup label="Other Account">
-                                                <option value="mobilemoney">Mobile Money</option>
-                                                <option value="creditcard">Credit Card</option>
-                                                <option value="bankaccount">Bank Account</option>
-                                                <option value="paypal">Paypal</option>
-                                            </optgroup>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endfor %}
-                                    
-                                </select>  
-                            </div>                              
                         </div>
                     </div>
-                        
-                    <div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;" >
-                        <div class="card-header d-flex justify-content-between" style="align-items: center;">
-                            <h3 class="card-title" style="margin: 1rem auto 1rem; align-self: center;">Send To&nbsp;&nbsp;<span id="country_name"></span></h3>
-                            <p id="country_img"></p>
-                            <div class="send-feedback m-2" style="position: absolute;width: 93%;"></div>
-						</div>
-
-                        <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">
-                            <small id="allow_reset-feedback"></small>
-                            <form class="form" method="post" style="margin: auto;" action="http://api.daticash.com/api/mobilemoney/new">
-                                <input type="hidden" name="type" id="type" value="withdraw">
-                                <input type="hidden" name="imput_account_ref" id="imput_account_ref" value="default">
-                                <input type="hidden" name="mode" id="mode" value="mobilemoney">
-
-                                <p class="waiting_text"></p>
-                                <div class="row">				
-                                    <div class="col-md-6">
-                                        <div class="form-group form-group-sender_phone">
-                                        <label for="sender_phone" style="width: 100%; margin-bottom: .5rem;">
-                                            <font style="vertical-align: inherit;">Sender Phone&nbsp</font>
-                                            <small id="sender_phone-feedback" style="display: block;"></small>											
-                                        </label>
-                                            <input type="hidden" name="sender_country_code" id="sender_country_code" value="{{ app.user.countryCode  }}">
-                                            <input type="tel" name="sender_phone" id="sender_phone" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                    <div class="form-group form-group-recipient_phone">
-                                        <label for="recipient_phone" style="width: 100%; margin-bottom: .5rem;">
-                                            <font style="vertical-align: inherit;">Recipient Phone&nbsp</font>
-                                            <small id="recipient_phone-feedback" style="display: block;"></small>											
-                                        </label>							
-                                        <input type="hidden" name="recipient_country_code" id="recipient_country_code" value="237">
-                                        <input type="text" name="recipient_phone" id="recipient_phone" class="form-control">
-                                    </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <div class="form-group ">
-                                            <label for="amount_sent" style="width: 100%; margin-bottom: .5rem;">
-                                                <font style="vertical-align: inherit;">Send Amount&nbsp <sapn id="currency_sent_txt">(USD)</sapn></font>
-                                                <small id="amount_sent-feedback" style="display: block;"></small>											
+                    
+                    <div id="operation_body_card">      
+                        <div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;" >
+                            <div class="card-header d-flex justify-content-between" style="align-items: center;">
+                                <h3 class="card-title" style="margin: 1rem auto 1rem; align-self: center;">Send To&nbsp;&nbsp;<span id="country_name"></span></h3>
+                                <p id="country_img"></p>
+                                <div class="send-feedback m-2" style="position: absolute;width: 93%;"></div>
+    						</div>
+    
+                            <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">
+                                <small id="allow_reset-feedback"></small>
+                                <form class="form" method="post" style="margin: auto;" action="http://api.daticash.com/api/mobilemoney/new">
+                                    <input type="hidden" name="type" id="type" value="withdraw">
+                                    <input type="hidden" name="imput_account_ref" id="imput_account_ref" value="default">
+                                    <input type="hidden" name="mode" id="mode" value="mobilemoney">
+    
+                                    <p class="waiting_text"></p>
+                                    <div class="row">				
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-sender_phone">
+                                            <label for="sender_phone" style="width: 100%; margin-bottom: .5rem;">
+                                                <font style="vertical-align: inherit;">Sender Phone&nbsp</font>
+                                                <small id="sender_phone-feedback" style="display: block;"></small>											
                                             </label>
-                                            <input type="text" name="amount_sent" id="amount_sent" class="form-control sent" value="">
-                                            <input type="hidden" name="currency_sent" id="currency_sent" value="USD">
+                                                <input type="hidden" name="sender_country_code" id="sender_country_code" value="{{ app.user.countryCode  }}">
+                                                <input type="tel" name="sender_phone" id="sender_phone" class="form-control">
+                                            </div>
                                         </div>
-                                    </div>						  
-                                    <div class="col-md-2" id="div_wait_convertion">
-                                        <span id="span_wait_convertion" style="text-align: -webkit-center; align-items: center;"></span>
-                                        <img id="mannuel_convert" src="{{ asset('assets/img/fleches.png') }}" style="position: relative;width: 70px; cursor: pointer;" /> 
-                                    </div>
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <label for="amount_received" style="width: 100%; margin-bottom: .5rem;">
-                                                <font style="vertical-align: inherit;">Receive Amount&nbsp <sapn id="currency_received_txt">(XAF)</sapn></font>
-                                                <small id="amount_received-feedback" style="display: block;"></small>											
-                                            </label>
-                                            <input type="text" name="amount_received" id="amount_received" class="form-control receive" value="100">
-                                            <input type="hidden" name="currency_received" id="currency_received" value="XAF">
+                                        <div class="col-md-6">
+                                        <div class="form-group form-group-recipient_phone">
+                                            <label for="recipient_phone" style="width: 100%; margin-bottom: .5rem;">
+                                                <font style="vertical-align: inherit;">Recipient Phone&nbsp</font>
+                                                <small id="recipient_phone-feedback" style="display: block;"></small>											
+                                            </label>							
+                                            <input type="hidden" name="recipient_country_code" id="recipient_country_code" value="237">
+                                            <input type="text" name="recipient_phone" id="recipient_phone" class="form-control">
+                                        </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group ">
-                                            <label for="imput_reason">What is the reason for the transfer ? (optional)</label>
-                                            <input type="text" name="imput_reason" id="imput_reason" class="form-control sent" maxlength="30" placeholder="This message will be sent to the receiver">							  						
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group ">
+                                                <label for="amount_sent" style="width: 100%; margin-bottom: .5rem;">
+                                                    <font style="vertical-align: inherit;">Send Amount&nbsp <sapn id="currency_sent_txt">(USD)</sapn></font>
+                                                    <small id="amount_sent-feedback" style="display: block;"></small>											
+                                                </label>
+                                                <input type="text" name="amount_sent" id="amount_sent" class="form-control sent" value="">
+                                                <input type="hidden" name="currency_sent" id="currency_sent" value="USD">
+                                            </div>
+                                        </div>						  
+                                        <div class="col-md-2" id="div_wait_convertion">
+                                            <span id="span_wait_convertion" style="text-align: -webkit-center; align-items: center;"></span>
+                                            <img id="mannuel_convert" src="{{ asset('assets/img/fleches.png') }}" style="position: relative;width: 70px; cursor: pointer;" /> 
                                         </div>
-                                    </div>	
-                                </div>
-                                <div class="card mt-2 mb-2">
-                                    <div class="card-body p-1 m-0 font-weight-bold">
-                                        <div class="float-left">Send Amount</div>
-                                        <div class="float-right"><span id="span_amount_sent_currency">$</span>&nbsp;<span id="span_amount_sent">0.0</span></div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label for="amount_received" style="width: 100%; margin-bottom: .5rem;">
+                                                    <font style="vertical-align: inherit;">Receive Amount&nbsp <sapn id="currency_received_txt">(XAF)</sapn></font>
+                                                    <small id="amount_received-feedback" style="display: block;"></small>											
+                                                </label>
+                                                <input type="text" name="amount_received" id="amount_received" class="form-control receive" value="100">
+                                                <input type="hidden" name="currency_received" id="currency_received" value="XAF">
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="card-body p-1 m-0 font-weight-bold">
-                                        <div class="float-left">Fees</div>
-                                        <input type="hidden" name="fees" id="fees" value="0.0">
-                                    <div class="float-right"><span id="span_fees_currency">$</span>&nbsp;<span id="span_fees">0.0</span></div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group ">
+                                                <label for="imput_reason">What is the reason for the transfer ? (optional)</label>
+                                                <input type="text" name="imput_reason" id="imput_reason" class="form-control sent" maxlength="30" placeholder="This message will be sent to the receiver">							  						
+                                            </div>
+                                        </div>	
                                     </div>
-                                    <div class="card-body m-0 p-1 font-weight-bold">
-                                        <div class="float-left">Total Pay:</div>
-                                        <input type="hidden" name="total_pay" id="total_pay" value="0.0">	
-                                    <div class="float-right"><span id="span_total_pay_currency">$</span>&nbsp;<span id="span_total_pay">0.0</span></div>
+                                    <div class="card mt-2 mb-2">
+                                        <div class="card-body p-1 m-0 font-weight-bold">
+                                            <div class="float-left">Send Amount</div>
+                                            <div class="float-right"><span id="span_amount_sent_currency">$</span>&nbsp;<span id="span_amount_sent">0.0</span></div>
+                                        </div>
+                                        <div class="card-body p-1 m-0 font-weight-bold">
+                                            <div class="float-left">Fees</div>
+                                            <input type="hidden" name="fees" id="fees" value="0.0">
+                                        <div class="float-right"><span id="span_fees_currency">$</span>&nbsp;<span id="span_fees">0.0</span></div>
+                                        </div>
+                                        <div class="card-body m-0 p-1 font-weight-bold">
+                                            <div class="float-left">Total Pay:</div>
+                                            <input type="hidden" name="total_pay" id="total_pay" value="0.0">	
+                                        <div class="float-right"><span id="span_total_pay_currency">$</span>&nbsp;<span id="span_total_pay">0.0</span></div>
+                                        </div>
+                                        <div class="card-body m-0 p-1 font-weight-bold">
+                                            <div class="float-left">Your Recipient Gets</div>
+                                            <div class="float-right"><span id="span_amount_received_currency">$</span>&nbsp;<span id="span_amount_received">0.0</span></div>
+                                        </div>
                                     </div>
-                                    <div class="card-body m-0 p-1 font-weight-bold">
-                                        <div class="float-left">Your Recipient Gets</div>
-                                        <div class="float-right"><span id="span_amount_received_currency">$</span>&nbsp;<span id="span_amount_received">0.0</span></div>
+                                    <div class="mt-2 mb-2">											
+                                        <button type="button" class="daticash_btn btn-daticash btn-block sendBtn" style="background-color:#1B5368">Send</button>
                                     </div>
-                                </div>
-                                <div class="mt-2 mb-2">											
-                                    <button type="button" class="daticash_btn btn-daticash btn-block sendBtn" style="background-color:#1B5368">Send</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>            
-
+                                </form>
+                            </div>
+                        </div>            
+                    </div> 
 
                 </div>
 
@@ -444,7 +698,189 @@
             <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
             <!-- Daticash QS-->	
             <script src="{{ asset('assets/js/daticashQS.js') }}"></script>
+<script>
 
+	var daticash_operation_card_body_popUp = (
+                        '<div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;" >'+ 
+                            '<div class="card-header d-flex justify-content-between" style="align-items: center;">'+
+                                '<h3 class="card-title" style="margin: 1rem auto 1rem; align-self: center;">Send To&nbsp;&nbsp;<span id="country_name"></span></h3>'+
+                                '<p id="country_img"></p>'+
+                                '<div class="send-feedback m-2" style="position: absolute;width: 93%;"></div>'+
+    						'</div>'+
+    
+                            '<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+
+                                '<small id="allow_reset-feedback"></small>'+
+                                '<form class="form" method="post" style="margin: auto;" action="http://api.daticash.com/api/mobilemoney/new">'+
+                                    '<input type="hidden" name="type" id="type" value="withdraw">'+
+                                    '<input type="hidden" name="imput_account_ref" id="imput_account_ref" value="default">'+
+                                    '<input type="hidden" name="mode" id="mode" value="mobilemoney">'+
+    
+                                    '<p class="waiting_text"></p>'+
+                                   '<div class="row">'+				
+                                       '<div class="col-md-6">'+
+                                           '<div class="form-group form-group-sender_phone">'+
+                                           '<label for="sender_phone" style="width: 100%; margin-bottom: .5rem;">'+
+                                               '<font style="vertical-align: inherit;">Sender Phone&nbsp</font>'+
+                                               '<small id="sender_phone-feedback" style="display: block;"></small>'+											
+                                           '</label>'+
+                                               '<input type="hidden" name="sender_country_code" id="sender_country_code" value="{{ app.user.countryCode  }}">'+
+                                               '<input type="tel" name="sender_phone" id="sender_phone" class="form-control">'+
+                                           '</div>'+
+                                       '</div>'+
+                                       '<div class="col-md-6">'+
+                                       '<div class="form-group form-group-recipient_phone">'+
+                                           '<label for="recipient_phone" style="width: 100%; margin-bottom: .5rem;">'+
+                                               '<font style="vertical-align: inherit;">Recipient Phone&nbsp</font>'+
+                                               '<small id="recipient_phone-feedback" style="display: block;"></small>'+											
+                                           '</label>'+							
+                                           '<input type="hidden" name="recipient_country_code" id="recipient_country_code" value="237">'+
+                                           '<input type="text" name="recipient_phone" id="recipient_phone" class="form-control">'+
+                                       '</div>'+
+                                       '</div>'+
+                                   '</div>'+
+                                   '<div class="row">'+
+                                       '<div class="col-md-5">'+
+                                           '<div class="form-group ">'+
+                                               '<label for="amount_sent" style="width: 100%; margin-bottom: .5rem;">'+
+                                                   '<font style="vertical-align: inherit;">Send Amount&nbsp <sapn id="currency_sent_txt">(USD)</sapn></font>'+
+                                                   '<small id="amount_sent-feedback" style="display: block;"></small>'+											
+                                               '</label>'+
+                                               '<input type="text" name="amount_sent" id="amount_sent" class="form-control sent" value="">'+
+                                               '<input type="hidden" name="currency_sent" id="currency_sent" value="USD">'+
+                                           '</div>'+
+                                       '</div>'+						  
+                                       '<div class="col-md-2" id="div_wait_convertion">'+
+                                           '<span id="span_wait_convertion" style="text-align: -webkit-center; align-items: center;"></span>'+
+                                           '<img id="mannuel_convert" src="{{ asset('assets/img/fleches.png') }}" style="position: relative;width: 70px; cursor: pointer;" />'+ 
+                                       '</div>'+
+                                       '<div class="col-md-5">'+
+                                           '<div class="form-group">'+
+                                               '<label for="amount_received" style="width: 100%; margin-bottom: .5rem;">'+
+                                                   '<font style="vertical-align: inherit;">Receive Amount&nbsp <sapn id="currency_received_txt">(XAF)</sapn></font>'+
+                                                   '<small id="amount_received-feedback" style="display: block;"></small>'+											
+                                               '</label>'+
+                                               '<input type="text" name="amount_received" id="amount_received" class="form-control receive" value="100">'+
+                                               '<input type="hidden" name="currency_received" id="currency_received" value="XAF">'+
+                                           '</div>'+
+                                       '</div>'+
+                                   '</div>'+
+                                   '<div class="row">'+
+                                       '<div class="col-md-12">'+
+                                           '<div class="form-group ">'+
+                                               '<label for="imput_reason">What is the reason for the transfer ? (optional)</label>'+
+                                               '<input type="text" name="imput_reason" id="imput_reason" class="form-control sent" maxlength="30" placeholder="This message will be sent to the receiver">'+							  						
+                                           '</div>'+
+                                       '</div>'+	
+                                   '</div>'+
+                                   '<div class="card mt-2 mb-2">'+
+                                       '<div class="card-body p-1 m-0 font-weight-bold">'+
+                                           '<div class="float-left">Send Amount</div>'+
+                                           '<div class="float-right"><span id="span_amount_sent_currency">$</span>&nbsp;<span id="span_amount_sent">0.0</span></div>'+
+                                       '</div>'+
+                                       '<div class="card-body p-1 m-0 font-weight-bold">'+
+                                           '<div class="float-left">Fees</div>'+
+                                           '<input type="hidden" name="fees" id="fees" value="0.0">'+
+                                       '<div class="float-right"><span id="span_fees_currency">$</span>&nbsp;<span id="span_fees">0.0</span></div>'+
+                                       '</div>'+
+                                       '<div class="card-body m-0 p-1 font-weight-bold">'+
+                                           '<div class="float-left">Total Pay:</div>'+
+                                           '<input type="hidden" name="total_pay" id="total_pay" value="0.0">'+	
+                                       '<div class="float-right"><span id="span_total_pay_currency">$</span>&nbsp;<span id="span_total_pay">0.0</span></div>'+
+                                       '</div>'+
+                                       '<div class="card-body m-0 p-1 font-weight-bold">'+
+                                           '<div class="float-left">Your Recipient Gets</div>'+
+                                           '<div class="float-right"><span id="span_amount_received_currency">$</span>&nbsp;<span id="span_amount_received">0.0</span></div>'+
+                                       '</div>'+
+                                   '</div>'+
+                                   '<div class="mt-2 mb-2">'+											
+                                       '<button type="button" class="daticash_btn btn-daticash btn-block sendBtn" style="background-color:#1B5368">Send</button>'+
+                                   '</div>'+
+                               '</form>'+
+                           '</div>'+
+                       '</div>'  
+				);
+
+
+
+
+
+
+
+(function ($) {
+    /*Textbox Events*/
+    $(document)
+    		/*Tab Highlighter Functionality*/
+    		.on('change', 'select#daticash__service-listbox', function(){
+    				var $this = $(this).find("option:selected");
+    				DatiOptItem.set($this);
+    				
+    			});
+
+    var DatiOptItem = {
+        set: function($this){
+             pid = $($this).attr("data-service_id");
+    		switch(pid) {
+    			case "1":// withdraw
+    				init.withdraw();
+    				break;
+    			case "2":// deposit
+    				init.deposit();
+    				break;
+    			default:
+    				init.default();
+    		}						
+        },
+        refresh: function(){
+            var $this = $('#daticash__service-listbox optgroup option[selected]');
+
+    		switch(pid = $($this).attr("data-service_id")) {
+    			case "1":// withdraw
+    				init.withdraw();
+    				break;
+    			case "2":// deposit
+    				init.deposit();
+    				break;
+    			default:
+    				init.default();
+    		}	
+    					
+        }
+    };
+/*    
+    $(document).ready(function(){
+    	DatiOptItem.refresh();
+    });
+*/    
+    var init = {
+    		//se connecter au gestionnaire de session puis recuperer l'état de la session
+    	deposit: function (){
+            $('#operation_body_card').empty().append(
+                '<div class="alert alert-warning alert-dismissible  flash-notice">'+
+                    '<i class="fa fa-exclamation-circle"></i>&nbsp Here ! deposit form coming soon</a>'+
+                    '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                '</div>'
+            );
+    	},
+    	withdraw: function(){
+    	    $('#operation_body_card').empty().append(daticash_operation_card_body_popUp);
+    	},
+     
+    	default: function(){
+            $('#operation_body_card').empty().append(
+                        '<div class="alert alert-success alert-dismissible  flash-notice">'+
+                            '<i class="fa fa-exclamation-circle"></i>&nbsp Here ! the default form coming soon</a>'+
+                            '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                        '</div>'
+            );
+    	},
+     
+    };
+    
+})(jQuery);
+
+
+    
+</script>
             <script>
 				var input_sender_phone = document.querySelector("#sender_phone");		
 				var input_recipient_phone = document.querySelector("#recipient_phone");
@@ -580,12 +1016,54 @@
 					var value = jQuery(this).val();
 					value = value.replace(/[^0-9]+/g, "");
 					jQuery(this).val(value);
-				});		
+				})
+				
+					
 			</script>
 
 
 			<script>
+			
+			
+			
 				$(document).ready(function() {
+				    
+				    $('#account_ref').on('change', function() {
+				        alert("change")
+				    })
+				    
+                    $('#payment-form').css('display', 'none')
+					$('#paypalMethodFrom').css('display', 'none')
+					$('#bankPaymentMethod').css('display', 'none')
+					$('#paymentMethod').on('change', function() {
+					  let paymentMethod = $('#paymentMethod').val()
+					  if(paymentMethod == 'momo') {
+						$('#mobileMethodForm').css('display', 'block')
+						$('#payment-form').css('display', 'none')
+						$('#paypalMethodFrom').css('display', 'none')
+					  } else if(paymentMethod == 'cc') {
+						$('#mobileMethodForm').css('display', 'none')
+						$('#paypalMethodFrom').css('display', 'none')
+						$('#payment-form').css('display', 'block')
+					  } else if(paymentMethod == 'pp') {
+						$('#mobileMethodForm').css('display', 'none')
+						$('#paypalMethodFrom').css('display', 'block')
+						$('#payment-form').css('display', 'none')
+					  } else if(paymentMethod == 'bank'){
+						  /*const local = $('#localisation').val()
+						  if(local != 1){
+							// Display a success notification
+							notyf.error('Not available for your location area!');
+						  }*/
+						  $('#bankPaymentMethod').css('display', 'block')
+						  $('#mobileMethodForm').css('display', 'none')
+						  $('#paypalMethodFrom').css('display', 'none')
+						  $('#payment-form').css('display', 'none')
+					  }
+					})
+									    
+				    
+				    
 					processConvert();
 
 					$("#amount_sent,#amount_received,#currency_received,#currency_sent").change(function(e) {
@@ -689,7 +1167,8 @@
 					e.preventDefault();	
 	
 				  let action = "init_mobilemoney_transaction";
-				  let type = "deposit";
+				  let id = 1;
+				  let type = "withdraw";
 				  let account_ref = $("#imput_account_ref").val();
 				  let amount_sent = $("#amount_sent").val();
 				  let currency_sent = $("#currency_sent").val();
@@ -731,6 +1210,7 @@
 								var sub_request = {
 									withdraw:{
 										"action":"withdraw", 
+										"id":id,
 										"type":type, 
 										"account_ref":account_ref, 
 										"amount_sent":amount_sent,
@@ -742,7 +1222,264 @@
 										"reason":reason, 							
 									}
 								};
-												
+								
+                                let status						
+                                let timerInterval
+                                let transaction_id
+                            Swal.fire({
+                                  title: "Initiate Transaction",
+                                  html: "STATUS : <b class=\"status_js\">Checking service availability.</b>.",
+                                  icon: "info",
+                                  timer: 5000,
+                                  timerProgressBar: true,
+                                  onBeforeOpen: () => {
+                                	Swal.showLoading()
+                                	return fetch("{{path('transactions_create')  }}"  , {"method": "POST", "data": sub_request.withdraw })//confirm-password url
+                                	//return fetch("{{path('transactions_create')  }}" + `?currency_sent=XAF&amount_sent=122220&type=withdraw&sender_phone=676558870&sender_country_code=237&recipient_country_code=237&recipient_phone=691752255&recipient_account_num=&account_ref=`, {"method": "POST"})//confirm-password url
+                                	//return fetch(`https://api.daticash.com/api/mobilemoney/new?currency_sent=XAF&amount_sent=122220&type=withdraw&sender_phone=676558870&sender_country_code=237&recipient_country_code=237&recipient_phone=691752255&recipient_account_num=&account_ref=`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "POST"})//confirm-password url(error)
+                                	//return fetch(`//api.github.com/users/bouba`)//confirm-password url(success)
+                                		.then(response => {
+                                			if (!response.ok) {
+                                			  throw new Error(response.statusText)
+                                			}
+                                			return response.json()
+                                		  })
+                                		  .catch(error => {
+                                			Swal.fire(
+                                			  "Failed!",
+                                			  "Service not avalaible Now, trys again later. Your transaction initiation have been aborded...",
+                                			  "error"
+                                			)						  
+                                			/*Swal.showValidationMessage(
+                                			  `Request failed: ${error}`
+                                			)*/
+                                		  })						
+                                  },						  
+                                  showLoaderOnConfirm: true,
+                                  onClose: () => {
+                                	Swal.fire(
+                                	  "Aborded!",
+                                	  "Your session has been closed. The initiation of transaction take too time...",
+                                	  "info"
+                                	)							
+                                  }						  
+                                }).then((result) => {
+                                	if (result.value) {
+                                		let transaction_id = result.value.id
+                                		let status						
+                                		let timerInterval						
+                                		Swal.fire({
+                                		  title: "Traitement en cour",
+                                		  html: "STATUS : <b class=\"status_js\">Mise à jour de l\'historique de la transaction.</b>.",
+                                		  icon: "info",
+                                		  timer: 10000,
+                                		  timerProgressBar: true,
+                                		  onBeforeOpen: () => {
+                                			Swal.showLoading()
+                                			timerInterval = setInterval(() => {
+                                				//return fetch(`https://api.daticash.com/api/mobilemoney/${transaction_id}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}})//confirm-password url
+                                				return fetch("{{path('transactions_view',{id:3})  }}" , {"method": "GET"})//check status url
+                                				  .then(
+                                					function(response) {
+                                						console.log(response);
+                                					  if (!response.ok) {
+                                					  // Examine the text in the response
+                                						  response.json().then(function(data) {
+                                							 status = data.message
+                                							console.log(data.message);
+                                						})
+                                					  }else{
+                                						if(undefined !== response){
+                                							switch(response.status) {
+                                								case "completed"://Action successfully
+                                										Swal.fire(
+                                										  "Complete!",
+                                										  "Your transaction Successfully Completed.",
+                                										  "success"
+                                										)
+                                									break;
+                                									
+                                								case "failed"://BAD_REQUEST
+                                										Swal.fire(
+                                										  "ERROR!",
+                                										  "Something is wrong with the request, possibly missing or improperly formatted parameters",
+                                										  "error"
+                                										)
+                                									break;
+                                									
+                                								case "confirm_requested"://CONFIRM-PIN-CODE
+                                										let currency_sent = response.currency_sent;
+                                										let amount_sent = response.amount_sent;
+                                										let recipient_phone = response.recipient_phone;
+                                										let recipient_username = response.recipient_username;
+                                										
+                                										Swal.fire({
+                                										  title: "Confirm Transaction!",
+                                										  text: "Vous etes sur le point d\'effectuer une transaction de "+amount_sent+" "+currency_sent+" vers le "+recipient_phone+"("+recipient_username+"). entrer votre PIN pour confirmer la transaction:",
+                                										  input: "password",
+                                											//closeOnConfirm: true,
+                                											inputPlaceholder: "Your PIN Code",				  
+                                										  inputAttributes: {
+                                											autocapitalize: "off"
+                                										  },
+                                										  showCancelButton: false,				  
+                                										  showLoaderOnConfirm: true,
+                                										  focusConfirm: false,
+                                										  confirmButtonText:\'<i class="fa fa-thumbs-up"></i> Confirm\',
+                                										  confirmButtonAriaLabel: "Thumbs up, great!",
+                                										  cancelButtonText:\'<i class="fa fa-thumbs-down"></i>\',
+                                										  cancelButtonAriaLabel: "Thumbs down",				  
+                                										  preConfirm: (password) => {
+                                											//return fetch(`//api.github.com/users/${password}`)//confirm-password url
+                                											return fetch("{{ path("transactions_update",{id:3}) }}/"  + "?password=" +`${password}`)//confirm-password url
+                                											  .then(response => {
+                                												if (!response.ok) {
+                                												  throw new Error(response.statusText)
+                                												}
+                                												return response.json()
+                                											  })
+                                											  .catch(error => {
+                                												Swal.showValidationMessage(
+                                												  `Request failed: ${error}`
+                                												)
+                                											  })
+                                										  },
+                                										  allowOutsideClick: () => !Swal.isLoading()
+                                										}).then((result) => {
+                                											if (result.value) {
+                                												transaction_id = result.value.id
+                                												let status						
+                                												let timerInterval						
+                                												Swal.fire({
+                                												  title: "Traitement en cour",
+                                												  html: "STATUS : <b class=\"status_js\">Mise à jour de l\'historique de la transaction.</b>.",
+                                												  icon: "info",
+                                												  timer: 10000,
+                                												  timerProgressBar: true,
+                                												  onBeforeOpen: () => {
+                                													Swal.showLoading()
+                                													timerInterval = setInterval(() => {
+                                														//return fetch(`https://api.daticash.com/api/mobilemoney/${transaction_id}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}})//confirm-password url
+                                														return fetch("{{path('transactions_view',{id:3})  }}" + `/${transaction_id}`, {"method": "GET"})//check status url
+                                														  .then(
+                                															function(response) {
+                                																console.log(response);
+                                															  if (!response.ok) {
+                                															  // Examine the text in the response
+                                																  response.json().then(function(data) {
+                                																	 status = data.message
+                                																	console.log(data.message);
+                                																})
+                                															  }else{
+                                																  // Examine the text in the response
+                                																  response.json().then(function(data) {
+                                																	 status = data.step_description
+                                																	console.log(data.step_description);
+                                																  });
+                                															  }
+                                															  
+                                															  const content = Swal.getContent()
+                                															  if (content) {
+                                																const b = content.querySelector(".status_js")
+                                																if (b) {
+                                																  b.textContent = status
+                                																}
+                                															  }							  
+                                															}
+                                														  )
+                                														  .catch(function(err) {
+                                															console.log("Fetch Error :-S", err);
+                                														  });			  
+                                
+                                													}, 1000);							
+                                												  },						  
+                                												  showLoaderOnConfirm: true,
+                                												  onClose: () => {
+                                													clearInterval(timerInterval)
+                                													Swal.fire(
+                                													  "Aborded!",
+                                													  "Your session has been closed. But your transaction take too time...",
+                                													  "info"
+                                													)							
+                                												  }						  
+                                												}).then((result) => {
+                                												  // Read more about handling dismissals below 
+                                												  if (result.dismiss === Swal.DismissReason.timer) {
+                                													console.log("I was closed by the timer")
+                                													Swal.fire({
+                                													  title: "<strong>STATUS TRANSACTION</strong>",
+                                													  icon: "info",
+                                													  html:
+                                														"Was closed by the timer. Your transaction <b>take too time</b>, go to your " +
+                                														"<a href=\"//daticash.com/dashborad\" target=\"_blank\">dashborad</a> " +
+                                														"to check manually this transaction status",
+                                													  showCloseButton: true,
+                                													  showCancelButton: false,
+                                													  focusConfirm: false,
+                                													  confirmButtonText:"OK",
+                                													})														
+                                												  }
+                                												})	
+                                
+                                											}
+                                										})									
+                                									break;
+                                									
+                                								default :
+                                								
+                                							}
+                                						}
+                                					  }
+                                					  
+                                					  const content = Swal.getContent()
+                                					  if (content) {
+                                						const b = content.querySelector(".status_js")
+                                						if (b) {
+                                						  b.textContent = status
+                                						}
+                                					  }							  
+                                					}
+                                				  )
+                                				  .catch(function(err) {
+                                					console.log("Fetch Error :-S", err);
+                                				  });			  
+                                
+                                			}, 1000);							
+                                		  },						  
+                                		  showLoaderOnConfirm: true,
+                                		  onClose: () => {
+                                			clearInterval(timerInterval)
+                                			Swal.fire(
+                                			  "Aborded!",
+                                			  "Your session has been closed. But your transaction take too time...",
+                                			  "info"
+                                			)							
+                                		  }						  
+                                		}).then((result) => {
+                                		  // Read more about handling dismissals below 
+                                		  if (result.dismiss === Swal.DismissReason.timer) {
+                                			console.log("I was closed by the timer")
+                                			Swal.fire({
+                                			  title: "<strong>STATUS TRANSACTION</strong>",
+                                			  icon: "info",
+                                			  html:
+                                				"Was closed by the timer. Your transaction <b>take too time</b>, go to your " +
+                                				"<a href=\"//daticash.com/dashborad\" target=\"_blank\">dashborad</a> " +
+                                				"to check manually this transaction status",
+                                			  showCloseButton: true,
+                                			  showCancelButton: false,
+                                			  focusConfirm: false,
+                                			  confirmButtonText:"OK",
+                                			})														
+                                		  }
+                                		})	
+                                
+                                	}
+                                })								
+								
+								
+								
+/*												
 							  $.ajax({
 								url: "https://api.daticash.com/api/mobilemoney/new",
 								dataType: "JSON",
@@ -966,6 +1703,10 @@
 									$(".sendBtn").text("Send").prop("disabled", false);
 								}
 							  });
+						
+*/						    
+						    
+						    
 						}else{
 							$(".sendBtn").text("Send").prop("disabled", false);
 							

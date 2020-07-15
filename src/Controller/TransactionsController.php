@@ -8,9 +8,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Transaction;
-
-use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -26,10 +23,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="operations_controller")
- */
+
 class TransactionsController extends AbstractController
 {
     private $client;
@@ -68,11 +62,12 @@ class TransactionsController extends AbstractController
     {
         $this->apikey = $this->getParameter('app.apikey');
         $this->site_url = $this->getParameter('app.site_url');
+
         $data = $request->getContent();
         $data=json_decode($data);
         //var_dump($data);
         $params=$data;
-        $endpoint="mobilemoney/new";
+        $endpoint="mobilemoney/".$data["id"]."/new";
         $headers=[
             'Accept' => 'application/json',
             "apikey"=> $this->apikey
@@ -80,6 +75,51 @@ class TransactionsController extends AbstractController
 
 
         $response=$this->make_get_request((array)$params,$headers,$endpoint);
+        /*
+         * code retouné pour la vue afin de lire la réponse et de savoir qu'il ya eu succès de la requête
+         * le content de la réponse doit contenir 201
+         */
+        $response=$this->handle_response($response);
+        return $response;
+
+
+    }
+
+    public function updateAction(Request $request,$id)
+    {
+        $this->apikey = $this->getParameter('app.apikey');
+        $this->site_url = $this->getParameter('app.site_url');
+
+        $data = $request->getContent();
+        $data=json_decode($data);
+        //$params=$data;
+       // $params["response"]="";
+        //$params["step"]="";
+        //$params["id"]=$id;
+        $endpoint="mobilemoney/".$id;
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+        $session = $this->get('session');
+        $password=$session->get('password');
+
+        if( !($password==$data["password"])){
+
+                $res =[
+                    "code"=>(string)403,
+                    "message" => 'erreur Authentification'
+                ];
+
+
+            return new Response(json_encode($res), Response::HTTP_OK,[
+                "Content-Type"=>'application/json'
+            ]);
+        }
+
+
+        $response=$this->make_put_request([],$headers,$endpoint,$data);
+
         $response=$this->handle_response($response);
         return $response;
 
@@ -93,74 +133,8 @@ class TransactionsController extends AbstractController
         ]);
     }
 
-    /* public function register(Request $request): Response
-     {
-         $user = new WebserviceUser();
-
-
-
-         $form = $this->createForm(RegistrationFormType::class, $user);
-
-         //$form->handleRequest($request);
-
-
-         if ($request->getMethod() == "POST" ) {
-             $user->setPhoneNumber($request->request->get('phone_number'));
-             $user->setCountryCode($request->request->get('country_code'));
-             $user->setPassword($request->request->get('new_password'));
-             $user->setLastname($request->request->get('lastname'));
-             $user->setFirstname($request->request->get('firstname'));
-             $user->setEmail($request->request->get('email'));
-
-
-             $endpoint="user/new";
-             $headers=[
-                 'Accept' => 'application/json',
-                 "apikey"=> $this->apikey
-             ];
-
-             $params=[
-                 'phone_number' => $user->getPhoneNumber(),
-                 'email' =>  $user->getEmail(),
-                 'country_code'=> $user->getCountryCode(),
-                 'plain_password'=>$user->getPassword(),
-                 'lastname'=>$user->getLastname(),
-                 'firstname' =>$user->getFirstname()
-
-
-
-             ];
-             $this->user_id=$this->make_get_request($params,$headers,$endpoint);
-             if(isset($this->user_id) && !empty($this->user_id)){
-                 return $this->redirectToRoute('home');
-             }
-
-
-
-
- /*
-
-             // do anything else you need here, like send an email
-             return $this->render('registration/registration.html.twig', [
-                 'registrationForm' => $form->createView(),
-             ]);
-             //return $this->redirectToRoute('home');
-         }
-
-         return $this->render('registration/registration.html.twig', [
-             'registrationForm' => $form->createView(),
-         ]);
-     }*/
     public function make_get_request(array $parameters, array $header, $endpoint)
     {
-/*        $myArr = '{
-    "code": 404,
-    "message": "empty list returned"
-}';*/
-        //return         $this->user_id=$this->getUser()->getid();
-
-        //return json_encode($myArr);
-
 
         $params = "";
         foreach ($parameters as $key => $value) {
@@ -179,12 +153,20 @@ class TransactionsController extends AbstractController
                 ]
             );
 
-            if($response->getStatusCode()==200 && $response->getStatusCode()==201){
+            if($response->getStatusCode()==200 || $response->getStatusCode()==201){
 
                 return $response->toArray();
-                //return $response->toArray();
-            }else{
-                var_dump($response->getInfo());
+            }
+   /*         if($response->getStatusCode()==400 ){
+                $res=[
+                    "id"=>1,
+                    "status"=>"string",
+                    "created_at"=> "2020-07-13T16:33:28.544Z"
+                    ];
+
+                return $res;
+            }*/
+            else{
                 return $response->getStatusCode();
 
             }
@@ -205,6 +187,63 @@ class TransactionsController extends AbstractController
 
     }
 
+    public function make_put_request(array $parameters, array $header, $endpoint,$body)
+    {
+
+        $params = "";
+        foreach ($parameters as $key => $value) {
+            $params = $params . $key . "=" . $value . "&";
+        }
+        $params = substr($params, 0, -1);
+        try {
+            $response = $this->client->request(
+                'PUT',
+                $this->site_url . $endpoint . "?" . $params,
+                [
+                    'headers' => $header,
+                    'json' => $body
+                ]
+            );
+
+            if($response->getStatusCode()==200 || $response->getStatusCode()==201 ||  $response->getStatusCode()==202){
+
+                return $response->toArray();
+            }
+    /*        if($response->getStatusCode()==400 ){
+                $res=[
+                    "id"=>1,
+                    "status"=>"string",
+                    "created_at"=> "2020-07-13T16:33:28.544Z"
+                ];
+
+                return $res;
+            }*/
+            else{
+                return $response->getStatusCode();
+
+            }
+
+
+
+
+        } catch (TransportExceptionInterface |DecodingExceptionInterface
+        |ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
+
+            $this->addFlash(
+                'error',
+                'Une erreur interne s\'est produite veuillez réessayer plus tard'
+            );
+            return null;
+        }
+
+
+    }
+
+    /*
+     * gère la réponse et la formate afin de retourner le json
+     * @response réponse donnée par la méthode make request
+     *
+     */
     private function handle_response($response)
     {
         if(isset($response) && is_int($response)){
@@ -222,7 +261,7 @@ class TransactionsController extends AbstractController
             ];
         }
 
-        return new Response(json_encode($res), Response::HTTP_OK,[
+        return new Response(json_encode($res), Response::HTTP_CREATED,[
             "Content-Type"=>'application/json'
         ]);
     }

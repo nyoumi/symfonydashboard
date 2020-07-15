@@ -36,10 +36,14 @@ transactions_view:
     path:     /transactions/{id}
     controller: App\Controller\TransactionsController::view
     methods:  [GET]
+    defaults: [id:1]
 transactions_create:
     path:     /transactions
     controller: App\Controller\TransactionsController::createAction
     methods:  [POST]
-
+transactions_update:
+    path:     /transactions/{id}
+    controller: App\Controller\TransactionsController::updateAction
+    methods:  [PUT]
 
 

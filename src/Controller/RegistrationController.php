@@ -97,6 +97,7 @@ class RegistrationController extends Controller
 
         $this->site_url = $this->getParameter('app.site_url');
         $this->apikey = $this->getParameter('app.apikey');
+        $header["apikey"]=$this->apikey;
 
         $params = "";
         foreach ($parameters as $key => $value) {
@@ -104,7 +105,7 @@ class RegistrationController extends Controller
 
         }
         $params = substr($params, 0, -1);
-        //$params = urlencode($params);
+        //$params = *
 
         try {
             $response = $this->client->request(
@@ -115,25 +116,27 @@ class RegistrationController extends Controller
                 ]
             );
 
-            if($response->getStatusCode()==400){
+            if($response->getStatusCode()==201){
                 $this->addFlash(
                     'success',
-                    'Utilisateur crée avec succès!'
+                    'User successfully created!'
                 );
-                return "id";
-                //return $response->toArray();
+                //return "id";
+                return $response->toArray();
             };
             if($response->getStatusCode()==400){
+
+                $content = $response->getContent(false);
                 $this->addFlash(
                     'error',
-                    'Echec lors de l\'enregistrement. Vérifiez qur vous avez rempli tous les champs!'
+                    $content
                 );
                 return null;
             };
             if($response->getStatusCode()==409){
                 $this->addFlash(
                     'error',
-                    'Echec de l\'opération ce numéro de téléphone ou cet email existe déjà'
+                    'Operation failed, this phone number or email already exists!'
                 );
                 return null;
             };
@@ -145,7 +148,7 @@ class RegistrationController extends Controller
 
             $this->addFlash(
                 'error',
-                'Une erreur interne s\'est produite veuillez réessayer plus tard'
+                'An internal error has occurred please try again later!'
             );
             return null;
         } catch (ClientExceptionInterface $e) {
@@ -155,14 +158,6 @@ class RegistrationController extends Controller
         } catch (ServerExceptionInterface $e) {
         }
 
-
-        /*     $statusCode = $response->getStatusCode();
-             if ($statusCode != 200) {
-                 var_dump($statusCode);
-             }
-             $contents = $response->getContent();
-             if ($statusCode == 200) return $response->toArray();
-             return 1000;*/
 
 
     }

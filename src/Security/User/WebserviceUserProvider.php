@@ -110,6 +110,9 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
                 $webUser->setUsername($login["firstname"]);
 
 
+
+
+
                 return $webUser;
 
 
@@ -158,11 +161,15 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
             };
             if($response->getStatusCode()==400){
                 throw new CustomUserMessageAuthenticationException(
-                    ' Un problème est survenu lors de votre connexion! Veuillez que vous avez bien saisi vos informations',[$response->getStatusCode()]);
+                    ' A problem occurred during your connection! Check that you have entered your information correctly',[$response->getStatusCode()]);
             };
             if($response->getStatusCode()==404){
                 throw new CustomUserMessageAuthenticationException(
-                    'Identifiant ou mot de passe incorrect!',[$response->getStatusCode()]);
+                    'Incorrect username or password!',[$response->getStatusCode()]);
+            };
+            if($response->getStatusCode()==412){
+                throw new CustomUserMessageAuthenticationException(
+                    'This account has not been activate yet! Check your mailbox and confirm',[$response->getStatusCode()]);
             };
 
 
