@@ -71,8 +71,12 @@ class RegistrationController extends Controller
 
 
             ];
+
             $this->user_id=$this->make_get_request($params,$headers,$endpoint);
+
             if(isset($this->user_id) && !empty($this->user_id)){
+                $session = $this->get('session');
+                $transaction=$session->get('transaction');
                 return $this->redirectToRoute('home');
             }
 

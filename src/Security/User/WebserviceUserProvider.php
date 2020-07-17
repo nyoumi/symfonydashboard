@@ -161,24 +161,25 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
             };
             if($response->getStatusCode()==400){
                 throw new CustomUserMessageAuthenticationException(
-                    ' A problem occurred during your connection! Check that you have entered your information correctly',[$response->getStatusCode()]);
+                    ' A problem occurred during your connection! Check that you have entered your information correctly',[],$response->getStatusCode());
             };
             if($response->getStatusCode()==404){
                 throw new CustomUserMessageAuthenticationException(
-                    'Incorrect username or password!',[$response->getStatusCode()]);
+                    'Incorrect username or password!',[],$response->getStatusCode());
             };
             if($response->getStatusCode()==412){
                 throw new CustomUserMessageAuthenticationException(
-                    'This account has not been activate yet! Check your mailbox and confirm',[$response->getStatusCode()]);
+                    'This account has not been activate yet! Check your mailbox and confirm',[],$response->getStatusCode());
             };
-
-
-
+            if($response->getStatusCode()==401){
+                throw new CustomUserMessageAuthenticationException(
+                    'Incorrect username or password!',[],$response->getStatusCode());
+            };
 
         } catch (TransportExceptionInterface $e) {
 
             throw new CustomUserMessageAuthenticationException(
-                ' Un problème interne est survenu lors de votre connexion! Veuillez réessayer plus tard');
+                'Un problème interne est survenu lors de votre connexion! Veuillez réessayer plus tard');
 
         } catch (ClientExceptionInterface $e) {
 

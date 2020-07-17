@@ -2,131 +2,139 @@
 {% extends "base.html.twig" %}
 
 {% block stylesheets %}
-            <!-- Font Awesome -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
-            <!-- Ionicons -->
-            <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-            <!-- Theme style -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
-            <!-- Google Font: Source Sans Pro -->
-            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">		
-            <!-- Datiuser style-->
-	        <link href="{{ asset('assets/css/confirm-user-popup.css') }}" rel="stylesheet">
-            <!-- Numeric Keypad -->
-            <link href="{{ asset('assets/css/jquery.keypad.css') }}" rel="stylesheet">
-            <!-- International Telephone Input -->
-            <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- Datiuser style-->
+    <link href="{{ asset('assets/css/confirm-user-popup.css') }}" rel="stylesheet">
+    <!-- Numeric Keypad -->
+    <link href="{{ asset('assets/css/jquery.keypad.css') }}" rel="stylesheet">
+    <!-- International Telephone Input -->
+    <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block head_javascripts %}
-            <!-- Sweet alert scripts-->
-            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>	
-            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
+    <!-- Sweet alert scripts-->
+    <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
 {% endblock %}
 
 {% block body %}
-<div class="chat-popup" id="daticash_connexion_popUp">
-    <div id="ib-center" class="dati_popup">
-        <div class="container">
-            <div class="row d-flex justify-content-center">
-                <div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">
-                    <div class="login-logo">
-                        <a href="http://daticash.com/" target="_blank" style="color: #fff;">
-                            <img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>
-                        </a>
-                    </div>
-                    <div class="login-feedback">
-                        {% for flashError in app.flashes('error') %}
-                            <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-                        {% endfor %}
-                        {% for message in app.flashes('notice') %}
-                            <div class="flash-notice">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-
-                        {# read and display several types of flash messages #}
-                        {% for label, messages in app.flashes(['success']) %}
-                            {% for message in messages %}
-                                <div class="alert alert-success">
-                                    {{ message }}
+    <div id="body_mask" class="body_mask"></div>
+    <div class="chat-popup" id="daticash_connexion_popUp">
+        <div id="ib-center" class="dati_popup">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">
+                        <div class="login-logo">
+                            <a href="http://daticash.com/" target="_blank" style="color: #fff;">
+                                <img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>
+                            </a>
+                        </div>
+                        <div class="login-feedback">
+                            {% for flashError in app.flashes('error') %}
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <i class="fa fa-exclamation-circle"></i>&nbsp{{ flashError }}
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
                                 </div>
                             {% endfor %}
-                        {% endfor %}
-
-                    </div>
-                    <div class="card body_card_daticash_login">
-                        <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">
-                            <small id="allow_reset-feedback"></small>
-                            <form method="post" class="form login-form" >
-                                <label for="phone_number" style="width: 100%; margin-bottom: .5rem;">
-                                    <font style="vertical-align: inherit;">Phone number&nbsp</font>
-                                    <small id="phone-feedback" style="display: block;"></small>
-                                </label>
-                                <div class="input-group mb-3 form-daticash_phone">
-                                    <input type="hidden" class="form-control" id="country_code" name="country_code">
-                                    <input type="phone" class="form-control" id="phone_number" name="phone_number">
-                                    <div class="input-group-append" id="input_group_appendto_phone" name="input_group_appendto_phone">
-                                        <div class="input-group-text">
-                                            <span class="fas fa-user"></span>
-                                        </div>
-                                    </div>
+                            {% for message in app.flashes('notice') %}
+                                <div class="alert alert-warning alert-dismissible  flash-notice">
+                                    <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }}"</a>
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
                                 </div>
+                            {% endfor %}
 
-                                <div class="new_password-group">
-                                    <label id="new_password_label" for="new_password" style="width: 100%; margin-bottom: .5rem;">
-                                        <font style="vertical-align: inherit;">New PIN Code&nbsp</font>
-                                        <small id="new_password-feedback"  style = "display: block;"></small>
+                            {# read and display several types of flash messages #}
+                            {% for label, messages in app.flashes(['success']) %}
+                                {% for message in messages %}
+                                    <div class="alert alert-success alert-dismissible">
+                                        <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }} }}
+                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+
+                        </div>
+                        <div class="card body_card_daticash_login">
+                            <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">
+                                <div class="col-12 mb-3" style="text-align: right;font-weight: 700;color: #007bff;color: #007bff;" ><p class="text-right" style="display: inline;color: #777777;font-weight: 100;">have account ?</p><p style="cursor:pointer;display: inline;" id="dati_login_modal" name="dati_login_modal"><a href="{{ path('login') }}"> Login Now!</a></p></div>
+
+                                <small id="allow_reset-feedback"></small>
+                                <form method="post" class="form login-form" >
+                                    <label for="phone_number" style="width: 100%; margin-bottom: .5rem;">
+                                        <font style="vertical-align: inherit;">Phone number&nbsp</font>
+                                        <small id="phone-feedback" style="display: block;"></small>
                                     </label>
-                                    <small class="show_or_hide_pin_for_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">
-                                        <i class="show_or_hide_pin_for_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>
-                                    <div class="input-group mb-3">
-                                        <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Choose New PIN Code" maxlength="6">
-                                        <div class="input-group-append">
+                                    <div class="input-group mb-3 form-daticash_phone">
+                                        <input type="hidden" class="form-control" id="country_code" name="country_code">
+                                        <input type="phone" class="form-control" id="phone_number" name="phone_number">
+                                        <div class="input-group-append" id="input_group_appendto_phone" name="input_group_appendto_phone">
                                             <div class="input-group-text">
-                                                <span class="fas fa-key"></span>
+                                                <span class="fas fa-user"></span>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="retype_new_password-group">
-                                    <label id="retype_new_password_label" for="retype_new_password" style="width: 100%; margin-bottom: .5rem;">
-                                        <font style="vertical-align: inherit;">Retype new PIN Code&nbsp</font>
-                                        <small id="retype_new_password-feedback" style = "display: block;"></small>
-                                    </label>
-                                    <small class="show_or_hide_pin_for_retype_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">
-                                        <i class="show_or_hide_pin_for_retype_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_retype_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>
-                                    <div class="input-group mb-3">
-                                        <input type="password" class="form-control" id="retype_new_password" name="retype_new_password" placeholder="Retype new PIN code" maxlength="6">
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-key"></span>
+                                    <div class="new_password-group">
+                                        <label id="new_password_label" for="new_password" style="width: 100%; margin-bottom: .5rem;">
+                                            <font style="vertical-align: inherit;">New PIN Code&nbsp</font>
+                                            <small id="new_password-feedback"  style = "display: block;"></small>
+                                        </label>
+                                        <small class="show_or_hide_pin_for_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">
+                                            <i class="show_or_hide_pin_for_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>
+                                        <div class="input-group mb-3">
+                                            <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Choose New PIN Code" maxlength="6">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <span class="fas fa-key"></span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <small class="text-center" id="check_password_correspondance-feedback" style = "display: block;"></small>
-                                <div id="re_captcha_container" class="text-center mb-2">
-                                    <div id="g-recaptcha"></div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-12 form-group_daticash_register_btn">
-                                        <input type="hidden" name="action" class="action" value="daticash_register">
-                                        <button type="submit" class="daticash_btn btn-daticash btn-block" id="daticash_request_register_btn" name="daticash_request_register_btn">Register</button>
+                                    <div class="retype_new_password-group">
+                                        <label id="retype_new_password_label" for="retype_new_password" style="width: 100%; margin-bottom: .5rem;">
+                                            <font style="vertical-align: inherit;">Retype new PIN Code&nbsp</font>
+                                            <small id="retype_new_password-feedback" style = "display: block;"></small>
+                                        </label>
+                                        <small class="show_or_hide_pin_for_retype_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">
+                                            <i class="show_or_hide_pin_for_retype_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_retype_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>
+                                        <div class="input-group mb-3">
+                                            <input type="password" class="form-control" id="retype_new_password" name="retype_new_password" placeholder="Retype new PIN code" maxlength="6">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <span class="fas fa-key"></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
 
+                                    <small class="text-center" id="check_password_correspondance-feedback" style = "display: block;"></small>
+                                    <div id="re_captcha_container" class="text-center mb-2">
+                                        <div id="g-recaptcha"></div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-12 form-group_daticash_register_btn">
+                                            <input type="hidden" name="action" class="action" value="daticash_register">
+                                            <button type="submit" class="daticash_btn btn-daticash btn-block" id="daticash_request_register_btn" name="daticash_request_register_btn">Register</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -512,7 +520,7 @@
                         let total_pay = $("#total_pay").text();
                         let fees = $("#fees").text();
 
-                       // $('#registration_form').submit();
+                        // $('#registration_form').submit();
                         $("[name='registration_form']")[0].submit();
                         $("[name='registration_form']").submit();
 
@@ -523,10 +531,6 @@
                         $('#email-feedback').html("<div class='text-danger'>Invalid Email</div>");
                     }
                 })
-
-
-            $('<div />').prependTo('body').prop('id', 'body_mask').addClass("body_mask");
-
 
             $('#password').attr('placeholder', 'Choose PIN Code');
             autoChoose_country_code(237);

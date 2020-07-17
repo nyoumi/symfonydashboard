@@ -22,9 +22,8 @@ history.index:
     path: /dashboard
     controller: App\Controller\DashboardController::view
 operation.index:
-    path: /operation
+    path: /operation/{id?}
     controller: App\Controller\TransactionsController::start
-
 #transactions_init:
 #    path:     /transactions/{id}/{number}
 #    controller: App\Controller\TransactionsController::start
@@ -33,16 +32,19 @@ operation.index:
 #            id: '\d+'
 
 transactions_view:
-    path:     /transactions/{id}
+    path:     /transactions/{id?}
     controller: App\Controller\TransactionsController::view
     methods:  [GET]
-    defaults: [id:1]
 transactions_create:
     path:     /transactions
     controller: App\Controller\TransactionsController::createAction
     methods:  [POST]
+transactions_create_anonymous:
+    path:     /send_money
+    controller: App\Controller\TransactionsController::createAction
+    methods:  [POST]
 transactions_update:
-    path:     /transactions/{id}
+    path:     /transactions/{id?}
     controller: App\Controller\TransactionsController::updateAction
     methods:  [PUT]
 

@@ -1,0 +1,250 @@
+{% extends "base.html.twig" %}
+{% set _transaction = transaction %}
+
+{% block stylesheets %}
+            <!-- Font Awesome -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+            <!-- Ionicons -->
+            <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+            <!-- Theme style -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+            <!-- Google Font: Source Sans Pro -->
+            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">	
+            <!-- International Telephone Input -->
+            <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
+
+            <style>
+                .body_mask:before{
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .body_mask:before{
+                    content:'';
+                    position:fixed;
+                    top:0;
+                    left:0;
+                    width:100vw;
+                    height:100vh;
+                    background-image: url(../img/girl2.jpg);
+                    background-position:center center;
+                    background-repeat:no-repeat;
+                    background-attachment:fixed;
+                    -webkit-background-size:cover;
+                    background-size:cover;
+                /* 	-webkit-filter:blur(10px);
+                    -moz-filter:blur(10px); */
+                    z-index: 9999999;
+                }
+
+                .body_card_daticash_login{
+                    background-color: rgba(255, 255, 255, 0.74);
+                    border-style: solid;
+                    border-width: 1px 1px 1px 1px;
+                    border-color: #000000;
+                    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+                    transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
+                    margin: 0px 0px 0px 0px;
+                }
+
+                .body_card_daticash_quick_sent{
+                    background-color: rgba(255, 255, 255, 0.74);
+                    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+                    transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
+                    margin: 0px 0px 0px 0px;
+                }
+
+                .daticash_btn{
+                    font-family: "century-gothic_content", century gothic;
+                    font-size: 23px;
+                    border-style: solid;
+                    border-width: 1px 1px 1px 1px;
+                    border-radius: 88px 88px 88px 88px;
+                    padding: 10px 10px 10px 10px;
+                    margin-bottom: 12px;
+                }
+
+                .btn-daticash {
+                    color: #fff;
+                    background-color: #0A4F68;
+                    border-color: rgba(0, 0, 0, 0);
+                    box-shadow: none;
+                }
+
+                .btn-daticash:hover {
+                    color: #fff;
+                    background-color: #0A4F68;
+                    border-color: rgba(0, 0, 0, 0);
+                }
+
+                .dati_popup{
+                        transition: transform .3s ease-out;
+                        -moz-transition: all 0.9s ease 0s;
+                        -webkit-transition: all 0.9s ease 0s;
+                        -o-transition: all 0.9s ease 0s;    
+                        visibility: visible;
+                        animation-duration: 1000ms;
+                        animation-delay: 1000ms;
+                        
+                }
+            </style>
+
+{% endblock %}
+
+{% block head_javascripts %}
+            <!-- Sweet alert scripts-->
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>	
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
+
+{% endblock %}
+
+ {% block body %}
+ <div id="body_mask" class="body_mask"></div>    
+
+ {% endblock %} 
+
+{% block javascripts %}
+            <!-- Waves Effect Plugin Js -->
+            <script src="{{ asset('adminLTE/plugins/node-waves/waves.js') }}"></script>
+            <!-- AdminLTE App -->
+            <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
+            <!-- AdminLTE for demo purposes -->
+            <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script> 
+            <!-- International Telephone Input-->	
+            <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
+            <!-- Daticash QS-->	
+            <script src="{{ asset('assets/js/daticashQS.js') }}"></script>
+
+
+            <script>
+			$(document).ready(function() {			
+						Swal.fire({
+						  title: "Confirm Transaction!",
+						  text: "Vous etes sur le point d\'effectuer une transaction de "+_transaction.amount_sent+" "+_transaction.currency_sent+" vers le "+_transaction.recipient_phone+"("+_transaction.recipient_username+"). entrer votre PIN pour confirmer la transaction:",
+						  input: "password",
+							//closeOnConfirm: true,
+							inputPlaceholder: "Your PIN Code",				  
+						  inputAttributes: {
+							autocapitalize: "off"
+						  },
+						  showCancelButton: false,				  
+						  showLoaderOnConfirm: true,
+						  focusConfirm: false,
+						  confirmButtonText:'<i class="fa fa-thumbs-up"></i> Confirm',
+						  confirmButtonAriaLabel: "Thumbs up, great!",
+						  cancelButtonText:'<i class="fa fa-thumbs-down"></i>',
+						  cancelButtonAriaLabel: "Thumbs down",				  
+						  preConfirm: (password) => {
+							//return fetch(`//api.github.com/users/${password}`)//confirm-password url
+							return fetch(confirmPath + "/" + transaction_id  + "?password=" +`${password}`)//confirm-password url
+							  .then(response => {
+								if (!response.ok) {
+								  throw new Error(response.statusText)
+								}
+								return response.json()
+							  })
+							  .catch(error => {
+								Swal.showValidationMessage(
+								  `Request failed: ${error}`
+								)
+							  })
+						  },
+						  allowOutsideClick: () => !Swal.isLoading()
+						}).then((result) => {
+							if (result.code == 201) {
+								let status						
+								let timerInterval						
+								Swal.fire({
+								  title: "Traitement en cour",
+								  html: "STATUS : <b class=\"status_js\">Mise à jour de l\'historique de la transaction.</b>.",
+								  icon: "info",
+								  timer: 10000,
+								  timerProgressBar: true,
+								  onBeforeOpen: () => {
+									Swal.showLoading()
+									timerInterval = setInterval(() => {
+										//return fetch(`https://api.daticash.com/api/mobilemoney/${transaction_id}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}})//confirm-password url
+										return fetch(checkPath + "/" + transaction_id , {"method": "GET"})//check status url
+										  .then(
+											function(response) {
+												console.log("application response after confirm = " + response);
+											  if (!response.ok) {
+											  // Examine the text in the response
+												  response.json().then(function(data) {
+													 status = data.step_description
+													console.log(data.step_description);
+												})
+											  }else{
+											  // Examine the text in the response
+												  response.json().then(function(data) {
+													 status = data.step_description
+													console.log("api response after confirm = " +data.step_description);
+												
+													switch(data.status.toLowerCase()) {
+														case "completed"://Action successfully
+																Swal.fire(
+																  "Complete!",
+																  "Your transaction Successfully Completed.",
+																  "success"
+																)
+															break;
+															
+														case "failed"://BAD_REQUEST
+																Swal.fire(
+																  "ERROR!",
+																  "Something is wrong with the request, possibly missing or improperly formatted parameters",
+																  "error"
+																)
+															break;
+													}
+											  
+												  const content = Swal.getContent()
+												  if (content) {
+													const b = content.querySelector(".status_js")
+													if (b) {
+													  b.textContent = status
+													}
+												  }							  
+												})
+											  }
+											})
+											  .catch(function(err) {
+												console.log("Fetch Error :-S", err);
+											  });			  
+
+									}, 1000);							
+								  },						  
+								  showLoaderOnConfirm: true,
+								  onClose: () => {
+									clearInterval(timerInterval)
+									Swal.fire(
+									  "Aborded!",
+									  "Your session has been closed. But your transaction take too time...",
+									  "info"
+									)							
+								  }						  
+								}).then((result) => {
+								  // Read more about handling dismissals below 
+								  if (result.dismiss === Swal.DismissReason.timer) {
+									console.log("I was closed by the timer")
+									Swal.fire({
+									  title: "<strong>STATUS TRANSACTION</strong>",
+									  icon: "info",
+									  html:
+										"Was closed by the timer. Your transaction <b>take too time</b>, go to your " +
+										"<a href=\"//daticash.com/dashborad\" target=\"_blank\">dashborad</a> " +
+										"to check manually this transaction status",
+									  showCloseButton: true,
+									  showCancelButton: false,
+									  focusConfirm: false,
+									  confirmButtonText:"OK",
+									})														
+								  }
+								})	
+
+							}
+						})	
+			});		
+			</script>
+            
+{% endblock %}
