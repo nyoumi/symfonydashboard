@@ -18,12 +18,29 @@ login_check:
     path: /login
     controller: App\Controller\SecurityController::login
     methods: GET|POST
+register:
+    path: /register
+    controller: App\Controller\RegistrationController::register
+    methods: GET|POST
+activate:
+    path: /activate/{id}/{token}
+    controller: App\Controller\ActivationController::activate
+    methods: GET
+activated:
+    path: /activated
+    controller: App\Controller\ActivationController::activatedAction
+    methods: GET
+send_sms:
+    path: /send_sms/{id}
+    controller: App\Controller\ActivationController::send_sms
+    methods: GET
 history.index:
     path: /dashboard
     controller: App\Controller\DashboardController::view
 operation.index:
-    path: /operation/{id?}
+    path: /operation
     controller: App\Controller\TransactionsController::start
+
 #transactions_init:
 #    path:     /transactions/{id}/{number}
 #    controller: App\Controller\TransactionsController::start

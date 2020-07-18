@@ -16,27 +16,50 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 
+/**
+ * Class RegistrationController
+ * @package App\Controller
+ */
 class RegistrationController extends Controller
 {
+    /**
+     * @var HttpClientInterface
+     */
     private $client;
+    /**
+     * @var
+     */
     private $site_url ;
+    /**
+     * @var
+     */
     private $apikey ;
+    /**
+     * @var
+     */
     private $user_id;
 
+    /**
+     * RegistrationController constructor.
+     * @param HttpClientInterface $client
+     */
     public function __construct(HttpClientInterface $client)
     {
         $this->client = $client;
 
     }
 
+
     /**
-     * @Route("/register", name="register")
      * @param Request $request
      * @return Response
      */
     public function register(Request $request): Response
     {
+
+
         $user = new WebserviceUser();
+        //if()
 
 
 
@@ -72,12 +95,29 @@ class RegistrationController extends Controller
 
             ];
 
-            $this->user_id=$this->make_get_request($params,$headers,$endpoint);
+            $this->user_id=$this->make_post_request($params,$headers,$endpoint);
+
+
 
             if(isset($this->user_id) && !empty($this->user_id)){
                 $session = $this->get('session');
-                $transaction=$session->get('transaction');
-                return $this->redirectToRoute('home');
+
+
+     /*           if ($session->has("transaction")){
+                    var_dump($session->get("transaction"));
+                    $transaction=(array)$session->get('transaction');
+
+                    return $this->redirectToRoute('transactions_create_anonymous',['transaction' => $transaction]);
+
+
+                }*/
+
+                var_dump($this->user_id);
+                return $this->render('pages/activations.html.twig',
+                    ["user_id"=>$this->user_id["id"],
+                        "user_email"=>$params["email"]
+                    ]);
+               // return $this->redirectToRoute('activate');
             }
 
 
@@ -93,10 +133,19 @@ class RegistrationController extends Controller
         }
 
         return $this->render('registration/registration.html.twig', [
-            'registrationForm' => $form->createView(),
+            'registrationForm' => $form->createView()
         ]);
     }
-    public function make_get_request(array $parameters, array $header, $endpoint)
+    /*
+     *
+     */
+    /**
+     * @param array $parameters
+     * @param array $header
+     * @param $endpoint
+     * @return null si la requete s'est mal passé et la réponse si la requete s'est bien passée
+     */
+    public function make_post_request(array $parameters, array $header, $endpoint)
     {
 
         $this->site_url = $this->getParameter('app.site_url');

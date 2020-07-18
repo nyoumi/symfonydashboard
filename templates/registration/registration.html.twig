@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block body %}
-    <div id="body_mask" class="body_mask"></div>
+    <div id="body_mask" class="body_mask">{{ app.session.get('country_code') }}-{{ app.session.get('phone_number') }}</div>
     <div class="chat-popup" id="daticash_connexion_popUp">
         <div id="ib-center" class="dati_popup">
             <div class="container">

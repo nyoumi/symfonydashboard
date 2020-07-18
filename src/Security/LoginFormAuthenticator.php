@@ -76,9 +76,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {
 
-            return new RedirectResponse($this->urlGenerator->generate('login'));
+            //return new RedirectResponse($this->urlGenerator->generate('login'));
 
-            //throw new InvalidCsrfTokenException();
+            throw new InvalidCsrfTokenException();
         }
         if (empty($credentials["password"])) {
             throw new CustomUserMessageAuthenticationException('Le mot de passe ne peut être vide!');

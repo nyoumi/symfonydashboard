@@ -50,8 +50,6 @@ class TransactionsController extends AbstractController
         $this->security=$security;
         $this->userProvider=$userProvider;
         $this->urlGenerator = $urlGenerator;
-
-
     }
 
     public function view($id)
@@ -66,7 +64,7 @@ class TransactionsController extends AbstractController
         ];
 
         $response=$this->make_get_request((array)$params,$headers,$endpoint);
-        $response=$this->handle_response($response);
+        $response=$this->handle_response($response,false);
         return $response;
 
     }
@@ -75,46 +73,42 @@ class TransactionsController extends AbstractController
 
     public function createAction(Request $request)
     {
+        return new RedirectResponse($this->urlGenerator->generate('register'));
+
         $this->apikey = $this->getParameter('app.apikey');
         $this->site_url = $this->getParameter('app.site_url');
 
         $data = $request->getContent();
+        //echo("=============================");
+
 
 
         $data=json_decode($data);
 
         if(!is_object($data)){
-            var_dump($request->getContent());
-            echo("=============================");
             parse_str($request->getContent(),$output);
             $data=(object) $output;
 
         }
-        var_dump($data);
 
 
         $this->saveToSession($data);
-        if (!$this->security->isGranted('ROLE_USER')){
            $user_exist= $this->verifyUserExist($data);
-           var_dump($user_exist);
-           if(is_int($user_exist) && $user_exist==412){
-               //initier la transaction et renvoyer la page operations
-               $this->addFlash(
-                   'error',
-                   'compte à activer'
-               );
+            if(is_array($user_exist)){
+                return $this->render('pages/activations.html.twig',
+                    ["user_id"=>$user_exist["error_content"]["user_id"],
+                        "user_email"=>$user_exist["error_content"]["email"]
+                    ]);
 
-
-               return $this->render('pages/operation.html.twig', ["transaction"=>$data,"activation_requested"=>true]);
-
-           }
+            }
            if (is_int($user_exist) && $user_exist==404){
-               return new RedirectResponse($this->urlGenerator->generate('register'));
+               $session=$this->get("session");
+               $session->set("phone_number",$data->sender_phone);
+               $session->set("country_code",$data->sender_country_code);
 
+               return new RedirectResponse($this->urlGenerator->generate('register'));
            }
 
-
-        }
 
         $params=$data;
         $endpoint="mobilemoney/".$data->id."/new";
@@ -123,17 +117,23 @@ class TransactionsController extends AbstractController
             "apikey"=> $this->apikey
         ];
 
-
         $response=$this->make_post_request((array)$params,$headers,$endpoint,(array)$data);
+        $response=$this->handle_response($response,"array");
 
-
-        $response=$this->handle_response($response);
-        var_dump($response);
         /*
-         * si les datas proviennent du formulaire renvoyer json sinon renvoyer la page operations
+         * si la transaction a été initiée ou echec de l'initiation l'efacer de la session
          */
+        $session = $this->get('session');
+        $session->remove('transaction');
+
+        /*
+        * si les datas proviennent du formulaire renvoyer json sinon renvoyer la page operations
+         * */
         if(!isset($data->local)){
-            $transaction=array_merge((array)$data,$response);
+            $data=(array)$data;
+            $data["transaction_status"]=$response;
+            //echo ("++++++++++++++++++++");
+            //var_dump($data);
             return $this->render('pages/operationQs.html.twig',
                 ["transaction"=>(array)$data,"transaction_status"=>$response]);
 
@@ -145,16 +145,12 @@ class TransactionsController extends AbstractController
     {
         $this->apikey = $this->getParameter('app.apikey');
         $this->site_url = $this->getParameter('app.site_url');
-
-
+        /*
+         * $data c'est le mot de passe
+         */
         $data = $request->getContent();
-        var_dump($data);
 
         $data=json_decode($data);
-        echo ("+++++++++++++++++++++");
-        var_dump($data);
-        var_dump($request->getMethod());
-
 
         $endpoint="mobilemoney/".$id;
         $headers=[
@@ -170,51 +166,52 @@ class TransactionsController extends AbstractController
         $session = $this->get('session');
         $transaction=$session->get('transaction');
         $login=[];
-        $login["sender_phone"]=$transaction["sender_phone"];
-        $login["sender_country_code"]=$transaction["sender_country_code"];
-        /*
-         * fake password
-         */
-        $login["password"]="";
+        $login["sender_phone"]=$transaction->sender_phone;
+        $login["sender_country_code"]=$transaction->sender_country_code;
+        $login["password"]=$data->password;
         $user_exist=$this->verifyUserExist($login);
+            if(is_array($user_exist)){
+                return $this->render('pages/activations.html.twig',
+                    ["user_id"=>$user_exist["error_content"]["user_id"],
+                        "user_email"=>$user_exist["error_content"]["email"]]);
+
+            }
 
         /*
-         * si la connexion a réussi l'opération continue
+         * si le type de retour est un entier alors c'est à dire un utilisateur alors erreur
+         *
          */
-
-
-        if( !is_object($user_exist)){
+        if( is_int($user_exist) ){
 
                 $res =[
-                    "code"=>(string)403,
+                    "code"=>(string)$user_exist,
                     "message" => 'erreur Authentification'
                 ];
-
 
             return new Response(json_encode($res), Response::HTTP_OK,[
                 "Content-Type"=>'application/json'
             ]);
         }
 
+        /*
+         * ajout des paramètres necessaires pour la requete
+         */
+        $data["status"]="confirmed";
+        $data["response"]="";
+        $data["step"]="";
 
-        $response=$this->make_put_request([],$headers,$endpoint,$data);
-
-        $response=$this->handle_response($response);
+        $response=$this->make_put_request((array)$data,$headers,$endpoint,(array)$data);
+        $response=$this->handle_response($response,false);
         return $response;
-
-
     }
 
-    public function start($transaction)
+    public function start()
     {
-        return $this->render('pages/operation.html.twig', ["transaction"=>$transaction
-
-        ]);
+        return $this->render('pages/operation.html.twig');
     }
 
     public function make_get_request(array $parameters, array $header, $endpoint)
     {
-
         $params = "";
         foreach ($parameters as $key => $value) {
             $params = $params . $key . "=" . $value . "&";
@@ -236,39 +233,20 @@ class TransactionsController extends AbstractController
 
                 return $response->toArray();
             }
-   /*         if($response->getStatusCode()==400 ){
-                $res=[
-                    "id"=>1,
-                    "status"=>"string",
-                    "created_at"=> "2020-07-13T16:33:28.544Z"
-                    ];
-
-                return $res;
-            }*/
             else{
                 return $response->getStatusCode();
-
             }
-
-
-
-
         } catch (TransportExceptionInterface |DecodingExceptionInterface
         |ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
-
             $this->addFlash(
                 'error',
                 'Une erreur interne s\'est produite veuillez réessayer plus tard'
             );
             return null;
         }
-
-
     }
-
     public function make_put_request(array $parameters, array $header, $endpoint,$body)
     {
-
         $params = "";
         foreach ($parameters as $key => $value) {
             $params = $params . $key . "=" . $value . "&";
@@ -283,43 +261,23 @@ class TransactionsController extends AbstractController
                     'json' => $body
                 ]
             );
-
             if($response->getStatusCode()==200 || $response->getStatusCode()==201 ||  $response->getStatusCode()==202){
-
                 return $response->toArray();
             }
-    /*        if($response->getStatusCode()==400 ){
-                $res=[
-                    "id"=>1,
-                    "status"=>"string",
-                    "created_at"=> "2020-07-13T16:33:28.544Z"
-                ];
-
-                return $res;
-            }*/
             else{
                 return $response->getStatusCode();
-
             }
-
-
-
-
         } catch (TransportExceptionInterface |DecodingExceptionInterface
         |ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
-
             $this->addFlash(
                 'error',
                 'Une erreur interne s\'est produite veuillez réessayer plus tard'
             );
             return null;
         }
-
-
     }
     public function make_post_request(array $parameters, array $header, $endpoint,$body)
     {
-
         $params = "";
         foreach ($parameters as $key => $value) {
             $params = $params . $key . "=" . $value . "&";
@@ -336,28 +294,19 @@ class TransactionsController extends AbstractController
             );
 
             if($response->getStatusCode()==200 || $response->getStatusCode()==201 ||  $response->getStatusCode()==202){
-
                 return $response->toArray();
             }
                     if($response->getStatusCode()==400 ){
                         $res=[
-                            "id"=>1,
-                            "status"=>"confirm_requested",
+                            "id"=>12,
+                            "status"=>"initiated",
                             "created_at"=> "2020-07-13T16:33:28.544Z"
                         ];
-
                         return $res;
                     }
             else{
-
-
                 return $response->getStatusCode();
-
             }
-
-
-
-
         } catch (TransportExceptionInterface |DecodingExceptionInterface
         |ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
 
@@ -367,16 +316,15 @@ class TransactionsController extends AbstractController
             );
             return null;
         }
-
-
     }
 
     /*
      * gère la réponse et la formate afin de retourner le json
      * @response réponse donnée par la méthode make request
+     * if $resp=="array" retourne array sinon retourne json
      *
      */
-    private function handle_response($response)
+    private function handle_response($response,$resp)
     {
         if(isset($response) && is_int($response)){
             $res =[
@@ -392,10 +340,12 @@ class TransactionsController extends AbstractController
                 "message" => 'erreur interne au serveur'
             ];
         }
-
-        return new Response(json_encode($res), Response::HTTP_CREATED,[
-            "Content-Type"=>'application/json'
-        ]);
+        if (!$resp=="array"){
+            return new Response(json_encode($response), Response::HTTP_CREATED,[
+                "Content-Type"=>'application/json'
+            ]);
+        }
+        return $res;
     }
 
     private function saveToSession($transaction)
@@ -423,36 +373,30 @@ class TransactionsController extends AbstractController
             return $user;
 
         }catch (CustomUserMessageAuthenticationException $exception){
-            var_dump($exception->getCode());
 
             if($exception->getCode()==404){
                 $this->addFlash(
                     'notice',
-                    'in order to do this operation you must create an account. Create a daticash account.'
+                    'in order to do this operation you must create Create a daticash account.'
                 );
                 return 404;
-
             }
             if($exception->getCode()==412 ){
                 $this->addFlash(
                     'notice',
                     'in order to do this operation you must Activate your account.'
                 );
-                return 412;
-
+                $response=[
+                    "code"=>$exception->getCode(),
+                    "error_content"=>$exception->getMessageData()
+                ];
+                return $response;
             }
             if($exception->getCode()==401){
-
                 return 401;
-
             }
             if (!($exception->getCode()==401 || $exception->getCode()==412 || $exception->getCode()==404)){
-                var_dump("++++++++++");
-                var_dump($exception->getCode());
-
-                throw new CustomUserMessageAuthenticationException(
-                    ' A problem occurred during your connection! Check that you have entered your information correctly',[],$exception->getCode());
-
+                return $exception->getCode();
             }
         }
 

@@ -169,7 +169,7 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
             };
             if($response->getStatusCode()==412){
                 throw new CustomUserMessageAuthenticationException(
-                    'This account has not been activate yet! Check your mailbox and confirm',[],$response->getStatusCode());
+                    'This account has not been activate yet! Check your mailbox and confirm or activate your account here.',(array)json_decode($response->getContent(false)),$response->getStatusCode());
             };
             if($response->getStatusCode()==401){
                 throw new CustomUserMessageAuthenticationException(
@@ -179,7 +179,7 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
         } catch (TransportExceptionInterface $e) {
 
             throw new CustomUserMessageAuthenticationException(
-                'Un problème interne est survenu lors de votre connexion! Veuillez réessayer plus tard');
+                'An internal problem occurred during your connection! please try again later!');
 
         } catch (ClientExceptionInterface $e) {
 

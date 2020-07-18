@@ -1,0 +1,340 @@
+
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+            <!-- Font Awesome -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+            <!-- Ionicons -->
+            <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+            <!-- Theme style -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+            <!-- Google Font: Source Sans Pro -->
+            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">		
+            <!-- Datiuser style-->
+	        <link href="{{ asset('assets/css/confirm-user-popup.css') }}" rel="stylesheet">
+            <!-- Numeric Keypad -->
+            <link href="{{ asset('assets/css/jquery.keypad.css') }}" rel="stylesheet">
+            <!-- International Telephone Input -->
+            <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block head_javascripts %}
+            <!-- Sweet alert scripts-->
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>	
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div id="body_mask" class="body_mask"></div>    
+
+{% endblock %}
+
+{% block javascripts %}
+            <!-- Bootstrap 4 -->
+            <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+            <!-- Waves Effect Plugin Js -->
+            <script src="{{ asset('adminLTE/plugins/node-waves/waves.js') }}"></script>
+            <!-- AdminLTE App -->
+            <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
+            <!-- AdminLTE for demo purposes -->
+            <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script> 
+            <!-- numeric keypad jQuery-->
+            <script src="{{ asset('assets/js/jquery.plugin.min.js') }}"></script>
+            <!-- numeric keypad script-->
+            <script src="{{ asset('assets/js/jquery.keypad.js') }}"></script>
+            <!-- International Telephone Input-->	
+            <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
+<script type="text/javascript">
+var email="{{ user_email }}";
+function daticash_confirm_token_form_popUp(email){
+	return	(
+			'<div class="chat-popup" id="daticash_confirm_token_form_popUp">'+
+				'<div id="ib-center" class="dati_popup">'+
+					'<div class="container">'+
+						'<div class="row d-flex justify-content-center">'+
+							'<div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">'+
+								'<div class="login-logo">'+
+									'<a href="http://daticash.com/" target="_blank" style="color: #fff;">'+
+										'<img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>'+
+									'</a>'+
+								'</div>'+									
+								'<div class="login-feedback"></div>'+
+									'<div class="card body_card_daticash_login">'+
+										'<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+								  										
+											'<div class="" id="conversation" style ="overflow-y: auto; background-color: #66666621;">'+
+												'<div class="lf-loading">'+
+													'<div class="spinner" id="loading_image" style="display: blok;">'+
+														'<div class="bounce1"></div>'+
+														'<div class="bounce2"></div>'+
+														'<div class="bounce3"></div>'+
+													'</div>'+
+												'</div>'+
+											'</div>'+
+											'<p class="text-center mb-3" style="color: #204050;">'+
+												'A message has been sent to '+  email +'. <br>Please follow the link it contains to activate your account.'+                      
+											'</p>'+
+											'<p style="text-align: center;color: #000;" class="mb-0">No access to email now ?</p>'+
+												'<div name="dati_check_whith_sms" id="dati_check_whith_sms" class="social-auth-links text-center mb-3">'+
+													'<input type="hidden" name="action" class="action" value="daticash_request_sms_code">'+
+													'<div name="daticash_request_sms_code_btn" id="daticash_request_sms_code_btn" class="daticash_btn btn-daticash btn-block" style="display: inline-block; margin-top: .5rem; cursor: pointer">'+
+													'Send me a sms to activate'+
+													'</div>'+
+												'</div>'+
+											'<hr>'+													
+										'</div>'+
+									'</div>'+
+								'</div>'+
+							'</div>'+
+						'</div>'+
+					'</div>'+						
+				'</div>'+
+			'</div>'
+			);						  
+} 
+
+function daticash_email_verified_popUp(){
+		return	(		
+		        '<div class="chat-popup" id="daticash_email_verified_popUp">'+
+					'<div id="ib-center" class="dati_popup">'+
+						'<div class="dati_user_status_login"></div>'+
+						'<div class="container">'+
+							'<div class="row d-flex justify-content-center">'+
+								'<div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">'+
+									'<div class="login-logo">'+
+										'<a href="http://daticash.com/" style="color: #fff;">'+
+											'<img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>'+
+										'</a>'+
+									'</div>'+
+								  '<div class="login-feedback"></div>'+									
+								  '<div class="card body_card_daticash_login">'+
+									'<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+								  
+									 
+									 '<div class="text-center mb-4">Your account is activated and your email has been successfully verified.</div>'+
+										'<div class="row">'+
+											'<div class="col-6"></div>'+
+											'<div class="col-6" style="text-align: center;float: right;color: #8285889c;border-radius: 120px;border: solid 1px #9a98a24f;"><p class="text-right" style="display: inline;color: #777777;font-weight: 100;"></p><p style="cursor:pointer;display:inline;" id="exit_btn" name="exit_btn">Continue</p></div>'+
+										'</div>'+
+									 '</div>'+
+
+									'</div>'+
+								  '</div>'+
+								'</div>'+
+							'</div>'+
+						'</div>'+
+					'</div>'+
+				'</div>'
+				);
+}
+
+    $(document).ready(function(){
+        /*Textbox Events*/
+        $("body")
+                .on('click', '#daticash_request_sms_code_btn', function(f){
+                    var that = this;
+    				//alert(that.tampon_data.phone_number)
+    				$('#daticash_request_sms_code_btn').text('Processing...').prop('disabled', true);
+    			            that.by = "sms"
+    						jQuery.ajax({
+    							type: "POST",
+    							url: classesLocation + 'action.php', // call the php file ajax/
+    							data: {socketclienttype : that.socketclienttype, action : "daticash_request_sms_code", "user_id" : that.user_id}, // send data var
+    							dataType: "json",
+    							beforeSend:function(){
+    								
+    							},								
+    							success: function(response){
+    								//valeur possible: resend ok/bad, key= phone
+                                        var left_time;
+                                        var sender_phone = that.tampon_data.phone_number.replace(/\d{6}$/i, "******");
+    								    //alert(sender_phone)     
+    									clearInterval(that._rebordCount);
+                                        
+    										$("#dati_check_whith_sms").html('<hr><label for="dati_code">A SMS has been sent to '+sender_phone+', please provide the token sent below...</label>'+
+    																										'<input type="text" style="font-size: 55px;text-align: center;width: 100%;" name="daticash_sms_code_input" id="daticash_sms_code_input" style="font-size: 55px;text-align: center;" maxlength="6" placeholder="xxxxxx">'+
+    																										'<div class="col-12" style="flex-flow: row-reverse;">'+
+    																										    '<div class="js_resend_sms">'+
+    																										    '</div>'+
+    																										'</div>'
+    																							);
+    										$('#daticash_request_sms_code_btn').prop('disabled', true);
+    										$('#daticash_sms_code_input').focus();
+    										
+    								//valeur possible: resend ok/bad, key= phone
+    								if(response.match === true || response.match === undefined){
+    										left_time = 30;
+    										that.second = 60;
+    								}else{
+    									left_time = response.time_left;
+    									that.second = 60;												
+    								}
+    								
+    								that._rebordCount = setInterval(function() {
+    								    
+    										//requiert un numero de téléphone : créer la zone du numero de tel + boutn d'envoi
+    										$(".js_resend_sms").empty().append(
+    																		    '<p style="color: green;">SMS Successfully sent... </p>To try again please wait : '+left_time+'min :'+ that.second +'s</p>'								
+    																		       
+    																		);	
+    									that.second = that.second - 1;																		
+    								
+    									if(that.second === 0 && left_time === 0){
+    									$(".js_resend_sms").empty().append(
+    																		'<p style="color: #000; float: right;" class="mb-0"><span style="color: #000;">You hav\'n\'receive the SMS?&nbsp;</span>'+
+    																		'<a id ="resend_sms" name ="resend_sms" href="#">Resend now?&nbsp;&nbsp; |&nbsp;&nbsp;</a>'+
+    																		'<a id ="dati_cancel_sms_btn" name ="dati_cancel_sms_btn" href="#">Annuler</a></p>'
+    																	);	
+    												clearInterval(that._rebordCount);					
+    									
+    									}else{
+    										if(that.second === 0){
+    											that.second = 59;
+    											left_time = left_time - 1;
+    										}											
+    									}
+    								}, 1000);									
+    											
+    										
+    							
+    							},
+    							error: function() {alert("error: Resend SMS, please try again or check with your email, otherwise contact the Administrator")
+    								$('#daticash_request_sms_code_btn').text('Send me a sms to activate').prop('disabled', false);
+    							}
+    							
+    
+    						});					
+    				
+    
+    					f.stopImmediatePropagation();
+				})
+                .on('keyup', '#daticash_sms_code_input', function(event){
+			    	var that = this;
+			    	event.stopImmediatePropagation();
+					$(".alert").empty()//supprimer le message d'erreur s'il existe
+					
+					var caveVal = jQuery("#daticash_sms_code_input").val();
+					var caveWidth = caveVal.length;
+					var value = jQuery(this).val();
+					value = value.replace(/[^0-9]+/g, '');
+					jQuery(this).val(value);
+
+					if (caveWidth == 6){
+        						$('#daticash_sms_code_input').before('<div class="login_image_js"><img src="'+ self.imgLocation +'/loader-status.gif" /> Processing...</div>').remove(); // loader image apprears in the <div id="newComment"></div>			
+						        $('#daticash_sms_code_input').remove();
+						//$("#dati_cancel_sms_btn").trigger("click");
+							
+						//jQuery('daticash_sms_code_input').attr('disabled', true);
+						
+						//jQuery('#dati_check_process').html('<img src="'+ self.imgLocation +'/loader-status.gif" /> Processing...'); // loader image apprears in the <div id="newComment"></div>
+						jQuery.ajax({
+							type: "POST",
+							url: self.classesLocation + 'action.php', // call the php file ajax/
+							data: {socketclienttype : self.socketclienttype, action : "daticash_confirm_sms_token_code", "token" : caveVal, "user_id" : that.user_id}, // send data var
+							dataType: "json",		
+							success: function(response){
+								if(response.match === false) {
+									;
+
+									$('.login-feedback').html(show_alert('error', response.details, 1));
+
+
+								    $('.login-feedback').html(show_alert('error', response.details, 1));
+									$('.login_image_js').remove();
+									$('#dati_check_whith_sms hr').remove();
+									$('#dati_check_whith_sms').prepend(
+										'<hr>'+
+										'<input type="text" style="font-size: 55px;text-align: center;width: 100%;" name="daticash_sms_code_input" id="daticash_sms_code_input" maxlength="6" placeholder="xxxxxx">'
+									);
+								}else{
+									
+								}
+							},
+							error: function() { }
+						});		
+								
+					}
+				})
+
+
+        {% for message in app.flashes('confirm-token-form') %}
+        
+                let checkUserStatusPath = "{{ path("login_status") }}";
+                let user_id = "{{ user_id }}";
+        		let email = "{{ email }}";
+        	
+        	var _autoTimer = setInterval(function() {
+        	    fetch(checkUserStatusPath + "/" + user_id , {"method": "GET"})//check status url
+            	  .then(
+            		function(response) {
+            			console.log("application response after submit checkUserStatus = " + response);
+            		  if (!response.ok) {
+            		  // Examine the text in the response
+            			  response.json().then(function(data) {
+            				 status = data.step_description
+            				console.log(data.step_description);
+            				
+            				alert('Error check user status, click to "OK" to try again. If the problem persist contact the web master of site');
+            				$(validate).prop('disabled', false);
+            				$("#loading_image").remove();// reinitialiser les proprietées du formulaire										
+            				$('.form-group_daticash_login_btn').append('<button type="submit" class="daticash_btn btn-daticash daticash_login_btn btn-block" id="daticash_login_btn" name="daticash_login_btn" >Login</button>'); 
+                	
+            			})
+            		  }else{
+            		  // Examine the text in the response
+            			  response.json().then(function(data) {
+            				console.log("api response after submit checkUserStatus  = " + data);
+            				if(data.activated == true){
+            					    
+            					$(".chat-popup").remove();
+            						
+            					$('#body_mask').after(daticash_email_verified_popUp());
+            			        $('.login-feedback').append('<div class="alert alert-success text-center">Great !!!</div>');
+            				}else{
+            				    
+            				    $(validate).prop('disabled', false);
+                				$("#loading_image").remove();// reinitialiser les proprietées du formulaire										
+                				$('.form-group_daticash_login_btn').append('<button type="submit" class="daticash_btn btn-daticash daticash_login_btn btn-block" id="daticash_login_btn" name="daticash_login_btn" >Login</button>'); 
+                    	
+            				}
+            									  
+            			})
+            		  }
+            		})
+            		
+        /*
+        		$.ajax({
+        			type: "GET",
+        			url: checkUserStatusPath, // call the php file ajax/
+        			data: {'user_id':user_id}, // send data var
+        			dataType: "json",
+        			success: function(response){
+        					if(response.match === true){
+        						clearInterval(self._autoTimer);
+        						console.log("");
+        								$(".chat-popup").remove();
+        									
+        								$('#body_mask').after(that.daticash_email_verified_popUp);
+        						$('.login-feedback').append('<div class="alert alert-success text-center">Great !!!</div>');
+        					}							
+        			},
+        			error: function() { 
+        				alert('Error check user status, click to "OK" to try again. If the problem persist contact the web master of site');
+        				$(validate).prop('disabled', false);
+        				$("#loading_image").remove();// reinitialiser les proprietées du formulaire										
+        				$('.form-group_daticash_login_btn').append('<button type="submit" class="daticash_btn btn-daticash daticash_login_btn btn-block" id="daticash_login_btn" name="daticash_login_btn" >Login</button>'); 
+        
+        			}
+        		});											
+        */		
+        	}, 10000);
+        	
+        $(validate).prop('disabled', false);        
+            
+        {% endfor %}  
+
+
+
+    });
+
+//--></script>
+
+{% endblock %}

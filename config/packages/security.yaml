@@ -42,8 +42,11 @@ security:
         - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/transactions, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/send_money, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/send_sms, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/activate, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
-        - { path: ^/, roles: [ROLE_MOBILE_CLIENT] }
+
+        - { path: ^/, roles: [ROLE_USER] }
 
         # - { path: ^/profile, roles: ROLE_USER }
 
