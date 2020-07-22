@@ -4,11 +4,16 @@ namespace App\Security;
 
 use App\Security\User\WebserviceUser;
 use Doctrine\ORM\EntityManagerInterface;
+use http\Exception\BadHeaderException;
+use HttpEncodingException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
@@ -136,6 +141,22 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
         return new RedirectResponse($this->urlGenerator->generate('home'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+    }
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
+        if($exception->getCode()==412){
+            var_dump($exception->getMessageData());
+            return new RedirectResponse($this->urlGenerator->generate('activation',[
+                "user_id"=>$exception->getMessageData()["user_id"],
+                "email"=>$exception->getMessageData() ["email"]
+
+            ]));
+        } else{
+
+            throw new CustomUserMessageAuthenticationException($exception->getMessage(),$exception->getMessageData(),$exception->getCode());
+
+        }
+
     }
 
     protected function getLoginUrl()

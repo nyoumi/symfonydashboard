@@ -1,0 +1,466 @@
+{% set _profile = app.user %}
+{% set _username = _profile.firstname ~ ' ' ~ _profile.lastname %}
+{% set _user_phone = '+' ~ _profile.countryCode ~ _profile.phoneNumber %}
+{% set _accounts = app.user.accounts %} 
+{% set _categories = app.session.get('services') %}
+ 
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+            <!-- Font Awesome -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+            <!-- Ionicons -->
+            <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+            <!-- Theme style -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+            <!-- Google Font: Source Sans Pro -->
+            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">		
+            <!-- Datiuser style-->
+	        <link href="{{ asset('assets/css/confirm-user-popup.css') }}" rel="stylesheet">
+            <!-- Numeric Keypad -->
+            <link href="{{ asset('assets/css/jquery.keypad.css') }}" rel="stylesheet">
+            <!-- International Telephone Input -->
+            <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block head_javascripts %}
+            <!-- Sweet alert scripts-->
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>	
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
+{% endblock %}
+
+{% block navbar %}
+   {% include "body/navbar.html.twig" ignore missing %}
+{% endblock %}
+
+{% block sidebar %}
+   {% include "body/sidebar.html.twig" ignore missing %}
+{% endblock %}
+
+{% block content_header %}
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Settings</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Settings</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+{% endblock %}
+
+{% block content_main %}   
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-3">
+
+            <!-- Profile Image -->
+            <div class="card card-primary card-outline">
+              <div class="card-body box-profile">
+                <div class="text-center">
+                  <img class="profile-user-img img-fluid img-circle"
+                       src="{% if _profile.avatar is null %}{{ asset('assets/img/mascotte.png') }}{% else %} {{ _profile.avatar  }} {% endif %}"
+                       alt="User profile picture"
+                       style="cursor: pointer;">
+                </div>
+                <form id="upload-file" class="upload-file" enctype='multipart/form-data' action='' method='post'>
+					<label id="avatar" class="profile" >
+						<input type="file" name="avatar" class="file" id="image_upload" /> 																									
+					</label>
+				</form>                
+                <h3 class="profile-username text-center">{{ _username }}</h3>
+
+                <p class="text-muted text-center">{{ _profile.email }}</p>
+                <p class="text-muted text-center">{{ _user_phone }}</p>
+                
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+
+            <!-- About Me Box -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">My Accounts</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <ul class="products-list product-list-in-card pl-2 pr-2">
+                {% for account in _accounts %}
+				  <li class="item">
+					<div class="product-img">
+					  <img src="{{ asset('adminLTE/dist/img/default-150x150.png') }}" alt="Product Image" class="img-size-50">
+					</div>
+					<div class="product-info">
+					  <a id="account_{{  account.id  }}" href="javascript:void(0)" data-account_id="{{  account.id  }}" class="account-name">{{ account.name  }}</a>
+					  <span class="product-description">
+					      {{ account.description  }}
+					  </span>
+					</div>
+				  </li>
+			    {% endfor %}			 
+				</ul>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+
+          </div>
+          <!-- /.col -->
+          <div class="col-md-9">
+            <div class="card">
+              <div class="card-header p-2">
+                <ul class="nav nav-pills">
+                  <li class="nav-item"><a class="nav-link active" href="#profile_settings" data-toggle="tab">Profile</a></li>  
+                  <li class="nav-item"><a class="nav-link" href="#account_settings" data-toggle="tab">Accounts</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#security_settings" data-toggle="tab">Security</a></li>
+                </ul>
+              </div><!-- /.card-header -->
+              <div class="card-body">
+                <div class="tab-content">
+                  
+                  <div class="active tab-pane" id="profile_settings">
+                    <form class="form-horizontal" name="profile_change_form" id="profile_change_form" action='https://api.daticash.com/api/user/'{{ _profile.id  }}'/edit' method='PUT'>
+                    <div class="input-group mb-3 form-daticash_phone">
+                        <small id="phone-feedback" style="display: block;"></small>
+                        <input type="hidden" class="form-control" id="country_code" name="country_code" value="{{ _profile.countryCode }}" >
+                        <input type="phone_number" class="form-control" id="phone_number" name="phone_number" value="{{ _profile.phoneNumber }}" >
+                        <div class="input-group-append" id="input_group_appendto_phone" name="input_group_appendto_phone">
+                        <div class="input-group-text">
+                            <span class="fas fa-phone"></span>
+                        </div>
+                        </div>
+                    </div>
+                      <div class="form-group row">
+                        <label for="firstname" class="col-sm-2 col-form-label">First Name</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="firstname" placeholder="firstname" value="{{ _profile.firstname }}">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="lastname" class="col-sm-2 col-form-label">Last Name</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="lastname" placeholder="Last Name" value="{{ _profile.lastname }}">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="email" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                          <small id="email-feedback"></small>
+                          <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{ _profile.email }}">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Profile Picture</label>
+                            <div class="user-block">
+                            <img class="profile-user-img img-circle img-bordered-sm" src="{% if _profile.avatar is null %}{{ asset('assets/img/mascotte.png') }}{% else %} {{ _profile.avatar  }} {% endif %}" alt="user image">
+                            <span class="username">
+                              <a href="#" class="profile-user-label">Choose image</a>
+                            </span>
+                            <span class="description">Click here to change you profile picture.</span>
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">PIN Code</label>
+                            <div class="pin-block">
+                            <span class="pincode_label">
+                              <a href="#">Change PIN Code</a>
+                            </span>
+                            <span class="description">Click here to change you PIN Code.</span>
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Default Account</label>
+                            <select class="swal2-select" style="display: flex; margin: 0;" name="default_account" id="default_account">
+                                <option value="" disabled="">Select your default account</option>                    
+                                {% for account in _accounts %}
+                                    <option data-account_name = "{{  account.name  }}" data-account_description = "{{  account.description  }}"  data-account_id = "{{  account.id  }}" value="{{  account.id  }}" class="nav-link {% if account.is_default  == "true" %} selected {% endif %}">{{  account.name  }}</option>
+                                {% endfor %}  
+
+                                </optgroup>
+                            </select>
+                      </div>
+                      <div class="form-group row">
+                        <div class="offset-sm-2 col-sm-10">
+                          <button type="submit" id="save_profile_change_btn" name="save_profile_change_btn" class="btn btn-info float-right">Save Changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div> 
+                  <div class="tab-pane" id="account_settings">
+                    <form class="form-horizontal">
+                      <div class="input-group mb-3 form-daticash_phone">
+                        <select class="swal2-select" style="display: flex; margin: 0; width: 100%;" name="default_account" id="default_account">
+                            <option value="" disabled="">Select your default account</option>                    
+                            {% for account in _accounts %}
+                                <option data-account_name ="{{  account.name  }}" data-account_description ="{{  account.description  }}"  data-account_id ="{{  account.id  }}" value="{{  account.id  }}" class="nav-link {% if account.is_default  == "true" %} selected {% endif %}">{{  account.name  }}</option>
+                            {% endfor %}  
+                            </optgroup>
+                        </select>
+                      </div>
+                      <div class="form-group row">
+                        <label for="name" class="col-sm-2 col-form-label">Account Name</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="name" placeholder="Account Name" value="{% for account in _accounts %}{% if account.is_default  == "true" %} {{  account.name  }} {% endif %}{% endfor %}">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="description" class="col-sm-2 col-form-label">Description</label>
+                        <div class="col-sm-10">
+                          <textarea class="form-control" id="description" placeholder="Description" value="{% for account in _accounts %}{% if account.is_default  == "true" %} {{  account.description  }} {% endif %}{% endfor %}"></textarea>
+                        </div>
+                      </div>
+                      
+                      <div class="form-group row">
+                        <div class="offset-sm-2 col-sm-10">
+                          <button type="submit" id="save_change_btn" name="save_change_btn" class="btn btn-info float-right">Save Changes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div> 
+                  <div class="tab-pane" id="security_settings">
+                    <!--// email and phone Number verification -->
+                    <form class="form-horizontal">
+                      <div class="input-group mb-3">
+                        <div class="progress">
+                          <div class="progress-bar bg-primary progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                            <span class="sr-only">40% Complete (success)</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="name" class="col-sm-2 col-form-label">Verify Email</label>
+                        <div class="col-sm-10">
+
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="description" class="col-sm-2 col-form-label">Verify Phone Number</label>
+                        <div class="col-sm-10">
+
+                        </div>
+                      </div>
+                      
+                      <div class="form-group row">
+                        <div class="offset-sm-2 col-sm-10">
+                          <button type="submit" id="save_change_btn" name="save_change_btn" class="btn btn-info float-right">Save Changes</button>
+                        </div>
+                      </div>
+                    </form>
+                    <hr>
+                  </div>
+                  <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+              </div><!-- /.card-body -->
+            </div>
+            <!-- /.nav-tabs-custom -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+
+{% block javascripts %}
+            <!-- Bootstrap 4 -->
+            <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+            <!-- Waves Effect Plugin Js -->
+            <script src="{{ asset('adminLTE/plugins/node-waves/waves.js') }}"></script>
+            <!-- AdminLTE App -->
+            <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
+            <!-- AdminLTE for demo purposes -->
+            <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script> 
+            <!-- numeric keypad jQuery-->
+            <script src="{{ asset('assets/js/jquery.plugin.min.js') }}"></script>
+            <!-- numeric keypad script-->
+            <script src="{{ asset('assets/js/jquery.keypad.js') }}"></script>
+            <!-- International Telephone Input-->	
+            <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
+
+
+
+<script type="text/javascript"><!--
+
+var daticash_current_phone_number;  
+function configure_intlTelInput(){
+	var phone_number = document.querySelector("#phone_number");
+	daticash_current_phone_number = window.intlTelInput(phone_number, {
+	  // allowDropdown: false,
+	  // autoHideDialCode: false,
+	  // autoPlaceholder: "off",
+	  // dropdownContainer: document.body,
+	  // excludeCountries: ["us"],
+	  // formatOnDisplay: false,
+	   geoIpLookup: function(callback) {
+	    $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+	      var countryCode = (resp && resp.country) ? resp.country : "";
+	       callback(countryCode);
+	     });
+	   },
+	  // hiddenInput: "full_number",
+	  // initialCountry: "auto",
+	  // localizedCountries: { 'de': 'Deutschland' },
+	   nationalMode: true,
+	  // onlyCountries: ['cm', 'ng', 'eg', 'ci', 'sn'],
+	  // placeholderNumberType: "MOBILE",
+	  // preferredCountries: ['cn', 'jp'],
+	  separateDialCode: true,
+	  utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",//get value
+	});
+
+	var output = document.querySelector("#phone-feedback");
+		
+	var handleChange = function() {
+		//impose the numeric characters
+		var value = jQuery(this).val();
+		value = value.replace(/[^0-9]+/g, '');
+		jQuery(this).val(value);		
+		
+	  //show message if incorrect phone number	
+	  var text = (daticash_current_phone_number.isValidNumber()) ? 'International: ' + daticash_current_phone_number.getNumber() + ' ✓ Valid': "Please enter a valid number below";
+	  var textNode = document.createTextNode(text);
+	  output.innerHTML = "";
+	  output.appendChild(textNode);
+	  
+		  /* change style color*/
+		  if(daticash_current_phone_number.isValidNumber()){
+			$("#phone-feedback").attr("class",'text-success');
+			$("#phone_number").removeClass("error").addClass("success");
+			
+		  }else{
+			$("#phone-feedback").attr("class",'text-danger');		  
+			$("#phone_number").addClass("error").removeClass("success");
+			$(this).parent().find("#input-group-text").css("color: #ff7c7c; border-color:#ff7c7c");
+		  } 	
+	
+	};
+	
+	// listen to "keyup", but also "change" to update when the user selects a country
+	phone_number.addEventListener('change', handleChange);
+	phone_number.addEventListener('keyup', handleChange);
+}
+
+function autoChoose_country_code(country_code){
+		configure_intlTelInput()
+			$("#input_group_appendto_phone").remove()
+			$('#phone_number').after('<div class="input-group-append"><div class="input-group-text" style="border-bottom-left-radius: 0;border-top-left-radius: 0;"><span class="fas fa-phone"></span></div></div>');
+
+	$(".iti__selected-flag").trigger("click");
+	$(".iti__country[data-dial-code='"+country_code+"']").trigger("click");						
+}
+
+function emailIsValid (email) {
+	return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+
+
+    $(document).ready(function(){
+        /*Textbox Events*/
+        $("body")
+                .on('click', '.iti__country' , function(e) {
+                        let sender_country_code = "1";
+                        let recipient_country_code = "237";
+                        let default_country_code = "cm";
+                        
+                    var $this = $(this);
+                        let _currency_received_txt = false;  
+                                default_country_code = $($this).attr("data-country-code");
+                                var pid = $($this).attr("id")
+                                
+                        sender_country_code = $this.find(".iti__dial-code").text();
+                        sender_country_code = sender_country_code.substring(1, sender_country_code.length);
+                                
+                        recipient_country_code = $this.find(".iti__dial-code").text();
+                        recipient_country_code = recipient_country_code.substring(1, recipient_country_code.length);
+                        
+                        if(_currency_received_txt = !$this.parents('.form-group-sender_phone').length){
+                            $('#country_img').html("<img src='https://www.countryflags.io/"+default_country_code+"/flat/32.png'>");		
+                            $('#country_name').html($("#"+pid).children(".iti__country-name").text());
+                        }	
+                        if(_currency_received_txt = $this.parents('.form-daticash_phone').length){
+                            //alert(recipient_country_code)
+                            $('#country_code').val(recipient_country_code);
+                        }	
+                        if(_currency_received_txt = $this.parents('.form-group_topup_by_mobile_money_source').length){
+                            //alert(recipient_country_code)
+                            $('#topup_by_mobile_money_source_country_code').val(recipient_country_code);
+                        }	
+                        
+                    //alert($this.parents('.form-daticash_phone').length)
+                    //alert(default_country_code)
+                    //alert(_currency_received_txt)
+            
+                    })
+                .on('click', '#save_profile_change_btn' , function(e) {
+    				e.preventDefault()
+    				var validate_reset = this;
+    
+    				var $form = $(this).closest("#profile_change_form");
+    				var email = $form.find("#email").val();
+
+    					$(".alert").remove()
+    					
+                    var formData = new FormData($form );
+                    console.log(formData)
+                    
+    					if (emailIsValid(email) && daticash_current_phone_number.isValidNumber()) {
+    						$('#email-feedback').html("<div class='text-success' style='display:inline;'> ✓ Valid</div>");
+    
+    						$(validate_reset).text("processing...").prop('disabled', true);
+    						$form.submit();
+    						
+    					}else{
+    						if(!emailIsValid(email)){
+    							$('#email-feedback').html("<div class='text-danger'>Invalid Email</div>");
+                            }
+                            
+    						if(phone_number==""){
+                                $('#phone-feedback').html("<div class='text-danger'>Please enter a valid number below</div>");
+                            }
+                            
+                            if(!daticash_current_phone_number.isValidNumber()){
+                                $('#phone-feedback').html("<div class='text-danger'>Please enter a valid number below</div>");
+                            }
+    					}					
+    				
+    				})
+                .on('click', '.account-name' , function(e) {
+                    $('a[href^="#account_settings"]').trigger("click");
+                    	e.preventDefault();
+                    	var id = $(this).attr('data-account_id');
+                    	var elem = $('a[href^="#account_settings"]');
+                    	if(id){
+                    		var elemTop = elem.first().offset().top;
+                    		$('html,body').animate({
+                    			scrollTop:elemTop
+                    		}, "fast");
+                    	}
+                    })
+                    
+                    
+                $('.profile-user-img, .profile-user-label').click(function(e){
+                    e.preventDefault();
+                    $('.profile input[type="file"]').click();
+                });			
+                
+                autoChoose_country_code({{ _profile.countryCode }});
+
+    });
+
+//--></script>
+{% endblock %}

@@ -2,139 +2,139 @@
 {% extends "base.html.twig" %}
 
 {% block stylesheets %}
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
-    <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-    <!-- Datiuser style-->
-    <link href="{{ asset('assets/css/confirm-user-popup.css') }}" rel="stylesheet">
-    <!-- Numeric Keypad -->
-    <link href="{{ asset('assets/css/jquery.keypad.css') }}" rel="stylesheet">
-    <!-- International Telephone Input -->
-    <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
+            <!-- Font Awesome -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+            <!-- Ionicons -->
+            <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+            <!-- Theme style -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+            <!-- Google Font: Source Sans Pro -->
+            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">		
+            <!-- Datiuser style-->
+	        <link href="{{ asset('assets/css/confirm-user-popup.css') }}" rel="stylesheet">
+            <!-- Numeric Keypad -->
+            <link href="{{ asset('assets/css/jquery.keypad.css') }}" rel="stylesheet">
+            <!-- International Telephone Input -->
+            <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block head_javascripts %}
-    <!-- Sweet alert scripts-->
-    <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>
-    <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
+            <!-- Sweet alert scripts-->
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>	
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
 {% endblock %}
 
 {% block body %}
-    <div id="body_mask" class="body_mask">{{ app.session.get('country_code') }}-{{ app.session.get('phone_number') }}</div>
-    <div class="chat-popup" id="daticash_connexion_popUp">
-        <div id="ib-center" class="dati_popup">
-            <div class="container">
-                <div class="row d-flex justify-content-center">
-                    <div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">
-                        <div class="login-logo">
-                            <a href="http://daticash.com/" target="_blank" style="color: #fff;">
-                                <img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>
-                            </a>
-                        </div>
-                        <div class="login-feedback">
-                            {% for flashError in app.flashes('error') %}
-                                <div class="alert alert-danger alert-dismissible" role="alert">
-                                    <i class="fa fa-exclamation-circle"></i>&nbsp{{ flashError }}
-                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                </div>
-                            {% endfor %}
-                            {% for message in app.flashes('notice') %}
-                                <div class="alert alert-warning alert-dismissible  flash-notice">
-                                    <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }}"</a>
-                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                </div>
-                            {% endfor %}
-
-                            {# read and display several types of flash messages #}
-                            {% for label, messages in app.flashes(['success']) %}
-                                {% for message in messages %}
-                                    <div class="alert alert-success alert-dismissible">
-                                        <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }} }}
-                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                    </div>
-                                {% endfor %}
-                            {% endfor %}
-
-                        </div>
-                        <div class="card body_card_daticash_login">
-                            <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">
-                                <div class="col-12 mb-3" style="text-align: right;font-weight: 700;color: #007bff;color: #007bff;" ><p class="text-right" style="display: inline;color: #777777;font-weight: 100;">have account ?</p><p style="cursor:pointer;display: inline;" id="dati_login_modal" name="dati_login_modal"><a href="{{ path('login') }}"> Login Now!</a></p></div>
-
-                                <small id="allow_reset-feedback"></small>
-                                <form method="post" class="form login-form" >
-                                    <label for="phone_number" style="width: 100%; margin-bottom: .5rem;">
-                                        <font style="vertical-align: inherit;">Phone number&nbsp</font>
-                                        <small id="phone-feedback" style="display: block;"></small>
-                                    </label>
-                                    <div class="input-group mb-3 form-daticash_phone">
-                                        <input type="hidden" class="form-control" id="country_code" name="country_code">
-                                        <input type="phone" class="form-control" id="phone_number" name="phone_number">
-                                        <div class="input-group-append" id="input_group_appendto_phone" name="input_group_appendto_phone">
-                                            <div class="input-group-text">
-                                                <span class="fas fa-user"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="new_password-group">
-                                        <label id="new_password_label" for="new_password" style="width: 100%; margin-bottom: .5rem;">
-                                            <font style="vertical-align: inherit;">New PIN Code&nbsp</font>
-                                            <small id="new_password-feedback"  style = "display: block;"></small>
-                                        </label>
-                                        <small class="show_or_hide_pin_for_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">
-                                            <i class="show_or_hide_pin_for_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>
-                                        <div class="input-group mb-3">
-                                            <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Choose New PIN Code" maxlength="6">
-                                            <div class="input-group-append">
-                                                <div class="input-group-text">
-                                                    <span class="fas fa-key"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="retype_new_password-group">
-                                        <label id="retype_new_password_label" for="retype_new_password" style="width: 100%; margin-bottom: .5rem;">
-                                            <font style="vertical-align: inherit;">Retype new PIN Code&nbsp</font>
-                                            <small id="retype_new_password-feedback" style = "display: block;"></small>
-                                        </label>
-                                        <small class="show_or_hide_pin_for_retype_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">
-                                            <i class="show_or_hide_pin_for_retype_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_retype_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>
-                                        <div class="input-group mb-3">
-                                            <input type="password" class="form-control" id="retype_new_password" name="retype_new_password" placeholder="Retype new PIN code" maxlength="6">
-                                            <div class="input-group-append">
-                                                <div class="input-group-text">
-                                                    <span class="fas fa-key"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <small class="text-center" id="check_password_correspondance-feedback" style = "display: block;"></small>
-                                    <div id="re_captcha_container" class="text-center mb-2">
-                                        <div id="g-recaptcha"></div>
-                                    </div>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-12 form-group_daticash_register_btn">
-                                            <input type="hidden" name="action" class="action" value="daticash_register">
-                                            <button type="submit" class="daticash_btn btn-daticash btn-block" id="daticash_request_register_btn" name="daticash_request_register_btn">Register</button>
-                                        </div>
-                                    </div>
-                                </form>
-
+<div id="body_mask" class="body_mask"></div>    
+<div class="chat-popup" id="daticash_connexion_popUp">
+    <div id="ib-center" class="dati_popup">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">
+                    <div class="login-logo">
+                        <a href="http://daticash.com/" target="_blank" style="color: #fff;">
+                            <img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>
+                        </a>
+                    </div>
+                    <div class="login-feedback">
+                        {% for flashError in app.flashes('error') %}
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <i class="fa fa-exclamation-circle"></i>&nbsp{{ flashError }}
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            </div>    
+                        {% endfor %}
+                        {% for message in app.flashes('notice') %}
+                            <div class="alert alert-warning alert-dismissible  flash-notice">
+                                <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }}"</a>
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
                             </div>
+                        {% endfor %}
+                    
+                        {# read and display several types of flash messages #}
+                        {% for label, messages in app.flashes(['success']) %}
+                            {% for message in messages %}                            
+                                <div class="alert alert-success alert-dismissible">
+                                    <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }}
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}                        
+
+                    </div>
+                    <div class="card body_card_daticash_login">
+                        <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">
+                        <div class="col-12 mb-3 dati_login_row" style="text-align: right;font-weight: 700;color: #007bff;color: #007bff;" ><p class="text-right" style="display: inline;color: #777777;font-weight: 100;">have account ?</p><p style="cursor:pointer;display: inline;" id="dati_login_modal" name="dati_login_modal"><a href="{{ path('login') }}"> Login Now!</a></p></div>
+                            
+                            <small id="allow_reset-feedback"></small>
+                            <form method="post" class="form login-form" >
+                                <label for="phone_number" style="width: 100%; margin-bottom: .5rem;">
+                                    <font style="vertical-align: inherit;">Phone number&nbsp</font>
+                                    <small id="phone-feedback" style="display: block;"></small>
+                                </label>
+                                <div class="input-group mb-3 form-daticash_phone">
+                                    <input type="hidden" class="form-control" id="country_code" name="country_code">
+                                    <input type="phone" class="form-control" id="phone_number" name="phone_number">
+                                    <div class="input-group-append" id="input_group_appendto_phone" name="input_group_appendto_phone">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="new_password-group">
+                                    <label id="new_password_label" for="new_password" style="width: 100%; margin-bottom: .5rem;">
+                                        <font style="vertical-align: inherit;">New PIN Code&nbsp</font>
+                                        <small id="new_password-feedback"  style = "display: block;"></small>
+                                    </label>
+                                    <small class="show_or_hide_pin_for_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">
+                                        <i class="show_or_hide_pin_for_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>
+                                    <div class="input-group mb-3">
+                                        <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Choose New PIN Code" maxlength="6">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-key"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="retype_new_password-group">
+                                    <label id="retype_new_password_label" for="retype_new_password" style="width: 100%; margin-bottom: .5rem;">
+                                        <font style="vertical-align: inherit;">Retype new PIN Code&nbsp</font>
+                                        <small id="retype_new_password-feedback" style = "display: block;"></small>
+                                    </label>
+                                    <small class="show_or_hide_pin_for_retype_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">
+                                        <i class="show_or_hide_pin_for_retype_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_retype_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>
+                                    <div class="input-group mb-3">
+                                        <input type="password" class="form-control" id="retype_new_password" name="retype_new_password" placeholder="Retype new PIN code" maxlength="6">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-key"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <small class="text-center" id="check_password_correspondance-feedback" style = "display: block;"></small>
+                                <div id="re_captcha_container" class="text-center mb-2">
+                                    <div id="g-recaptcha"></div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-12 form-group_daticash_register_btn">
+                                        <input type="hidden" name="action" class="action" value="daticash_register">
+                                        <button type="submit" class="daticash_btn btn-daticash btn-block" id="daticash_request_register_btn" name="daticash_request_register_btn">Register --></button>
+                                    </div>
+                                </div>
+                            </form>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -157,7 +157,8 @@
     <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
 
     <script type="text/javascript"><!--
-
+        $('body').css('overflow', 'hidden')
+/** Déclaration des fonctions et des vatiables**/
         var daticash_current_phone_number;
         function configure_intlTelInput(){
             var phone_number = document.querySelector("#phone_number");
@@ -226,7 +227,6 @@
             $(".iti__country[data-dial-code='"+country_code+"']").trigger("click");
         }
 
-
         function passwordLength(element, value){
             //alert(element)
             //alert(value)
@@ -244,7 +244,200 @@
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
         }
 
-        let tampon_data = {};
+        let tampon_data = {
+            'phone_number' : "",
+            'country_code' : "",
+            'new_password' : "",
+            'retype_new_password' : "",
+            'firstname' : "",
+            'lastname' : "",
+            'email' : ""
+        };
+        
+        var daticash_register_if_not_exist_step1_popUp = ( 
+			'<div class="chat-popup" id="daticash_register_if_not_exist_step1_popUp">'+
+                '<div id="ib-center" class="dati_popup>'+
+                    '<div class="container">'+
+                        '<div class="row d-flex justify-content-center">'+
+                            '<div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">'+
+                                '<div class="login-logo">'+
+                                    '<a href="http://daticash.com/" target="_blank" style="color: #fff;">'+
+                                        '<img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>'+
+                                    '</a>'+
+                                '</div>'+
+                                '<div class="login-feedback"></div>'+
+                                '<div class="card body_card_daticash_login">'+
+                                    '<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+
+                                        '<small id="allow_reset-feedback"></small>'+
+                                        '<form method="post" class="form login-form" >'+
+                                            '<label for="phone_number" style="width: 100%; margin-bottom: .5rem;">'+
+                                                '<font style="vertical-align: inherit;">Phone number&nbsp</font>'+
+                                                '<small id="phone-feedback" style="display: block;"></small>'+
+                                            '</label>'+
+                                            '<div class="input-group mb-3 form-daticash_phone">'+
+                                                '<input type="hidden" class="form-control" id="country_code" name="country_code">'+
+                                                '<input type="phone" class="form-control" id="phone_number" name="phone_number">'+
+                                                '<div class="input-group-append" id="input_group_appendto_phone" name="input_group_appendto_phone">'+
+                                                    '<div class="input-group-text">'+
+                                                        '<span class="fas fa-user"></span>'+
+                                                    '</div>'+
+                                                '</div>'+
+                                            '</div>'+
+            
+                                            '<div class="new_password-group">'+
+                                                '<label id="new_password_label" for="new_password" style="width: 100%; margin-bottom: .5rem;">'+
+                                                    '<font style="vertical-align: inherit;">New PIN Code&nbsp</font>'+
+                                                    '<small id="new_password-feedback"  style = "display: block;"></small>'+
+                                                '</label>'+
+                                                '<small class="show_or_hide_pin_for_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">'+
+                                                    '<i class="show_or_hide_pin_for_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>'+
+                                                '<div class="input-group mb-3">'+
+                                                    '<input type="password" class="form-control" id="new_password" name="new_password" placeholder="Choose New PIN Code" maxlength="6">'+
+                                                    '<div class="input-group-append">'+
+                                                        '<div class="input-group-text">'+
+                                                            '<span class="fas fa-key"></span>'+
+                                                        '</div>'+
+                                                    '</div>'+
+                                                '</div>'+
+                                            '</div>'+
+            
+                                            '<div class="retype_new_password-group">'+
+                                                '<label id="retype_new_password_label" for="retype_new_password" style="width: 100%; margin-bottom: .5rem;">'+
+                                                    '<font style="vertical-align: inherit;">Retype new PIN Code&nbsp</font>'+
+                                                    '<small id="retype_new_password-feedback" style = "display: block;"></small>'+
+                                                '</label>'+
+                                                '<small class="show_or_hide_pin_for_retype_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">'+
+                                                    '<i class="show_or_hide_pin_for_retype_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_retype_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>'+
+                                                '<div class="input-group mb-3">'+
+                                                    '<input type="password" class="form-control" id="retype_new_password" name="retype_new_password" placeholder="Retype new PIN code" maxlength="6">'+
+                                                    '<div class="input-group-append">'+
+                                                        '<div class="input-group-text">'+
+                                                            '<span class="fas fa-key"></span>'+
+                                                        '</div>'+
+                                                    '</div>'+
+                                                '</div>'+
+                                            '</div>'+
+            
+                                            '<small class="text-center" id="check_password_correspondance-feedback" style = "display: block;"></small>'+
+                                            '<div id="re_captcha_container" class="text-center mb-2">'+
+                                                '<div id="g-recaptcha"></div>'+
+                                            '</div>'+
+                                            '<hr>'+
+                                            '<div class="row">'+
+                                                '<div class="col-12 form-group_daticash_register_btn">'+
+                                                    '<input type="hidden" name="action" class="action" value="daticash_register">'+
+                                                    '<button type="submit" class="daticash_btn btn-daticash btn-block" id="daticash_request_register_btn" name="daticash_request_register_btn">Register --></button>'+
+                                                '</div>'+
+                                            '</div>'+
+                                        '</form>'+
+            
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+            '</div>'+
+        '</div>'
+            );
+            
+    	var daticash_register_if_not_exist_popUp = (
+			'<div class="chat-popup" id="daticash_register_if_not_exist_popUp">'+
+				'<div id="ib-center" class="dati_popup">'+
+					'<div class="dati_user_status_login"></div>'+
+					'<div class="container">'+
+						'<div class="row d-flex justify-content-center">'+
+							'<div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">'+
+								'<div class="login-logo">'+
+									'<a href="http://daticash.com/" style="color: #fff;">'+
+										'<img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>'+
+									'</a>'+
+								'</div>'+
+							  '<div class="login-feedback"></div>'+
+							  '<div class="card body_card_daticash_login">'+
+								'<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+								  
+								  '<form method="post" name="registration_form" action="{{ path('register') }}" class="form login-form">'+
+							        '<div class="row">'+
+									  '<div class="col-2">'+
+									    '<img src="{{ absolute_url(asset("assets/img/back.png")) }}" id="back_to_step_one_btn" name="back_to_step_one_btn" style="width:100%; cursor:pointer;"/>'+
+									  '</div>'+
+									  '<div class="col-10">'+
+									    '<small style="float: right;">For an optimal experience with the daticash system, tell us who you are. We respect your privacy.&nbsp</small>'+
+									  '</div>'+
+									'</div>'+
+									
+									'<div class="input-group mb-3">'+
+									  '<label for="lastname" style="width: 100%; margin-bottom: .5rem;">'+
+										'<font style="vertical-align: inherit;">Last Name</font>'+
+										'<small id="lastname-feedback"></small>'+
+									  '</label>'+
+									  '<input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name">'+
+									  '<div class="input-group-append">'+
+										'<div class="input-group-text">'+
+										  '<span class="fas fa-user"></span>'+
+										'</div>'+
+									  '</div>'+
+									'</div>'+
+									
+									'<div class="input-group mb-3">'+
+									  '<label for="firstname" style="width: 100%; margin-bottom: .5rem;">'+
+										'<font style="vertical-align: inherit;">First Name&nbsp</font>'+
+										'<small id="firstname-feedback"></small>'+
+									  '</label>'+
+									  '<input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name">'+
+									  '<div class="input-group-append">'+
+										'<div class="input-group-text">'+
+										  '<span class="fas fa-user"></span>'+
+										'</div>'+
+									  '</div>'+
+									'</div>'+									  
+								  									  
+									'<div class="input-group mb-3">'+
+									  '<label for="email" style="width: 100%; margin-bottom: .5rem;">'+
+										'<font style="vertical-align: inherit;">Email</font>'+
+										'<small id="email-feedback"></small>'+
+									  '</label>'+
+									  '<input type="email" class="form-control" id="email" name="email" placeholder="Email">'+
+									  '<div class="input-group-append">'+
+										'<div class="input-group-text">'+
+										  '<span class="fas fa-envelope"></span>'+
+										'</div>'+
+									  '</div>'+
+									'</div>'+
+									
+										 '<div id="re_captcha_container" class="text-center mb-2">'+
+											 '<div id="g-recaptcha"></div>'+
+										 '</div>'+
+										 '<hr>'+
+										 
+									'<div class="form-group_daticash_register_if_not_exist">'+
+										'<div class="row">'+
+										  '<div class="col-12">'+
+											'<input type="hidden" name="action" class="action" value="daticash_register_if_not_exist">'+
+											'<button type="submit" class="daticash_btn btn-daticash btn-block" id="daticash_register_if_not_exist_btn" name="daticash_register_if_not_exist_btn">Continue</button>'+
+										  '</div>'+
+										'</div>'+
+ 
+										  '<div class="col-12 " >'+
+											'<div class="icheck-primary" style="font-weight: 100;">'+
+											  '<input type="checkbox" checked id="agree" name="agree">'+
+											  '<label for="agreement"  style="margin:5px; color:#7A7A7A; display: inline;">'+
+												'I agree to the <a href="https://app.termly.io/document/terms-of-use-for-saas/9697da89-93b4-427a-ad5b-d41243fe5436" target="_blank"><b style="color:#3C424F; font-weight: 700;"> Terms and Conditions </a></b> and the <a href="https://app.termly.io/document/privacy-policy/6957bc16-55f2-427c-8e66-64d1d4c387a9" target="_blank"><b style="color:#3C424F; font-weight: 700;"> Privacy Policy</b></a>'+
+											  '</label></br>'+
+											'</div>'+												  
+										  '</div>'+		
+									'</div>'+		
+									  
+								  '</form>'+
+								'</div>'+
+							  '</div>'+
+							'</div>'+
+						'</div>'+
+					'</div>'+
+				'</div>'+
+			'</div>'
+			);
+{#        
         var daticash_register_if_not_exist_popUp = (
             '<div class="chat-popup" id="daticash_register_if_not_exist_popUp">'+
             '<div id="ib-center" class="dati_popup">'+
@@ -333,6 +526,76 @@
             '</div>'+
             '</div>'
         );
+#}        
+     	function alert_message_popUp (message){
+     	                return (
+    						  '<div class="chat-popup modal fade show" id="alert_message_popUp" aria-modal="true" style=" display: block;z-index:999999999;opacity: 0.9;background-color: #000000b8;">'+
+    							'<div class="modal-dialog">'+
+    							  '<div class="modal-content">'+
+    								'<div class="modal-header">'+
+    								  '<h4 class="modal-title">IMPORTANT MESSAGE</h4>'+
+    								'</div>'+		  
+    								'<div class="modal-body">'+
+    								  '<p>'+
+    									  '<h5><i class="icon fas fa-info"></i> Alert!</h5>'+ message +
+    								  '</p>'+
+    								'</div>'+
+    								'<div class="modal-footer justify-content-between">'+
+    								  '<button type="button" class="daticash_btn btn-default" data-dismiss="modal" id="btn_close_modal">Cancel</button>'+
+    								  '<button type="button" class="daticash_btn btn-daticash" id="close_modal_lg">Compris!</button>'+
+    								'</div>'+
+    							  '</div>'+
+    							'</div>'+
+    						  '</div>'
+    	                );
+    	}
+
+        function daticash_select_transaction_status_position(step){
+        	console.log(step);
+        		switch(step) {
+            		case 1:
+        				$(".step-one").addClass("finish active");
+        				break;
+        			case 2:
+        				$(".step-one").addClass("finish active");$(".step-one i").removeClass("fa-user").addClass("fa-check text-success");
+        				$(".step-two").addClass("finish active");
+        				break;
+        				
+        			case 3:
+        				$(".step-one").addClass("finish active");$(".step-one i").removeClass("fa-user").addClass("fa-check text-success");
+        				$(".step-two").addClass("finish active");$(".step-two i").removeClass("fa-edit").addClass("fa-check text-success");				
+        				$(".step-three").addClass("finish active");
+        				break;
+        			default :
+        				$("#daticash_display_transaction_status_topUp").addClass("tab");			
+        		}		
+        }  
+
+    	function daticash_display_transaction_status_topUp(){
+    		return (
+    				'<div id="daticash_display_transaction_status_topUp">'+
+    					'<div class="head_steps text-center">'+
+    						'<span class="step step-one">'+
+    							'<div class="step-icon"><i class="fa fa-user"></i>'+
+    							'</div>'+
+    							'<p>User Account Verification</p>'+
+    						'</span>'+
+    						'<span class="step step-two">'+
+    							'<div class="step-icon"><i class="fa fa-edit"></i>'+
+    							'</div>'+
+    							'<p>Balance Check</p>'+
+    						'</span>'+
+    						'<span class="step step-three">'+
+    							'<div class="step-icon"><i class="fa fa-credit-card"></i>'+
+    							'</div>'+
+    							'<p>Transaction Processing</p>'+
+    						'</span>'+
+    					'</div>'+
+    				'</div>'
+    			);			
+    	}        
+        
+/** Fin de la déclaration **/
 
         $(document).ready(function(){
             /*Textbox Events*/
@@ -423,10 +686,10 @@
                     var validate = this;
 
                     var $form = $(this).closest(".login-form");
-                    var phone_number = $form.find("#phone_number").val().replace(/[^0-9]+/g, '');
-                    var country_code = $form.find("#country_code").val();
-                    var new_password = $form.find("#new_password").val();
-                    var retype_new_password = $form.find("#retype_new_password").val();
+                    phone_number = $form.find("#phone_number").val().replace(/[^0-9]+/g, '');
+                    country_code = $form.find("#country_code").val();
+                    new_password = $form.find("#new_password").val();
+                    retype_new_password = $form.find("#retype_new_password").val();
                     var action = $form.find(".action").val();
 //alert(phone_number)
 //alert(country_code)
@@ -441,15 +704,20 @@
                             $("#check_password_correspondance-feedback").empty().append("<div class='text-danger'>Given PIN Code does not match.</div>");
 
                         }else{
-                            tampon_data = {
-                                'phone_number' : phone_number,
-                                'country_code' : country_code,
-                                'new_password' : new_password
-                            }
-
+                            tampon_data.phone_number = phone_number;
+                            tampon_data.country_code = country_code;
+                            tampon_data.new_password = new_password;
+                            tampon_data.retype_new_password = retype_new_password
+    				    
                             $(".chat-popup").remove();
 
-                            $('#body_mask').after(daticash_register_if_not_exist_popUp);
+                            $('#body_mask').after(daticash_register_if_not_exist_popUp);			
+            				$('.login-logo').after(daticash_display_transaction_status_topUp());
+            				daticash_select_transaction_status_position(1);	
+            				
+            				$("#firstname").val(tampon_data.firstname);
+            				$("#lastname").val(tampon_data.lastname);
+            				$("#email").val(tampon_data.email);
 
                         }
                     }else{
@@ -488,7 +756,7 @@
                     var plain_password = tampon_data.new_password;
                     var firstname = $form.find("#firstname").val();
                     var lastname = $form.find("#lastname").val();
-                    var action = $form.find(".action").val();;
+                    var action = $form.find(".action").val();
 
                     $(".login-form").append(
                         '<input type="hidden" name="phone_number" value="'+ tampon_data.phone_number +'">'+
@@ -520,7 +788,7 @@
                         let total_pay = $("#total_pay").text();
                         let fees = $("#fees").text();
 
-                        // $('#registration_form').submit();
+                       // $('#registration_form').submit();
                         $("[name='registration_form']")[0].submit();
                         $("[name='registration_form']").submit();
 
@@ -531,14 +799,79 @@
                         $('#email-feedback').html("<div class='text-danger'>Invalid Email</div>");
                     }
                 })
+                .on('click', '#close_modal_lg', function(){
+					$('.modal').remove();
+				})
+				.on('click', '#btn_close_modal', function(f){
+				    window.location = "https://daticash.com/send-cash/";	//retourner à la page précedente					
+						
+				})
+				.on('click', '#back_to_step_one_btn', function(f){
+				var cls = this;
+				    tampon_data.firstname= $("#firstname").val();
+				    tampon_data.lastname= $("#lastname").val();
+				    tampon_data.email= $("#email").val();
+				    
+						$(".chat-popup").remove();
 
+                            $('#body_mask').after(daticash_register_if_not_exist_step1_popUp);			
+            				$('.login-logo').after(daticash_display_transaction_status_topUp());
+            				daticash_select_transaction_status_position(1);
+					                    
+                        $("#new_password").val(tampon_data.new_password);
+                        $("#retype_new_password").val(tampon_data.retype_new_password);	
+    				    $("#phone_number").val(tampon_data.phone_number);
+    				
+                        autoChoose_country_code(237);
+                        
+                        $('#password').attr('placeholder', 'Choose PIN Code');
+                        $('#new_password').keypad();
+                        $('#retype_new_password').keypad();
+    			
+    			    $("#phone_number").prop('disabled', true);	
+				})	
+				.on('focus', 'input', '.login-form input, .login-form textarea' , function() {
+					$("#password-feedback").empty();
+					$("#username-feedback").empty();
+					$("#email-feedback").empty();
+					$(".login-feedback").empty();
+					
+				// daticash reset or change pin	
+					$("#check_pin_code_correspondance-feedback").empty();
+					$("#new_pin_code_label").removeClass('text-danger');
+					$("#retype_new_pin_code_label").removeClass('text-danger');
+					
+				})
+            
+            /*Textbox actions */
             $('#password').attr('placeholder', 'Choose PIN Code');
             autoChoose_country_code(237);
 
             $('#new_password').keypad();
             $('#retype_new_password').keypad();
-
-
+            
+            {% if app.session.get('phone_number') is defined and app.session.get('phone_number')|length > 0 %}
+                $(".dati_login_row").remove();
+	            var message_alert = 'To complete your transaction securely, you must first register.</br>It will only take a few minutes and then your transaction will continue.</br>'; //get value	
+            
+			 	if(message_alert !== ""){
+					$('.container').append(alert_message_popUp (message_alert));
+					message_alert = "";
+				}
+				
+                $("#phone_number").val("{{app.session.get('phone_number')}}");
+                
+				$(".iti__selected-flag").trigger("click");
+				$(".iti__country[data-dial-code='{{app.session.get('country_code')}}']").trigger("click");
+			
+			    $("#phone_number").prop('disabled', true);
+				
+				$('#daticash_display_transaction_status_topUp').remove();			
+				$('.login-logo').after(daticash_display_transaction_status_topUp());
+				daticash_select_transaction_status_position(1);	
+				
+            {% endif %}
+            
         });
 
 

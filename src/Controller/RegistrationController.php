@@ -7,7 +7,6 @@ use App\Security\User\WebserviceUser;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -57,7 +56,6 @@ class RegistrationController extends Controller
     public function register(Request $request): Response
     {
 
-
         $user = new WebserviceUser();
         //if()
 
@@ -98,21 +96,22 @@ class RegistrationController extends Controller
             $this->user_id=$this->make_post_request($params,$headers,$endpoint);
 
 
-
             if(isset($this->user_id) && !empty($this->user_id)){
                 $session = $this->get('session');
 
 
-     /*           if ($session->has("transaction")){
-                    var_dump($session->get("transaction"));
-                    $transaction=(array)$session->get('transaction');
+                if ($session->has("transaction")){
 
-                    return $this->redirectToRoute('transactions_create_anonymous',['transaction' => $transaction]);
+                    $response = $this->forward('App\Controller\TransactionsController::createAction', [
+
+                    ]);
+
+                    return $response;
+                        //$this->redirectToRoute('transactions_create_anonymous',[$transaction]);
 
 
-                }*/
+                }
 
-                var_dump($this->user_id);
                 return $this->render('pages/activations.html.twig',
                     ["user_id"=>$this->user_id["id"],
                         "user_email"=>$params["email"]
@@ -179,10 +178,10 @@ class RegistrationController extends Controller
             };
             if($response->getStatusCode()==400){
 
-                $content = $response->getContent(false);
+
                 $this->addFlash(
                     'error',
-                    $content
+                    json_decode($response->getContent(false))[0]->message." Erreur ".$response->getStatusCode()
                 );
                 return null;
             };
@@ -193,6 +192,12 @@ class RegistrationController extends Controller
                 );
                 return null;
             };
+
+            $this->addFlash(
+                'error',
+                'An internal error has occurred please try again later! Erreur:'.$response->getStatusCode()
+            );
+            return null;
 
 
 
@@ -211,7 +216,11 @@ class RegistrationController extends Controller
         } catch (ServerExceptionInterface $e) {
         }
 
-
+        $this->addFlash(
+            'error',
+            'An internal error has occurred please try again later!'
+        );
+        return null;
 
     }
 }

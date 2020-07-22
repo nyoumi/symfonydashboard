@@ -1,17 +1,5 @@
 {% set _locale = 'fr' %}
 
-    {%
-        set _profile = {
-            'user_id': '12',
-            'firtsname': 'EXEMPLE',
-            'lastname': 'User',
-            'email': 'Exempleuser@gmail.com',
-            'country_code': '237',
-            'phone_number': '695255410',
-            'currency': 'XAF',
-        }
-    %}
-
 <!DOCTYPE html>
 <html lang="{{ _locale }}">
     <head>
@@ -108,7 +96,57 @@
             .datitext-dark {
                 color: #1F4051!important;
             }
-
+            .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+                color: #343a40;
+                background-color: #f4f6f9;
+            }
+            .card-primary:not(.card-outline)>.card-header, .card-primary:not(.card-outline)>.card-header a {
+                color: #343a40;
+            }
+            .card-primary:not(.card-outline)>.card-header {
+                background-color: #f4f6f9;
+            }
+            .card-primary.card-outline {
+                border-top: 3px solid #1f4051;
+            }
+            .pin-block .pincode_label {
+                font-size: 16px;
+                font-weight: 600;
+                margin-top: -1px;
+                display: block;
+            }
+            .pin-block .description {
+                color: #6c757d;
+                font-size: 13px;
+                margin-top: -3px;
+                display: block;
+            } 
+            .profile-user-label {
+                color: #1f4051;
+                text-decoration: none;
+                background-color: transparent;
+                cursor: pointer;
+            }
+            .profile-user-label:hover {
+                color: #2C6FB7;
+            }
+            
+            /*upload profile*/
+            .profile input[type='file']{
+                position: absolute;
+                margin-top: 3px;
+                margin-left: 3px;
+                height: 1px;
+                width: 1px;
+                z-index: -5;
+            }
+            .products-list .account-name {
+                font-weight: 600;
+            }
+            
+            .swal2-container {
+                z-index: 9999999;
+            }
         </style>
         {% block head_javascripts %}{% endblock %}
     </head>
@@ -151,7 +189,12 @@
         <script src="{{ asset('adminLTE/plugins/jquery/jquery.min.js') }}"></script>
         <!-- jQuery UI 1.11.4 -->
         <script src="{{ asset('adminLTE/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
-        {% block javascripts %}{% endblock %}	
+            
+        {% block javascripts %}{% endblock %}
+            
+        {% block topup_and_sweetalert %}
+
+        {% endblock %}
 
     </body>
 </html>

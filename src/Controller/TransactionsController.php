@@ -18,10 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Security;
-
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -35,7 +33,6 @@ class TransactionsController extends AbstractController
     private $client;
     private $site_url ;
     private $apikey ;
-    private $user_id;
     private $serializer;
     private $security;
     private $userProvider;
@@ -73,27 +70,35 @@ class TransactionsController extends AbstractController
 
     public function createAction(Request $request)
     {
-        return new RedirectResponse($this->urlGenerator->generate('register'));
+
 
         $this->apikey = $this->getParameter('app.apikey');
         $this->site_url = $this->getParameter('app.site_url');
 
         $data = $request->getContent();
-        //echo("=============================");
-
-
-
         $data=json_decode($data);
+
 
         if(!is_object($data)){
             parse_str($request->getContent(),$output);
             $data=(object) $output;
-
         }
 
+        if($this->emptyObj($data) ){
+            $data=$request->query->all();
+            $data=(object) $data;
+        }
+        //var_dump($data);
+        if ($this->emptyObj($data)) {
+            $session = $this->get('session');
+
+            $data=$session->get("transaction_initiated");
+        }
 
         $this->saveToSession($data);
-           $user_exist= $this->verifyUserExist($data);
+        if(!isset($data->local)){
+            $user_exist= $this->verifyUserExist((array)$data);
+
             if(is_array($user_exist)){
                 return $this->render('pages/activations.html.twig',
                     ["user_id"=>$user_exist["error_content"]["user_id"],
@@ -101,13 +106,14 @@ class TransactionsController extends AbstractController
                     ]);
 
             }
-           if (is_int($user_exist) && $user_exist==404){
-               $session=$this->get("session");
-               $session->set("phone_number",$data->sender_phone);
-               $session->set("country_code",$data->sender_country_code);
+            if (is_int($user_exist) && $user_exist==404){
+                $session=$this->get("session");
+                $session->set("phone_number",$data->sender_phone);
+                $session->set("country_code",$data->sender_country_code);
 
-               return new RedirectResponse($this->urlGenerator->generate('register'));
-           }
+                return new RedirectResponse($this->urlGenerator->generate('register'));
+            }
+        }
 
 
         $params=$data;
@@ -121,10 +127,10 @@ class TransactionsController extends AbstractController
         $response=$this->handle_response($response,"array");
 
         /*
-         * si la transaction a été initiée ou echec de l'initiation l'efacer de la session
+         * si la transaction a été initiée ou echec de l'initiation l'effacer de la session
          */
         $session = $this->get('session');
-        $session->remove('transaction');
+        //$session->remove('transaction_initiated');
 
         /*
         * si les datas proviennent du formulaire renvoyer json sinon renvoyer la page operations
@@ -133,14 +139,87 @@ class TransactionsController extends AbstractController
             $data=(array)$data;
             $data["transaction_status"]=$response;
             //echo ("++++++++++++++++++++");
-            //var_dump($data);
-            return $this->render('pages/operationQs.html.twig',
+            return $this->render('pages/operationQS.html.twig',
                 ["transaction"=>(array)$data,"transaction_status"=>$response]);
 
         }
-        return $response;
+        return new Response(json_encode($response), Response::HTTP_CREATED,[
+            "Content-Type"=>'application/json'
+        ]);
+    }
+    private function emptyObj( $obj ) {
+        foreach ( $obj AS $prop ) {
+            return FALSE;
+        }
+
+        return TRUE;
     }
 
+    public function getPricing(Request $request)
+    {
+        $this->apikey = $this->getParameter('app.apikey');
+        $this->site_url = $this->getParameter('app.site_url');
+
+        $data = $request->getContent();
+        $data=json_decode($data);
+
+
+        if(!is_object($data)){
+            parse_str($request->getContent(),$output);
+            $data=(object) $output;
+        }
+
+        if($this->emptyObj($data) ){
+            $data=$request->query->all();
+            $data=(object) $data;
+        }
+        $endpoint="mobilemoney/pricing";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+
+        $params=(array)$data;
+        $response=$this->make_get_request($params,$headers,$endpoint);
+
+        return new Response(json_encode($response), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
+
+    }
+
+    public function convert(Request $request)
+    {
+        $this->apikey = $this->getParameter('app.apikey');
+        $this->site_url = $this->getParameter('app.site_url');
+
+        $data = $request->getContent();
+        $data=json_decode($data);
+
+
+        if(!is_object($data)){
+            parse_str($request->getContent(),$output);
+            $data=(object) $output;
+        }
+
+        if($this->emptyObj($data) ){
+            $data=$request->query->all();
+            $data=(object) $data;
+        }
+        $endpoint="mobilemoney/convert";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+
+        $params=(array)$data;
+        $response=$this->make_get_request($params,$headers,$endpoint);
+
+        return new Response(json_encode($response), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
+
+    }
     public function updateAction(Request $request,$id)
     {
         $this->apikey = $this->getParameter('app.apikey');
@@ -297,6 +376,9 @@ class TransactionsController extends AbstractController
                 return $response->toArray();
             }
                     if($response->getStatusCode()==400 ){
+                /*
+                 * @TODO supprimer cette partie
+                 */
                         $res=[
                             "id"=>12,
                             "status"=>"initiated",
@@ -350,7 +432,8 @@ class TransactionsController extends AbstractController
 
     private function saveToSession($transaction)
     {
-        $this->get('session')->set('transaction',$transaction);
+        $this->get('session')->set('transaction_initiated',$transaction);
+
     }
 
     /*
@@ -395,9 +478,8 @@ class TransactionsController extends AbstractController
             if($exception->getCode()==401){
                 return 401;
             }
-            if (!($exception->getCode()==401 || $exception->getCode()==412 || $exception->getCode()==404)){
                 return $exception->getCode();
-            }
+
         }
 
     }

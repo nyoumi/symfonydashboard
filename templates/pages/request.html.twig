@@ -1,0 +1,315 @@
+
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+            <!-- Font Awesome -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+            <!-- Ionicons -->
+            <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+            <!-- Theme style -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+            <!-- Google Font: Source Sans Pro -->
+            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">		
+            <!-- Datiuser style-->
+	        <link href="{{ asset('assets/css/confirm-user-popup.css') }}" rel="stylesheet">
+            <!-- Numeric Keypad -->
+            <link href="{{ asset('assets/css/jquery.keypad.css') }}" rel="stylesheet">
+            <!-- International Telephone Input -->
+            <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block head_javascripts %}
+            <!-- Sweet alert scripts-->
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>	
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div id="body_mask" class="body_mask"></div>    
+
+{% endblock %}
+
+{% block javascripts %}
+            <!-- Bootstrap 4 -->
+            <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+            <!-- Waves Effect Plugin Js -->
+            <script src="{{ asset('adminLTE/plugins/node-waves/waves.js') }}"></script>
+            <!-- AdminLTE App -->
+            <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
+            <!-- AdminLTE for demo purposes -->
+            <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script> 
+            <!-- numeric keypad jQuery-->
+            <script src="{{ asset('assets/js/jquery.plugin.min.js') }}"></script>
+            <!-- numeric keypad script-->
+            <script src="{{ asset('assets/js/jquery.keypad.js') }}"></script>
+            <!-- International Telephone Input-->	
+            <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
+<script type="text/javascript"><!--
+
+function daticash_confirm_change_or_reset_password_popUp(){
+        return(
+				'<div class="chat-popup" id="daticash_confirm_change_or_reset_password_popUp">'+
+					'<div id="ib-center" class="dati_popup">'+
+						'<div class="dati_user_status_login"></div>'+
+						'<div class="container">'+
+							'<div class="row d-flex justify-content-center">'+
+								'<div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">'+
+									'<div class="login-logo">'+
+										'<a href="http://daticash.com/" style="color: #fff;">'+
+											'<img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>'+
+										'</a>'+
+									'</div>'+
+								  '<div class="login-feedback"></div>'+
+								  '<div class="card body_card_daticash_login">'+
+									'<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+								  
+									  '<form method="post" class="form login-form">'+
+										'<div class="old_password-group">'+
+											'<label id="old_password_label" for="old_password" style="width: 100%; margin-bottom: .5rem;">'+
+											  '<font style="vertical-align: inherit;">Old PIN Code&nbsp</font>'+
+											  '<small id="old_password-feedback" style = "display: block;"></small>'+
+											'</label>'+
+											'<small class="show_or_hide_pin_for_old_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">'+
+											'<i class="show_or_hide_pin_for_old_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_old_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>'+												
+											'<div class="input-group mb-3">'+
+											  '<input type="password" class="form-control" id="old_password" name="old_password" placeholder="Enter your old PIN Code" maxlength="6">'+
+											  '<div class="input-group-append">'+
+												'<div class="input-group-text">'+
+												  '<span class="fas fa-key"></span>'+
+												'</div>'+
+											  '</div>'+
+											'</div>'+
+										'</div>'+										'<div class="new_password-group">'+
+											'<label id="new_password_label" for="new_password" style="width: 100%; margin-bottom: .5rem;">'+
+											  '<font style="vertical-align: inherit;">New PIN Code&nbsp</font>'+
+											  '<small id="new_password-feedback"  style = "display: block;"></small>'+
+											'</label>'+
+											'<small class="show_or_hide_pin_for_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">'+
+											'<i class="show_or_hide_pin_for_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>'+												
+											'<div class="input-group mb-3">'+
+											  '<input type="password" class="form-control" id="new_password" name="new_password" placeholder="Choose New PIN Code" maxlength="6">'+
+											  '<div class="input-group-append">'+
+												'<div class="input-group-text">'+
+												  '<span class="fas fa-key"></span>'+
+												'</div>'+
+											  '</div>'+
+											'</div>'+
+										'</div>'+
+										
+										'<div class="retype_new_password-group">'+	
+											'<label id="retype_new_password_label" for="retype_new_password" style="width: 100%; margin-bottom: .5rem;">'+
+											  '<font style="vertical-align: inherit;">Retype new PIN Code&nbsp</font>'+
+											  '<small id="retype_new_password-feedback" style = "display: block;"></small>'+
+											'</label>'+
+											'<small class="show_or_hide_pin_for_retype_new_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">'+
+											'<i class="show_or_hide_pin_for_retype_new_password_text_js">Show</i><input type="checkbox" id="show_or_hide_pin_for_retype_new_password_id" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>'+												
+											'<div class="input-group mb-3">'+
+											  '<input type="password" class="form-control" id="retype_new_password" name="retype_new_password" placeholder="Retype new PIN code" maxlength="6">'+
+											  '<div class="input-group-append">'+
+												'<div class="input-group-text">'+
+												  '<span class="fas fa-key"></span>'+
+												'</div>'+
+											  '</div>'+
+											'</div>'+
+										'</div>'+
+																			
+											 '<small class="text-center" id="check_password_correspondance-feedback" style = "display: block;"></small>'+
+											 '<div id="re_captcha_container" class="text-center mb-2">'+
+												 '<div id="g-recaptcha"></div>'+
+											 '</div>'+
+											 '<hr>'+
+										'<div class="row group_daticash_daticash_confirm_change_or_reset_password">'+
+										  '<div class="col-12">'+
+											'<input type="hidden" name="action" class="action" value="daticash_confirm_change_or_reset_password">'+
+											'<button type="submit" class="daticash_btn btn-daticash btn-block" id="daticash_confirm_change_or_reset_password_btn" name="daticash_confirm_change_or_reset_password_btn">Change PIN</button>'+
+										  '</div>'+
+										'</div>'+
+									  '</form>'+
+									'</div>'+
+								  '</div>'+
+								'</div>'+
+							'</div>'+
+						'</div>'+
+					'</div>'+
+				'</div>'
+				);
+				
+}
+
+function passwordLength(element, value){
+	//alert(element)
+	//alert(value)
+	var n = value.length;
+	if(n != 6){
+		$(element).empty().text("Invalid PIN, left characters: "+ (6 - value.length)).attr("class", "text-danger")
+			return false;
+	}else{
+		$(element).empty().text("Good! your pin is ✓ Valid").attr("class", "text-success");
+	}
+	return true;
+}
+
+    $(document).ready(function(){
+        /*Textbox Events*/
+        $("body")
+            .on('click', '#show_or_hide_pin_for_new_password_id', function(){
+                if($('#show_or_hide_pin_for_new_password_id').prop("checked") == true) {
+                    $('#new_password').attr("type", "text");
+                    $('.show_or_hide_pin_for_new_password_text_js').text("Hide");
+                } else {
+                    $('#new_password').attr("type", "password");
+                    $('.show_or_hide_pin_for_new_password_text_js').text("Show");
+                }
+            })
+            .on('click', '#show_or_hide_pin_for_retype_new_password_id', function(){
+                if($('#show_or_hide_pin_for_retype_new_password_id').prop("checked") == true) {
+                    $('#retype_new_password').attr("type", "text");
+                    $('.show_or_hide_pin_for_retype_new_password_text_js').text("Hide");
+                } else {
+                    $('#retype_new_password').attr("type", "password");
+                    $('.show_or_hide_pin_for_retype_new_password_text_js').text("Show");
+                }
+            })
+            .on('change', '#new_password' , function(e) {
+                passwordLength("#new_password-feedback", $('#new_password').val());
+                e.stopImmediatePropagation;
+                var new_password_length = $("#new_password").val(); //alert(new_password_length.length)
+                if(new_password_length.length === 6){
+                    $(".keypad-close").trigger("click");
+                    $("#new_password").trigger("blur");
+                }
+            })
+            .on('change', '#retype_new_password' , function(e) {
+                passwordLength("#retype_new_password-feedback", $('#retype_new_password').val());
+                e.stopImmediatePropagation;
+                var retype_new_password_length = $("#retype_new_password").val(); //alert(new_password_length.length)
+                if(retype_new_password_length.length === 6){
+                    $(".keypad-close").trigger("click");
+                    $("#retype_new_password").trigger("blur");
+                }
+            })
+            .on('click', '#daticash_confirm_change_or_reset_password_btn_try_again' , function(e) {
+				// request login with daticash
+			    window.href="{{ path('login') }}"	
+			})
+			.on('click', '#exit_btn' , function() {
+				window.location = "{{ path("login") }}";
+			})
+			.on('click', '#daticash_confirm_change_or_reset_password_btn' , function(e) {
+				e.preventDefault()
+				var validate_reset = this;
+
+				var $form = $(this).closest(".login-form");
+				var old_password = $form.find("#old_password").val();
+				var new_password = $form.find("#new_password").val();
+				var retype_new_password = $form.find("#retype_new_password").val();
+				var user_id ="{{ user_id }}"
+				var token ="{{ token }}"
+				
+					$(".alert").remove()
+
+						if (passwordLength('#new_password-feedback', new_password) && passwordLength('#retype_new_password-feedback', retype_new_password)) {
+							if (new_password !== retype_new_password) {
+								$("#new_password_label").addClass('text-danger');
+								$("#retype_new_password_label").addClass('text-danger');
+								$("#check_password_correspondance-feedback").empty().append("<div class='text-danger'>Given PIN Code does not match.</div>");
+								
+							}else{
+								$(validate_reset).prop('disabled', true).remove();
+
+								$("#loading_image").remove();
+								$(".login-form").append(
+														'<div class="spinner" id="loading_image" style="display: hidden;">'+
+															'<div class="bounce1"></div>'+
+															'<div class="bounce2"></div>'+
+															'<div class="bounce3"></div>'+
+															'<h4>Please wait...</h4>'+
+														'</div>'
+														);				
+								
+
+								alert('you are going to reset your password! are you sure.?');
+								
+        						fetch("{{ path("request_true") }}"+ "/reset?token="+token+"&user_id="+user_id+"&new_password="+new_password , {"method": "POST", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                                	  .then(
+                                		function(response) {
+                                    		  if (!response.ok) {
+                                    		      console.log("application response after reset code submit = ");
+                                    		      console.log(response);
+        
+                                    		  }else{
+                                    		      console.log("application response after reset code submit = ");
+                                    		      console.log(response);
+                                    		  // Examine the text in the response
+                                    			  response.json().then(function(data) {
+                                    				console.log("api response after submit  = " + data);
+                                    				if(data.code === 200 || data.code === 202){
+                                    				    $('.login-feedback').html('<div class="alert alert-success text-center">Great !!!</div>');																		
+            											$("#loading_image").remove();	
+            											$(".login-card-body").empty().append(
+            																	 '<div class="text-center mb-4">the password has been resetted successfully</div>'+
+            																		'<div class="row">'+
+            																			'<div class="col-6"></div>'+
+            																			'<div class="col-6" style="text-align: center;float: right;color: #8285889c;border-radius: 120px;border: solid 1px #9a98a24f;"><p class="text-right" style="display: inline;color: #777777;font-weight: 100;"></p><p style="cursor:pointer;display:inline;" id="exit_btn" name="exit_btn">Return Login</p></div>'+
+            																		'</div>'+
+            																	 '</div>'	
+            																);
+                                    				}else{
+                                    				  $('.login-feedback').html(show_alert('error', "Sorry:( reset failed! password has not been resetted. Please try again later..."s, 1));											
+            											$("#loading_image").remove();// reinitialiser les proprietées du formulaire	
+            											$("#group_daticash_daticash_confirm_change_or_reset_password div").append('<button type="submit" class="daticash_btn btn-daticash btn-block" id="daticash_confirm_change_or_reset_password_btn" name="daticash_confirm_change_or_reset_password_btn">Reset PIN</button>')
+                                    				  
+                                    				}					  
+                                    			})
+                                    		  }
+                                		})		
+                                		
+							
+							}
+						}else{
+							if(new_password==""){
+								$('#new_password-feedback').html("<div class='text-danger'>Please enter a valid PIN Code below</div>");
+							}
+							if(retype_new_password==""){
+								$('#retype_new_password-feedback').html("<div class='text-danger'>Please enter a valid PIN Code below</div>");
+							}
+							
+							
+							if(!passwordLength('#new_password-feedback', new_password)){
+								$('#new_password-feedback').html("<div class='text-danger'>PIN must be 6 characters</div>")
+							}
+							if(!passwordLength('#retype_new_password-feedback', retype_new_password)){
+								$('#retype_new_password-feedback').html("<div class='text-danger'>PIN must be 6 characters</div>")
+							}
+														
+						}		
+						
+			})
+
+        {% for message in app.flashes('change') %}
+			// request register
+			$(".chat-popup").remove();
+			
+			$('#body_mask').after(daticash_confirm_change_or_reset_password_popUp());
+			$('#old_password').keypad();	
+			$('#new_password').keypad();	
+			$('#retype_new_password').keypad();       
+       
+        {% endfor %}  
+        {% for message in app.flashes('reset') %}
+			// request register
+			$(".chat-popup").remove();
+			
+			$('#body_mask').after(daticash_confirm_change_or_reset_password_popUp());
+			$('#old_password').keypad();	
+			$('#new_password').keypad();	
+			$('#retype_new_password').keypad(); 
+			
+			$('.old_password-group').remove();
+			$('#daticash_confirm_change_or_reset_password_btn').text('Reset PIN');
+       
+        {% endfor %}         
+    });
+
+//--></script>
+
+{% endblock %}

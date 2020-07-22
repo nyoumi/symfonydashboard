@@ -1,10 +1,9 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-       <!--<img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-           style="opacity: .8">-->
-      <span class="brand-text font-weight-light">DatiCash System</span>
+    <a href="index3.html" class="brand-link text-center">
+       <img src={{ asset('assets/img/Daticash-white.png') }} alt="Daticash Logo" class="brand-image elevation-3"
+           style="opacity: .8; float: none; margin: 0;max-height: 83px;">
     </a>
 
     <!-- Sidebar -->
@@ -15,20 +14,20 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
 		  <li class="nav-item">
-			<a href="{{ path('dashboard.index') }}" class="nav-link {% if current_menu is defined and current_menu == 'dashboard' %} active {% endif %}">
+			<a href="{{ path('dashboard.index') }}" class="nav-link {% if 'dashboard' in app.request.pathinfo  %} active {% endif %}">
 			  <i class="fas fa-tachometer-alt nav-icon"></i>
 			  
 			  <p> Dashboard</p>
 			</a>
 		  </li>	
           <li class="nav-item">
-            <a href="{{ path('history.index') }}" class="nav-link {% if current_menu is defined and current_menu == 'history' %} active {% endif %}">
+            <a href="{{ path('history') }}" class="nav-link {% if 'history' in app.request.pathinfo %} active {% endif %}">
               <i class="nav-icon fas fa-th"></i>
               <p> History</p>
             </a>
           </li>	
-          <li class="nav-item has-treeview {% if current_menu is defined and current_menu == 'operation' %}menu-open{% endif %}">
-            <a href="#" class="nav-link {% if current_menu is defined and current_menu == 'operation' %} active {% endif %}">
+          <li class="nav-item has-treeview {% if 'operation' in app.request.pathinfo %}menu-open{% endif %}">
+            <a href="#" class="nav-link {% if 'operation' in app.request.pathinfo %} active {% endif %}">
               <i class="nav-icon fas fa-circle"></i>
               <p>
                 Operations
@@ -37,7 +36,7 @@
             </a>
             <ul class="nav nav-treeview">
             {% for categorie in _categories %}		
-              <li class="nav-item has-treeview {% if category_id is defined and category_id == categorie.id %} menu-open {% endif %}">
+              <li class="nav-item has-treeview {% if app.request.get('cid') is defined and app.request.get('cid') == categorie.id %} menu-open {% endif %}">
                 <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>
@@ -48,7 +47,7 @@
                 <ul class="nav nav-treeview">
                 {% for service in categorie.services %}
                   <li class="nav-item">
-                    <a href="{{ path('operation.index', {'cid': categorie.id, 'sid': service.id}) }}" class="nav-link {% if service_id is defined and service_id == service.id %} active {% endif %}">
+                    <a href="{{ path('operation.index', {'cid': categorie.id, 'sid': service.id}) }}" class="nav-link {% if app.request.get('sid') is defined and app.request.get('sid') == service.id %} active {% endif %}">
                       <i class="far fa-dot-circle nav-icon"></i>
                       <p>{{ service.label }}</p>
                     </a>
@@ -59,7 +58,12 @@
             {% endfor %}  
             </ul>
           </li>
-
+          <li class="nav-item">
+            <a href="{{ path('settings') }}" class="nav-link {% if 'history' in app.request.pathinfo %} active {% endif %}">
+              <i class="nav-icon fas fa-cog"></i>
+              <p> Settings</p>
+            </a>
+          </li>	
 		</ul>
       </nav>
       <!-- /.sidebar-menu -->

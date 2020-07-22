@@ -2,33 +2,46 @@
 
 namespace App\Security\User;
 
-use App\Security\User\WebserviceUser;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-
-
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 
 
+/**
+ * Class WebserviceUserProvider
+ * @package App\Security\User
+ */
 class WebserviceUserProvider extends AbstractController implements UserProviderInterface
 {
+    /**
+     * @var string
+     */
     private $site_url;
+    /**
+     * @var string
+     */
     private $apikey;
+    /**
+     * @var HttpClientInterface
+     */
     private $client;
 
 
-    public function __construct(HttpClientInterface $client,string $apikey, string $site_url )
+    /**
+     * WebserviceUserProvider constructor.
+     * @param HttpClientInterface $client
+     * @param string $apikey
+     * @param string $site_url
+     */
+    public function __construct(HttpClientInterface $client, string $apikey, string $site_url )
     {
         $this->client = $client;
 
@@ -41,6 +54,10 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
 
     }
 
+    /**
+     * @param object $user
+     * @return \App\Security\User\WebserviceUser|UserInterface
+     */
     public function loadUserByUsername($user)
     {
         $country_code = $user->getCountryCode();
@@ -53,6 +70,10 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
 
     }
 
+    /**
+     * @param UserInterface $user
+     * @return UserInterface
+     */
     public function refreshUser(UserInterface $user)
     {
 
@@ -69,11 +90,21 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
         return $user;
     }
 
+    /**
+     * @param string $class
+     * @return bool
+     */
     public function supportsClass($class)
     {
         return WebserviceUser::class === $class;
     }
 
+    /**
+     * @param $country_code
+     * @param $phone_number
+     * @param $password
+     * @return \App\Security\User\WebserviceUser
+     */
     private function fetchUser($country_code, $phone_number, $password)
     {
 
@@ -135,6 +166,12 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
         );*/
     }
 
+    /**
+     * @param array $parameters
+     * @param array $header
+     * @param $endpoint
+     * @return array
+     */
     public function make_get_request(array $parameters, array $header, $endpoint)
     {
 
@@ -164,39 +201,43 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
                     ' A problem occurred during your connection! Check that you have entered your information correctly',[],$response->getStatusCode());
             };
             if($response->getStatusCode()==404){
+                $this->addFlash(
+                    'error',
+                    'Incorrect username or password!'
+                );
                 throw new CustomUserMessageAuthenticationException(
                     'Incorrect username or password!',[],$response->getStatusCode());
             };
             if($response->getStatusCode()==412){
+                $this->addFlash(
+                    'error',
+                    'This account has not been activate yet! Check your mailbox and confirm or activate your account here.'
+                );
+
                 throw new CustomUserMessageAuthenticationException(
                     'This account has not been activate yet! Check your mailbox and confirm or activate your account here.',(array)json_decode($response->getContent(false)),$response->getStatusCode());
             };
             if($response->getStatusCode()==401){
+                $this->addFlash(
+                    'error',
+                    'Incorrect username or password!'
+                );
                 throw new CustomUserMessageAuthenticationException(
                     'Incorrect username or password!',[],$response->getStatusCode());
             };
 
-        } catch (TransportExceptionInterface $e) {
+        } catch (TransportExceptionInterface|ClientExceptionInterface
+        |DecodingExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface
+        $e) {
+            $this->addFlash(
+                'error',
+                'An internal problem occurred during your connection! please try again later!'
+            );
 
             throw new CustomUserMessageAuthenticationException(
                 'An internal problem occurred during your connection! please try again later!');
 
-        } catch (ClientExceptionInterface $e) {
-
-        } catch (DecodingExceptionInterface $e) {
-        } catch (RedirectionExceptionInterface $e) {
-        } catch (ServerExceptionInterface $e) {
         }
-
-
-   /*     $statusCode = $response->getStatusCode();
-        if ($statusCode != 200) {
-            var_dump($statusCode);
-        }
-        $contents = $response->getContent();
-        if ($statusCode == 200) return $response->toArray();
-        return 1000;*/
-
-
+        return null;
     }
 }

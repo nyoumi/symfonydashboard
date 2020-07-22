@@ -1,8 +1,6 @@
 <?php
-// src/Security/User/WebserviceUser.php
 namespace App\Security\User;
 
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 
@@ -20,6 +18,76 @@ class WebserviceUser implements UserInterface, EquatableInterface
     private $currency_code ;
     private $accounts ;
     private $services ;
+    private $enabled;
+    private $id ;
+    private $email ;
+
+    /**
+     * @return mixed
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @param mixed $enabled
+     */
+    public function setEnabled($enabled): void
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getisEmailActivated()
+    {
+        return $this->is_email_activated;
+    }
+
+    /**
+     * @param mixed $is_email_activated
+     */
+    public function setIsEmailActivated($is_email_activated): void
+    {
+        $this->is_email_activated = $is_email_activated;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getisPhoneActivated()
+    {
+        return $this->is_phone_activated;
+    }
+
+    /**
+     * @param mixed $is_phone_activated
+     */
+    public function setIsPhoneActivated($is_phone_activated): void
+    {
+        $this->is_phone_activated = $is_phone_activated;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param mixed $avatar
+     */
+    public function setAvatar($avatar): void
+    {
+        $this->avatar = $avatar;
+    }
+    private $is_email_activated;
+    private $is_phone_activated;
+    private $avatar;
 
     
     public function __construct( )
@@ -73,8 +141,7 @@ class WebserviceUser implements UserInterface, EquatableInterface
     {
         $this->roles = $roles;
     }
-    private $id ;
-    private $email ;
+
 
     /**
      * @param mixed $id

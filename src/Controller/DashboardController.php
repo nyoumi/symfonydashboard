@@ -55,10 +55,10 @@ class DashboardController extends Controller
 
                 return $response->toArray();
             }else{
-                $this->addFlash(
+                /*$this->addFlash(
                     'error',
                     'Echec ! '.$response->getStatusCode()." ".$endpoint
-                );
+                );*/
                 $resp=[
                     'code' => $response->getStatusCode(),
 
@@ -210,5 +210,46 @@ class DashboardController extends Controller
 
         ]); 
         
+    }
+
+    public function viewHistory()
+    {
+        $this->apikey = $this->getParameter('app.apikey');
+        $this->site_url = $this->getParameter('app.site_url');
+        $this->user_id=$this->getUser()->getid();
+        $user = $this->security->getUser();
+        $user_roles=$user->getRoles();
+
+        $endpoint="mobilemoneys";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+        $params=[
+            'order' => 'asc',
+            'user_id' => $this->user_id,
+            'start_at'=> '2020-01-01 00:00:00',
+            'end_at'=>'2021-01-01 00:00:00',
+            'page'=> '1',
+            'limit'=>'10'
+        ];
+        try {
+            $this->transactions=$this->make_get_request($params,$headers,$endpoint);
+            if(!(isset($this->transactions) && isset($this->transactions[0]['id']))){
+                $this->transactions=[];
+            }
+
+
+
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        return $this->render('pages/history.html.twig', [
+
+
+            'transactions' =>$this->transactions,
+
+        ]);
+
     }
 }

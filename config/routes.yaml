@@ -13,7 +13,10 @@ login:
     path: /login
     controller: App\Controller\SecurityController::login
     methods: GET|POST
-    
+action:
+    path: /action
+    controller: App\Controller\ActivationController::activatedAction
+    methods: GET
 login_check:
     path: /login
     controller: App\Controller\SecurityController::login
@@ -26,21 +29,38 @@ activate:
     path: /activate/{id}/{token}
     controller: App\Controller\ActivationController::activate
     methods: GET
+activation:
+    path: /activation/{user_id}/{email}
+    controller: App\Controller\ActivationController::activation
+    methods: GET
 activated:
     path: /activated
     controller: App\Controller\ActivationController::activatedAction
     methods: GET
-send_sms:
-    path: /send_sms/{id}
-    controller: App\Controller\ActivationController::send_sms
+request_reset:
+    path: /request_reset
+    controller: App\Controller\PasswordController::requestReset
     methods: GET
-history.index:
-    path: /dashboard
-    controller: App\Controller\DashboardController::view
+request_true:
+    path: /request_true/{operation?}
+    controller: App\Controller\PasswordController::requestTrue
+    methods: GET|POST
+send_sms:
+    path: /send_activation_token/{type}/{id}
+    controller: App\Controller\ActivationController::send_activation_token
+    methods: GET
+history:
+    path: /history
+    controller: App\Controller\DashboardController::viewHistory
 operation.index:
     path: /operation
     controller: App\Controller\TransactionsController::start
-
+pricing:
+    path: /pricing
+    controller: App\Controller\TransactionsController::getPricing
+convert:
+    path: /convert
+    controller: App\Controller\TransactionsController::convert
 #transactions_init:
 #    path:     /transactions/{id}/{number}
 #    controller: App\Controller\TransactionsController::start
@@ -56,6 +76,7 @@ transactions_create:
     path:     /transactions
     controller: App\Controller\TransactionsController::createAction
     methods:  [POST]
+#cette route est security anonymous
 transactions_create_anonymous:
     path:     /send_money
     controller: App\Controller\TransactionsController::createAction
@@ -64,5 +85,11 @@ transactions_update:
     path:     /transactions/{id?}
     controller: App\Controller\TransactionsController::updateAction
     methods:  [PUT]
-
-
+profile_update:
+    path:     /profile_update/{id?}
+    controller: App\Controller\ProfileController::editAction
+    methods:  GET|POST
+profile_file_upload:
+    path:     /profile_file_upload/{id?}
+    controller: App\Controller\ProfileController::uploadAction
+    methods:  POST

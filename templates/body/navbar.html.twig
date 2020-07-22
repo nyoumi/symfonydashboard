@@ -1,7 +1,4 @@
-    {%
-        set _profile = app.user
-    %}
-
+{% set _profile = app.user %}
 {% set _username = _profile.firstname ~ ' ' ~ _profile.lastname %}
 {% set _user_phone = '+' ~ _profile.countryCode ~ _profile.phoneNumber %}
 
@@ -34,11 +31,11 @@
 				</a>
 
 				<div class="dropdown-divider"></div>
-				<a href="#" class="dropdown-item">
+				<a href="{{ path('dashboard.index') }}" class="dropdown-item">
 					<i class="fas fa-tachometer-alt mr-2"></i> Dashboard
 				</a>
 				<div class="dropdown-divider"></div>
-				<a id="{{ _profile.id }}" href="#" class="dropdown-item">
+				<a href="{{ path('settings') }}" class="dropdown-item">
 					<i class="fas fa-user mr-2"></i> Profile
 				</a>
 				<div class="dropdown-divider"></div>

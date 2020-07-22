@@ -44,7 +44,13 @@ security:
         - { path: ^/send_money, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/send_sms, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/activate, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-
+        - { path: ^/action, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/request_reset, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/profile_update, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/profile_file_upload, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/request_true, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/send_activation_token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/activation, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/, roles: [ROLE_USER] }
 

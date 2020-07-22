@@ -1,36 +1,509 @@
 
-{% extends 'base.html.twig' %}
-{% block title %}Log in!{% endblock %}
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+            <!-- Font Awesome -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+            <!-- Ionicons -->
+            <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+            <!-- Theme style -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+            <!-- Google Font: Source Sans Pro -->
+            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">		
+            <!-- Datiuser style-->
+	        <link href="{{ asset('assets/css/confirm-user-popup.css') }}" rel="stylesheet">
+            <!-- Numeric Keypad -->
+            <link href="{{ asset('assets/css/jquery.keypad.css') }}" rel="stylesheet">
+            <!-- International Telephone Input -->
+            <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block head_javascripts %}
+            <!-- Sweet alert scripts-->
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>	
+            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
+{% endblock %}
 
 {% block body %}
-{% if error %}
-<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-{% endif %}
-{% if app.user %}
-<div class="mb-3">
-    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
-</div>
-{% endif %}
-
-<form action="{{ path('login') }}" method="post">
-    <label for="country_code">country_code:</label>
-    <input type="text" id="country_code" name="country_code" value=""/>
-    <label for="phone_number">phone_number:</label>
-    <input type="text" id="phone_number" name="phone_number" value="{{ last_username }}"/>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password"/>
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-    {#
-        If you want to control the URL the user
-        is redirected to on success (more details below)
-        <input type="hidden" name="_target_path" value="/account"/>
-    #}
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Resté connecté
-        </label>
+<div id="body_mask" class="body_mask"></div>    
+<div class="chat-popup" id="daticash_connexion_popUp">
+    <div id="ib-center" class="dati_popup">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">
+                    <div class="login-logo">
+                        <a href="http://daticash.com/" target="_blank" style="color: #fff;">
+                            <img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width: 100%" />
+                        </a>
+                    </div>
+                    <div class="login-feedback">
+                        
+                        {% for flashError in app.flashes('error') %}
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <i class="fa fa-exclamation-circle"></i>&nbsp{{ flashError }}
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            </div>    
+                        {% endfor %}
+                        {% for message in app.flashes('notice') %}
+                            <div class="alert alert-warning alert-dismissible  flash-notice">
+                                <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }}"</a>
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            </div>
+                        {% endfor %}
+                    
+                        {# read and display several types of flash messages #}
+                        {% for label, messages in app.flashes(['success']) %}
+                            {% for message in messages %}                            
+                                <div class="alert alert-success alert-dismissible">
+                                    <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }} }}
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}                        
+                        
+                        {% if error %}
+                            <div class="alert alert-danger alert-dismissible">
+                                <i class="fa fa-exclamation-circle"></i>&nbsp{{ error.messageKey|trans(error.messageData, 'security') }}
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            </div>
+                        {% endif %}
+                        
+                        {% if app.user %}
+                            <div class="alert alert-warning alert-dismissible">
+                                <i class="fa fa-exclamation-circle"></i>&nbspYou are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            </div>
+                        {% endif %}
+                        <div class="card body_card_daticash_login">
+                            <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">
+                            <div class="col-12 mb-3" style="text-align: right;font-weight: 700;color: #007bff;color: #007bff;" ><p class="text-right" style="display: inline;color: #777777;font-weight: 100;">have not account ?</p><p style="cursor:pointer;display: inline;" id="dati_register_modal" name="dati_register_modal"><a href="{{ path('register') }}"> Register Now!</a></p></div>
+                                								  
+                                <small id="allow_reset-feedback"></small>
+                                <form method="post" action="{{ path('login') }}" class="form login-form">
+                                <label for="phone_number" style="width: 100%; margin-bottom: .5rem;">
+                                    <font style="vertical-align: inherit;">Phone number&nbsp</font>
+                                    <small id="phone-feedback" style="display: block;"></small>												
+                                </label>
+                                <div class="input-group mb-3 form-daticash_phone">
+                                    <input type="hidden" class="form-control" id="country_code" name="country_code" value="237" >
+                                    <input type="phone_number" class="form-control" id="phone_number" name="phone_number" >
+                                    <div class="input-group-append" id="input_group_appendto_phone" name="input_group_appendto_phone">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-user"></span>
+                                    </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="login_password-group">	
+                                    <label for="password" style="width: 100%; margin-bottom: .5rem;">
+                                        <font style="vertical-align: inherit;">PIN Code&nbsp</font>
+                                        <small id="password-feedback" style = "display: inline-block"></small>
+                                    </label>
+                                    <small class="show_or_hide_password_js" style="margin-top: 4px;color: #0a4f68;position: absolute;right: 20px;">
+                                    <i class="show_or_hide_password_text_js">Show</i><input type="checkbox" id="show_hide_password" style="vertical-align: text-bottom;margin-left: 5px;color: #777777;font-weight: 100;"></small>												
+                                    <div class="input-group mb-3">
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="PIN" maxlength="6">
+                                        <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-key"></span>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="re_captcha_container" class="text-center mb-2">
+                                    <div id="g-recaptcha"></div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                                    {#
+                                        If you want to control the URL the user
+                                        is redirected to on success (more details below)
+                                        <input type="hidden" name="_target_path" value="/account"/>
+                                    
+                                    <div class="checkbox mb-3">
+                                        <label>
+                                            <input type="checkbox" name="_remember_me"> Resté connecté
+                                        </label>
+                                    </div>
+                                    #}
+                                    <div class="col-12 form-group_daticash_login_btn">
+                                    <input type="hidden" name="action" class="action" value="daticash_login">
+                                    <button type="submit" class="daticash_btn btn-daticash btn-block" id="daticash_login_btn" name="daticash_login_btn" >Login</button>
+                                    </div>
+                                </div>
+                                </form>
+                                <div class="row reset_js"> 
+                                    <div class="col-12 mb-3" style="font-weight: 700;color: #007bff;color: #007bff;" ><p class="text-right" style="display: inline;color: #777777;font-weight: 100;"></p><p style="cursor:pointer;display: inline;color: #0a4f68;;" id="daticash_allow_reset_password" name="daticash_allow_reset_password">PIN forgotten?</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+{% endblock %}
 
-    <button type="submit">login</button>
-</form>
+{% block javascripts %}
+            <!-- Bootstrap 4 -->
+            <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+            <!-- Waves Effect Plugin Js -->
+            <script src="{{ asset('adminLTE/plugins/node-waves/waves.js') }}"></script>
+            <!-- AdminLTE App -->
+            <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
+            <!-- AdminLTE for demo purposes -->
+            <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script> 
+            <!-- numeric keypad jQuery-->
+            <script src="{{ asset('assets/js/jquery.plugin.min.js') }}"></script>
+            <!-- numeric keypad script-->
+            <script src="{{ asset('assets/js/jquery.keypad.js') }}"></script>
+            <!-- International Telephone Input-->	
+            <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
+<script type="text/javascript"><!--
+
+var daticash_current_phone_number;  
+function configure_intlTelInput(){
+	var phone_number = document.querySelector("#phone_number");
+	daticash_current_phone_number = window.intlTelInput(phone_number, {
+	  // allowDropdown: false,
+	  // autoHideDialCode: false,
+	  // autoPlaceholder: "off",
+	  // dropdownContainer: document.body,
+	  // excludeCountries: ["us"],
+	  // formatOnDisplay: false,
+	   geoIpLookup: function(callback) {
+	    $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+	      var countryCode = (resp && resp.country) ? resp.country : "";
+	       callback(countryCode);
+	     });
+	   },
+	  // hiddenInput: "full_number",
+	  // initialCountry: "auto",
+	  // localizedCountries: { 'de': 'Deutschland' },
+	   nationalMode: true,
+	  // onlyCountries: ['cm', 'ng', 'eg', 'ci', 'sn'],
+	  // placeholderNumberType: "MOBILE",
+	  // preferredCountries: ['cn', 'jp'],
+	  separateDialCode: true,
+	  utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",//get value
+	});
+
+	var output = document.querySelector("#phone-feedback");
+		
+	var handleChange = function() {
+		//impose the numeric characters
+		var value = jQuery(this).val();
+		value = value.replace(/[^0-9]+/g, '');
+		jQuery(this).val(value);		
+		
+	  //show message if incorrect phone number	
+	  var text = (daticash_current_phone_number.isValidNumber()) ? 'International: ' + daticash_current_phone_number.getNumber() + ' ✓ Valid': "Please enter a valid number below";
+	  var textNode = document.createTextNode(text);
+	  output.innerHTML = "";
+	  output.appendChild(textNode);
+	  
+		  /* change style color*/
+		  if(daticash_current_phone_number.isValidNumber()){
+			$("#phone-feedback").attr("class",'text-success');
+			$("#phone_number").removeClass("error").addClass("success");
+			
+		  }else{
+			$("#phone-feedback").attr("class",'text-danger');		  
+			$("#phone_number").addClass("error").removeClass("success");
+			$(this).parent().find("#input-group-text").css("color: #ff7c7c; border-color:#ff7c7c");
+		  } 	
+	
+	};
+	
+	// listen to "keyup", but also "change" to update when the user selects a country
+	phone_number.addEventListener('change', handleChange);
+	phone_number.addEventListener('keyup', handleChange);
+}
+
+function autoChoose_country_code(country_code){
+		configure_intlTelInput()
+			$("#input_group_appendto_phone").remove()
+			$('#phone_number').after('<div class="input-group-append"><div class="input-group-text" style="border-bottom-left-radius: 0;border-top-left-radius: 0;"><span class="fas fa-phone"></span></div></div>');
+
+	$(".iti__selected-flag").trigger("click");
+	$(".iti__country[data-dial-code='"+country_code+"']").trigger("click");						
+}
+
+function passwordLength(element, value){
+	//alert(element)
+	//alert(value)
+	var n = value.length;
+	if(n != 6){
+		$(element).empty().text("Invalid PIN, left characters: "+ (6 - value.length)).attr("class", "text-danger")
+			return false;
+	}else{
+		$(element).empty().text("Good! your pin is ✓ Valid").attr("class", "text-success");
+	}
+	return true;
+}
+
+function daticash_request_reset_password_popUp (){
+        return (
+				'<div class="chat-popup" id="daticash_request_reset_password_popUp">'+
+					'<div id="ib-center" class="dati_popup">'+
+						'<div class="dati_user_status_login"></div>'+
+						'<div class="container">'+
+							'<div class="row d-flex justify-content-center">'+
+								'<div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">'+
+									'<div class="login-logo">'+
+										'<a href="http://daticash.com/" style="color: #fff;">'+
+											'<img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>'+
+										'</a>'+
+									'</div>'+
+								  '<div class="login-feedback"></div>'+
+								  '<div class="card body_card_daticash_login">'+
+									'<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+								  
+									  '<form method="post" class="form login-form">'+
+									  
+										'<div class="input-group mb-3">'+
+										  '<label for="email" style="width: 100%; margin-bottom: .5rem;">'+
+											'<font style="vertical-align: inherit;">Email&nbsp</font>'+
+											'<small id="email-feedback"></small>'+
+										  '</label>'+
+										  '<input type="email" class="form-control" id="email" name="email" placeholder="Email">'+
+										  '<div class="input-group-append">'+
+											'<div class="input-group-text">'+
+											  '<span class="fas fa-envelope"></span>'+
+											'</div>'+
+										  '</div>'+
+										'</div>'+
+										
+											 '<div id="re_captcha_container" class="text-center mb-2">'+
+												 '<div id="g-recaptcha"></div>'+
+											 '</div>'+
+											 '<hr>'+
+										'<div class="row">'+
+										  '<div class="col-12 form-group_daticash_request_reset_password">'+
+											'<input type="hidden" name="action" class="action" value="daticash_request_reset_password">'+
+											'<button type="submit" class="daticash_btn btn-daticash btn-block" id="daticash_request_reset_password_btn" name="daticash_request_reset_password_btn">Reset PIN</button>'+
+										  '</div>'+
+										'</div>'+
+									  '</form>'+
+									'</div>'+
+								  '</div>'+
+								'</div>'+
+							'</div>'+
+						'</div>'+
+					'</div>'+
+				'</div>'
+				);
+}
+
+function emailIsValid (email) {
+	return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+function show_alert(type = "error", message, dismissible = 1){
+	switch(type.toLowerCase()) {
+    		case "error":
+				if (dismissible === 1){
+					return ('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp'+ message +'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				}else{
+					return ('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i>&nbsp'+ message +'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				}				
+				break;
+
+			case "success":
+				if (dismissible === 1){
+					return ('<div class="alert alert-success alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp'+ message +'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				}else{
+					return ('<div class="alert alert-success"><i class="fa fa-exclamation-circle"></i>&nbsp'+ message +'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+				}
+				break;
+
+			default :
+				return ('');
+		}
+}
+
+    $(document).ready(function(){
+        /*Textbox Events*/
+        $("body")
+                .on('click', '.iti__country' , function(e) {
+                        let sender_country_code = "1";
+                        let recipient_country_code = "237";
+                        let default_country_code = "cm";
+                        
+                    var $this = $(this);
+                        let _currency_received_txt = false;  
+                                default_country_code = $($this).attr("data-country-code");
+                                var pid = $($this).attr("id")
+                                
+                        sender_country_code = $this.find(".iti__dial-code").text();
+                        sender_country_code = sender_country_code.substring(1, sender_country_code.length);
+                                
+                        recipient_country_code = $this.find(".iti__dial-code").text();
+                        recipient_country_code = recipient_country_code.substring(1, recipient_country_code.length);
+                        
+                        if(_currency_received_txt = !$this.parents('.form-group-sender_phone').length){
+                            $('#country_img').html("<img src='https://www.countryflags.io/"+default_country_code+"/flat/32.png'>");		
+                            $('#country_name').html($("#"+pid).children(".iti__country-name").text());
+                        }	
+                        if(_currency_received_txt = $this.parents('.form-daticash_phone').length){
+                            //alert(recipient_country_code)
+                            $('#country_code').val(recipient_country_code);
+                        }	
+                        if(_currency_received_txt = $this.parents('.form-group_topup_by_mobile_money_source').length){
+                            //alert(recipient_country_code)
+                            $('#topup_by_mobile_money_source_country_code').val(recipient_country_code);
+                        }	
+                        
+                    //alert($this.parents('.form-daticash_phone').length)
+                    //alert(default_country_code)
+                    //alert(_currency_received_txt)
+            
+                    })
+                .on('click', '#show_hide_password', function(){
+                        if($('#show_hide_password').prop("checked") == true) {
+                            $('#password').attr("type", "text");
+                            $('.show_or_hide_password_text_js').text("Hide");
+                        } else {
+                            $('#password').attr("type", "password");
+                            $('.show_or_hide_password_text_js').text("Show");						
+                        }
+                    }) 
+                .on('change', '#password' , function(e) {
+                    passwordLength("#password-feedback", $('#password').val());
+                    e.stopImmediatePropagation;
+                    var password_length = $("#password").val(); //alert(password_length.length)
+                        if(password_length.length === 6){
+                            $(".keypad-close").trigger("click");
+                            $("#password").trigger("blur");
+                        }            
+                    }) 
+                .on('click', '#daticash_login_btn', function(e) {
+                    e.preventDefault()
+                    var validate = this;
+
+                    var $form = $(this).closest(".login-form");
+                    var phone_number = $form.find("#phone_number").val().replace(/[^0-9]+/g, '');
+                    var country_code = $form.find("#country_code").val();
+                    var password = $form.find("#password").val();
+                    var action = $form.find(".action").val();
+  
+                        //alert(country_code)
+                        //alert(phone_number) 
+                        //alert(password)
+                        //alert(action)
+                    
+                        if (passwordLength('#password-feedback', password) && daticash_current_phone_number.isValidNumber()) {
+
+                            $(validate).prop('disabled', true).remove();
+                            
+                            $("#loading_image").remove();
+                            $(".login-form").append(
+                                                    '<div class="spinner" id="loading_image" style="display: hidden;">'+
+                                                        '<div class="bounce1"></div>'+
+                                                        '<div class="bounce2"></div>'+
+                                                        '<div class="bounce3"></div>'+
+                                                        '<h4>Please wait...</h4>'+
+                                                    '</div>'
+                                                    );	
+     			                
+     			                    $('.login-form').submit();
+
+                        }else{
+                            
+                            if(phone_number==""){
+                                $('#phone-feedback').html("<div class='text-danger'>Please enter a valid number below</div>");
+                            }
+                            
+                            if(!daticash_current_phone_number.isValidNumber()){
+                                $('#phone-feedback').html("<div class='text-danger'>Please enter a valid number below</div>");
+                            }	
+                        
+                            if(!passwordLength('#password-feedback', password)){
+                                $('#password-feedback').html("<div class='text-danger'>PIN must be 6 characters</div>")
+                            }
+                                                    
+                        }
+            
+                    })
+                .on('click', '#daticash_allow_reset_password' , function(e) {
+    				$(".chat-popup").remove();
+    				
+    					$('#body_mask').after(daticash_request_reset_password_popUp());	
+
+    				})
+                .on('click', '#daticash_request_reset_password_btn' , function(e) {
+    				e.preventDefault()
+    				var validate_reset = this;
+    
+    				var $form = $(this).closest(".login-form");
+    				var email = $form.find("#email").val();
+    				var action = $form.find(".action").val();				
+    				
+    					$(".alert").remove()
+    
+    					if (emailIsValid(email)) {
+    						$('#email-feedback').html("<div class='text-success' style='display:inline;'> ✓ Valid</div>");
+    
+    						$(validate_reset).prop('disabled', true);
+    						$("#loading_image").remove();
+    						$(".login-form").append(
+    												'<div class="spinner" id="loading_image" style="display: hidden;">'+
+    													'<div class="bounce1"></div>'+
+    													'<div class="bounce2"></div>'+
+    													'<div class="bounce3"></div>'+
+    													'<h4>Please wait...</h4>'+
+    												'</div>'
+    												);				
+    						var socketclienttype = 'USERSTATUS_CLIENT';
+                        	fetch("{{ path("request_reset") }}" + "?email=" + email , {"method": "GET", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                        	  .then(
+                        		function(response) {
+                            		  if (!response.ok) {
+                            		      console.log("application response after request sms code submit = ");
+                            		      console.log(response);
+
+                            		  }else{
+                            		      console.log("api response after request sms code submit = ");
+                            		      console.log(response);
+                            		  // Examine the text in the response
+                                         response.json().then(function(data) {
+                            			 console.log("api response after submit  = " + data.code);
+                            				if(data.code === 500){
+                                                $('.login-feedback').html('<div class="alert alert-success text-center">A reset email has been sent to '+data.email+'</div>');																		
+        									    $("#loading_image").remove();								
+        										$(".login-card-body").empty().append(
+        																 '<div class="text-center mb-4">The email with further instructions was sent to '+data.email+'. If you don’t receive a message in 5 minutes, check the junk folder. If you are still experiencing any problems, contact support at <a href="http://support@daticash.com" target="_blank" >support@daticash.com</a></div>'+
+        																	'<div class="row">'+
+        																		'<div class="col-6"></div>'+
+        																		'<div class="col-6" style="text-align: center;float: right;color: #8285889c;border-radius: 120px;border: solid 1px #9a98a24f;"><p class="text-right" style="display: inline;color: #777777;font-weight: 100;"></p><p style="cursor:pointer;display:inline;" id="exit_btn" name="exit_btn">Return Login</p></div>'+
+        																	'</div>'+
+        																 '</div>'
+        															);                            				    
+                            				            
+                    								
+                            				}else{
+                            				    //$('.login-feedback').html(show_alert('error', "the reset process failed. password has not been resetted. Please try again later...", 1));
+                            				    $('.login-feedback').html(show_alert('error', "You must provide a valid mail or username to reset your password...", 1));
+                            				    $(validate_reset).prop('disabled', false);
+            											$("#loading_image").remove();// reinitialiser les proprietées du formulaire	
+                                   
+                            				}					  
+                            			})
+                            		  }
+                        		})
+       
+    					}else{
+    							$('#email-feedback').html("<div class='text-danger'>Invalid Email</div>");
+    					}					
+    				
+    				})
+    				
+                autoChoose_country_code(237);	
+					$('#password').keypad();
+
+    });
+
+//--></script>
+
 {% endblock %}
