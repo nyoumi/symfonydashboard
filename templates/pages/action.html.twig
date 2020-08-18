@@ -51,30 +51,35 @@
     		        '<div class="chat-popup" id="daticash_email_activated_popUp">'+
     					'<div id="ib-center" class="dati_popup">'+
     						'<div class="dati_user_status_login"></div>'+
+    						
     						'<div class="container">'+
     							'<div class="row d-flex justify-content-center">'+
     								'<div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">'+
-    									'<div class="login-logo">'+
-    										'<a href="http://daticash.com/" style="color: #fff;">'+
-    											'<img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>'+
-    										'</a>'+
-    									'</div>'+
-    								  '<div class="login-feedback"></div>'+									
+    								
+    								  '<div class="login-logo">'+
+    									'<a href="http://daticash.com/" style="color: #fff;">'+
+    										'<img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>'+
+    									'</a>'+
+    								  '</div>'+
+    								  
+    								  '<div class="login-feedback"></div>'+	
+    								  
     								  '<div class="card body_card_daticash_login">'+
-    									'<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+								  
-    									 
+    									'<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+	
     									 '<div class="text-center mb-4">Your account is activated and your email has been successfully verified.</div>'+
     										'<div class="row">'+
     											'<div class="col-6"></div>'+
     											'<div class="col-6" style="text-align: center;float: right;color: #8285889c;border-radius: 120px;border: solid 1px #9a98a24f;"><p class="text-right" style="display: inline;color: #777777;font-weight: 100;"></p><p style="cursor:pointer;display:inline;" id="exit_btn" name="exit_btn">Continue</p></div>'+
     										'</div>'+
     									 '</div>'+
-    
     									'</div>'+
     								  '</div>'+
+    								  
     								'</div>'+
     							'</div>'+
     						'</div>'+
+    						
+    						
     					'</div>'+
     				'</div>'
     				);
@@ -82,32 +87,38 @@
     
     function daticash_inappropriate_mail_popUp(){
     		return	(
-    		        '<div class="chat-popup" id="daticash_inappropriate_mail_popUp">'+
+                    '<div class="chat-popup" id="daticash_email_activated_popUp">'+
     					'<div id="ib-center" class="dati_popup">'+
     						'<div class="dati_user_status_login"></div>'+
+    						
     						'<div class="container">'+
     							'<div class="row d-flex justify-content-center">'+
     								'<div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">'+
-    									'<div class="login-logo">'+
-    										'<a href="http://daticash.com/" style="color: #fff;">'+
-    											'<img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}"/>'+
-    										'</a>'+
-    									'</div>'+
+    								
+    								  '<div class="login-logo">'+
+    									'<a href="http://daticash.com/" style="color: #fff;">'+
+    										'<img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>'+
+    									'</a>'+
+    								  '</div>'+
+    								  
+    								  '<div class="login-feedback"></div>'+	
+    								  
     								  '<div class="card body_card_daticash_login">'+
-    									'<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+								  
-    									 
+    									'<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+	
     									 '<div class="text-center mb-4">Thank you for your feedback</div>'+
     										'<div class="row">'+
     											'<div class="col-6"></div>'+
     											'<div class="col-6" style="text-align: center;float: right;color: #8285889c;border-radius: 120px;border: solid 1px #9a98a24f;"><p class="text-right" style="display: inline;color: #777777;font-weight: 100;"></p><p style="cursor:pointer;display:inline;" id="exit_btn" name="exit_btn">Return Login</p></div>'+
     										'</div>'+
     									 '</div>'+
-    
     									'</div>'+
     								  '</div>'+
+    								  
     								'</div>'+
     							'</div>'+
     						'</div>'+
+    						
+    						
     					'</div>'+
     				'</div>'
     				);	
@@ -127,7 +138,15 @@
 			$('#body_mask').after(daticash_inappropriate_mail_popUp());
 	        $('.login-feedback').append('<div class="alert alert-success text-center">Great !!!</div>');        
        
-        {% endfor %}         
+        {% endfor %}
+    
+         /*Textbox Events*/
+        $("body")
+            .on('click', '#exit_btn' , function() {
+                    var href = '{{ path("dashboard.index") }}';
+                    window.location = href;
+				})
+        
     });
 
 //--></script>

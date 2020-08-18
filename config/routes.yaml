@@ -37,6 +37,10 @@ activated:
     path: /activated
     controller: App\Controller\ActivationController::activatedAction
     methods: GET
+verify:
+    path: /verify
+    controller: App\Controller\ActivationController::verify
+    methods: POST
 request_reset:
     path: /request_reset
     controller: App\Controller\PasswordController::requestReset
@@ -49,6 +53,50 @@ send_sms:
     path: /send_activation_token/{type}/{id}
     controller: App\Controller\ActivationController::send_activation_token
     methods: GET
+retrieve_account:
+    path: /accounts/{id}/retrieve
+    controller: App\Controller\AccountController::retrieve
+    methods: GET
+list_accounts:
+    path: /accounts/{id}/list_accounts
+    controller: App\Controller\AccountController::listAccounts
+    methods: GET
+list_accounts_types:
+    path: /accounts/listAccountsTypes
+    controller: App\Controller\AccountController::listAccountsTypes
+    methods: GET
+generate_confirm_code:
+    path: /accounts/generateConfirmCode
+    controller: App\Controller\AccountController::generateConfirmCode
+    methods: GET
+estimate:
+    path: /accounts/estimate
+    controller: App\Controller\AccountController::estimate
+    methods: GET
+create_account:
+    path: /create_account
+    controller: App\Controller\AccountController::createAccount
+    methods: POST
+set_trusted_hosts_list:
+    path: /set_trusted_hosts_list
+    controller: App\Controller\AccountController::setTrustedHostsList
+    methods: POST
+renew_security_token:
+    path: /renew_security_token
+    controller: App\Controller\AccountController::renewSecurityToken
+    methods: POST
+promote:
+    path: /promote_account
+    controller: App\Controller\AccountController::promoteAccount
+    methods: POST
+delete_account:
+    path: /delete_account/{id}
+    controller: App\Controller\AccountController::deleteAccount
+    methods: GET
+edit_account:
+    path: /edit_account
+    controller: App\Controller\AccountController::editAccount
+    methods: POST
 history:
     path: /history
     controller: App\Controller\DashboardController::viewHistory
@@ -85,11 +133,19 @@ transactions_update:
     path:     /transactions/{id?}
     controller: App\Controller\TransactionsController::updateAction
     methods:  [PUT]
-profile_update:
+profile:
     path:     /profile_update/{id?}
     controller: App\Controller\ProfileController::editAction
+    methods:  GET|POST
+profile_test:
+    path:     /profile_testing/{id?}
+    controller: App\Controller\ProfileController::testing
     methods:  GET|POST
 profile_file_upload:
     path:     /profile_file_upload/{id?}
     controller: App\Controller\ProfileController::uploadAction
     methods:  POST
+profile_file_receive_test:
+    path:     /file_upload
+    controller: App\Controller\ProfileController::testAction
+    methods:  PUT

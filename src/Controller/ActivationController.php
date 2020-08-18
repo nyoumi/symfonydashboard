@@ -74,7 +74,6 @@ class ActivationController extends AbstractController
 
 
         $activated=$request->query->get("activated");
-        var_dump($activated);
         if ("true"==$activated){
             $this->addFlash(
                 'activated',
@@ -110,7 +109,7 @@ class ActivationController extends AbstractController
             $endpoint="users/".$id."/token-sms";
 
         }else{
-            $endpoint="user/".$id."/token-mail";
+            $endpoint="users/".$id."/token-mail";
 
         }
         $headers=[
@@ -125,6 +124,40 @@ class ActivationController extends AbstractController
         return new Response(json_encode($response), Response::HTTP_OK,[
             "Content-Type"=>'application/json'
         ]);
+    }
+
+    public function verify(Request $request)
+    {
+        /*
+         * lecture des données envoyées par post, submit ou dans la requête
+         */
+
+        $data = $request->getContent();
+        $data=json_decode($data);
+
+
+        if(!is_object($data)){
+            parse_str($request->getContent(),$output);
+            $data=(object) $output;
+        }
+
+        if($this->emptyObj($data) ){
+            $data=$request->query->all();
+            $data=(object) $data;
+        }
+        $endpoint="user/".$data->id."/verify-contact";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+
+        $params=(array)$data;
+
+        $response=$this->make_put_request($params,$headers,$endpoint,(array)$data);
+        return new Response(json_encode($response), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
+
     }
 
     /**
@@ -160,7 +193,7 @@ class ActivationController extends AbstractController
                 ]
             );
 
-            if($response->getStatusCode()==201 | $response->getStatusCode()==200){
+            if($response->getStatusCode()==200 |$response->getStatusCode()==208|$response->getStatusCode()==201 ){
 
                 return $response->toArray();
             }else {
@@ -209,13 +242,17 @@ class ActivationController extends AbstractController
                 [
                     'headers' => $header,
 
-
                 ]
             );
 
-            if($response->getStatusCode()==201 | $response->getStatusCode()==200){
+            if($response->getStatusCode()==201 | $response->getStatusCode()==200
+                | $response->getStatusCode()==202 | $response->getStatusCode()==208){
+                $code=$response->getStatusCode();
+                $response=$response->toArray();
 
-                return $response->toArray();
+                $response["code"]=$code;
+
+                return $response;
             }else {
 
 
@@ -237,4 +274,14 @@ class ActivationController extends AbstractController
 
 
     }
+
+    private function emptyObj( $obj ) {
+        foreach ( $obj AS $prop ) {
+            array($prop);
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
 }

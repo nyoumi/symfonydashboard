@@ -1,0 +1,1720 @@
+{% set _profile = app.user %}
+{% set _username = _profile.firstname ~ ' ' ~ _profile.lastname %}
+{% set _user_phone = '+' ~ _profile.countryCode ~ _profile.phoneNumber %}
+{% set _accounts = app.user.accounts %} 
+{% set _categories = app.session.get('services') %}
+{% set _accountGroupAll = app.session.get('account_types') %}
+
+{#{% set _accountGroupAll = [
+            {
+                'name': 'ROLE_BUSINESS',
+                'description':'Business accounts role'
+            },
+            {
+                'name': 'ROLE_MERCHANT',
+                'description':'merchant accounts role'
+            },
+            {
+                'name': 'ROLE_CURRENT',
+                'description':'ordinary current accounts role'
+            },
+            {
+                'name': 'ROLE_DEVELOPER',
+                'description':'Developer accounts role'
+            },
+]
+
+%}#}
+{% set _accountGroupAvailableForUser = [
+    {
+        'name': 'ROLE_TEST',
+        'description': 'TEST ROLE',
+        'accounts': [
+
+        {
+            "id": 49,
+            "name": "Mon Compte Business 1",
+            "balance": "0.0",
+            "description": "Mon Compte Business",
+            "is_default": false,
+            "currency": "XAF",
+            "roles": [
+            "ROLE_BUSINESS"
+        ],
+            "is_soft_deleted": null
+        },
+        {
+            "id": 50,
+            "name": "Mon Compte Developpeur 1",
+            "balance": "0.0",
+            "description": "Mon Compte Developpeur",
+            "is_default": false,
+            "currency": "XAF",
+            "roles": [
+            "ROLE_DEVELOPER"
+        ],
+            "is_soft_deleted": null
+        }
+    ],
+    },
+    {
+        'name': 'ROLE_CURRENT',
+        'description': 'ordinary current accounts role',
+        'accounts': [
+        {
+            'id': '12',
+            'name': 'Default',
+            'balance': '250000',
+            'description': "default account",
+            'is_default': true,
+            'currency': "XAF",
+            'roles': [
+            "ROLE_USER"
+        ]
+        },
+
+    ],
+    },
+    {
+        'name': 'ROLE_DEVELOPER',
+        'description': 'Developer accounts role',
+        'accounts': [
+        {
+            'id': '21',
+            'name': 'Easy School',
+            'balance': '122000',
+            'description': 'My School application account.',
+            'is_default': true,
+            'currency': "XAF",
+            'roles': [
+            "ROLE_DEVELOPER"
+        ]
+        },
+        {
+            'id': '14',
+            'name': 'SUIVI LS',
+            'balance': '2500000',
+            'description': 'Suivi des Liaisons Spécialisées',
+            'is_default': false,
+            'currency': "XAF",
+            'roles': [
+            "ROLE_DEVELOPER"
+        ]
+        },
+        {
+            'id': '15',
+            'name': 'IComerce',
+            'balance': '200',
+            'description': 'Plate forme de e-commerce.',
+            'is_default': false,
+            'currency': "XAF",
+            'roles': [
+            "ROLE_DEVELOPER"
+        ]
+        },
+        {
+            'id': '16',
+            'name': 'Gest Pro',
+            'balance': '25000',
+            'description': '',
+            'is_default': false,
+            'currency': "XAF",
+            'roles': [
+            "ROLE_DEVELOPER"
+        ]
+        },
+    ],
+    },
+    {
+        'name': 'ROLE_MERCHANT',
+        'description': 'merchant accounts role',
+        'accounts': [
+        {
+            'id': '17',
+            'name': 'Taxi express',
+            'balance': '1200',
+            'description': 'Taxi express.',
+            'is_default': true,
+            'currency': "XAF",
+            'roles': [
+            "ROLE_MERCHANT"
+        ]
+        },
+        {
+            'id': '18',
+            'name': 'ETS Dressing',
+            'balance': '0',
+            'description': 'Mon super marché de Dressing',
+            'is_default': false,
+            'currency': "XAF",
+            'roles': [
+            "ROLE_MERCHANT"
+        ]
+        },
+    ],
+    },
+    {
+        'name': 'ROLE_BUSINESS',
+        'description': 'Business accounts role',
+        'accounts': [
+        {
+            'id': '19',
+            'name': 'Super CallBox',
+            'balance': '100000',
+            'description': "Transfert d\'argent",
+            'is_default': true,
+            'currency': "XAF",
+            'roles': [
+            "ROLE_BUSINESS"
+        ]
+        }
+    ],
+    },
+]
+%}
+
+{#{%
+        set _accounts = [
+                      {
+                        "id": 21,
+                        "name": "default",
+                        "balance": "0.0",
+                        "description": "default account",
+                        "is_default": true,
+                        "currency": "XAF",
+                        "roles": [
+                          "ROLE_USER"
+                        ],
+                        "is_soft_deleted": null
+                      }
+                    ]
+
+%}#}
+
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- Datiuser style-->
+    <link href="{{ asset('assets/css/confirm-user-popup.css') }}" rel="stylesheet">
+    <!-- Numeric Keypad -->
+    <link href="{{ asset('assets/css/jquery.keypad.css') }}" rel="stylesheet">
+    <!-- International Telephone Input -->
+    <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block head_javascripts %}
+    <!-- Sweet alert scripts-->
+    <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
+{% endblock %}
+
+{% block navbar %}
+    {% include "body/navbar.html.twig" ignore missing %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "body/sidebar.html.twig" ignore missing %}
+{% endblock %}
+
+{% block content_header %}
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Profile settings</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Profile settings</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+            <div class="login-feedback"></div>
+        </div><!-- /.container-fluid -->
+    </div>
+{% endblock %}
+
+{% block content_main %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+
+                    <!-- Profile Image -->
+                    <div class="card card-primary card-outline" style="text-align: center;">
+                        <div class="card-body box-profile" id="help_card-body">
+                            <div class="text-center">
+                                <img class="profile-user-img img-fluid img-circle"
+                                     src="{% if _profile.avatar is null %}{{ asset('assets/img/mascotte.png') }} {% else %} {{ _profile.avatar }} {% endif %}"
+                                     alt="User profile picture"
+                                     style="cursor: pointer; height: 100px;">
+                            </div>
+                            <form id="upload-file" class="upload-file" enctype='multipart/form-data' action='' method='post'>
+                                <label id="avatar" class="profile" >
+                                    <input type="file" name="avatar" class="file" id="image_upload" />
+                                </label>
+                            </form>
+
+                            <h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{ _username }}</h3>
+                            <p class="text-muted text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{ _profile.email }}</p>
+                            <p class="text-muted text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{ _user_phone }}</p>
+
+                        </div>
+                        <!-- /.card-body -->
+                        {% for userRight in _profile.roles %}
+                            {% if 'ROLE_BUSINESS' not in userRight and 'ROLE_ADMIN' not in userRight and 'ROLE_USER' in userRight %}
+                                <div class="card-footer text-center" id="help_card-footer">
+                                    <div class="row">
+                                        <div class="col-sm-6 mb-2" style="display: inline-grid;">
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-info float-left" name="become_CM_account" id="become_CM_account">Become Merchant</a>
+                                        </div>
+                                        <div class="col-sm-6 mb-2" style="display: inline-grid;">
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-info float-rigth" name="become_CD_account" id="become_CD_account">Become Developer</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <!-- /.card -->
+
+
+                    <!-- About Me Box -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">My Accounts</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <ul class="products-list product-list-in-card pl-2 pr-2">
+                                <input id="0" type="hidden" class="account-name" >
+                                {% for account in _accounts %}
+                                    <li class="item">
+                                        <div class="product-img">
+                                            <img src="/public/adminLTE/dist/img/default-150x150.png" alt="Product Image" class="img-size-50">
+                                        </div>
+                                        <div class="product-info">
+                                            <a data-account_id="{{  account.id  }}" data-account_name="{{  account.name  }}" data-account_description="{{  account.description  }}" href="javascript:void(0)" class="account-name">{{ account.name  }}</a>
+                                            <span class="product-description">
+                    {{  account.description  }}
+                    </span>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <!-- /.card-body -->
+                        {% for userRight in _profile.roles %}
+                            {% if 'ROLE_BUSINESS' in userRight or 'ROLE_ADMIN' in userRight or 'ROLE_CUSTOMER' in userRight %}
+                                <div class="card-footer text-center">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <!-- /.card -->
+
+
+                </div>
+                <!-- /.col -->
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-header p-2">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item"><a class="nav-link active " href="#profile_settings" data-toggle="tab">Profile</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#account_settings" data-toggle="tab">Accounts</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#security_settings" data-toggle="tab">Security</a></li>
+                            </ul>
+                        </div><!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="tab-content">
+
+                                <div class="active tab-pane" id="profile_settings">
+                                    <form class="form-horizontal">
+                                        <div class="input-group mb-3 form-daticash_phone">
+                                            <input type="hidden" class="form-control" id="country_code" name="country_code" value="{{ _profile.countryCode }}" >
+                                            <input type="hidden" class="form-control" id="phoneNumber" name="phoneNumber" value="{{ _profile.phoneNumber }}" >
+                                            <input type="hidden" class="form-control" id="user_id" name="user_id" value="{{ _profile.id }}" >
+                                            <div class="row" style="width:100%">
+                                                <div class="col-sm-10" style="width:80%;">
+                                                    <input type="phone_number" class="form-control" id="phone_number" name="phone_number" value="{{ _profile.phoneNumber }}" style="display: inline;width: 100%;" >
+                                                </div>
+                                                <div class="col-sm-2" style="width:20%;">
+                                                    <a class="btn btn-default btn-sm change_phone_number_btn" href="#" data-user_id = "{{ _profile.id }}" data-toggle="modal" data-target="#change_phone_number_modal">
+                                                        <i class="fas fa-edit">
+                                                        </i>
+                                                        Change
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="input-group-append" id="input_group_appendto_phone" name="input_group_appendto_phone">
+                                                <div class="input-group-text">
+                                                    <span class="fas fa-phone"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="firstname" class="col-sm-2 col-form-label">First Name</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="firstname" name="firstname" placeholder="firstname" value="{{ _profile.firstname }}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="lastname" class="col-sm-2 col-form-label">Last Name</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name" value="{{ _profile.lastname }}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="email" class="col-sm-2 col-form-label">Email</label>
+                                            <div class="col-sm-10">
+                                                <div class="row" style="width:100%">
+                                                    <div class="col-sm-10" style="width:80%;">
+                                                        <input type="email" class="form-control" id="email"  name="email" placeholder="Email" value="{{ _profile.email }}" disabled>
+                                                    </div>
+                                                    <div class="col-sm-2" style="width:20%;">
+                                                        <a class="btn btn-default btn-sm change_email_btn" href="#" data-user_id = "{{ _profile.id }}" data-toggle="modal" data-target="#change_email_modal">
+                                                            <i class="fas fa-edit">
+                                                            </i>
+                                                            Change
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Profile Picture</label>
+                                            <div class="user-block">
+                                                <img class="profile-user-img img-circle img-bordered-sm" src="{% if _profile.avatar is null %}{{ asset('assets/img/mascotte.png') }} {% else %} {{ _profile.avatar }} {% endif %}" alt="user image">
+                                                <span class="username">
+                              <a href="#" class="profile-user-label">Choose image</a>
+                            </span>
+                                                <span class="description">Click here to change you profile picture.</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">PIN Code</label>
+                                            <div class="pin-block">
+                            <span class="pincode_label">
+                              <a href="#">Change PIN Code</a>
+                            </span>
+                                                <span class="description">Click here to change you PIN Code.</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Default Account</label>
+                                            <select class="swal2-select" style="display: flex; margin: 0;" name="default_account_id_selected" id="default_account_id_selected">
+                                                <option value="" disabled="">Select your default account</option>
+                                                {% for account in _accounts %}
+                                                    <option data-account_name = "{{ account.name }}" data-account_description = "{{ account.description }}"  data-account_id = "{{ account.id }}" value="{{ account.id }}" class="nav-link {% if account.is_default  == "true" %} selected {% endif %}">{{ account.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="offset-sm-2 col-sm-10">
+                                                <button type="submit" id="save_profile_change_btn" class="btn btn-info float-right">Save Changes</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane" id="account_settings">
+                                    <form class="form-horizontal">
+                                        <div class="input-group mb-3 form-daticash_account">
+                                            <div class="col-sm-10" style="width:80%;">
+                                                <select class="swal2-select" style="display: flex; margin: 0; width: 100%;" name="daticash__account-listbox" id="daticash__account-listbox">
+                                                    <option style="color:#17a2b8;" data-account_name="" data-account_description =""  data-account_id ="0" value="0" class="nav-link" selected>Add New </option>
+
+                                                    {% set _accountGroupForUser = _accountGroupAll %}
+
+                                                    {% for key1, accountGroupAll in _accountGroupAll %}
+                                                    <optgroup style="color:gray;" label="My {{ accountGroupAll.description }}">
+                                                        {% set var = 0 %}
+                                                        {% for key2, accountGroupForUser in _accountGroupForUser %}
+                                                            {% if key2 == key1 %}
+                                                                {% for key2, account in _accounts %}
+                                                                    {% if accountGroupAll.name in account.roles %}
+                                                                        {% set var = var + 1 %}
+                                                                        <option style="color:#17a2b8;" data-account_name="{{ account.name }}" data-account_description="{{ account.description }}"  data-account_id="{{ account.id }}" value="{{ account.id }}" class="nav-link">{{ account.name }}</option>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {% if var == 0 %}
+                                                            <option data-account_id="" value="" disabled="" >Empty</option>
+                                                        {% endif %}
+                                                        {% endfor %}
+
+                                                        {#
+                                                          {% for accountGroup in _accountGroupAvailableForUser %}
+                                                              <optgroup label="{{ accountGroup.description }}">
+                                                                {% for account in accountGroup.accounts %}
+                                                                    <option data-account_name="{{ account.name }}" data-account_description="{{ account.description }}"  data-account_id="{{ account.id }}" value="{{ account.id }}" class="nav-link">{{ account.name }}</option>
+                                                                {% endfor %}
+                                                              </optgroup>
+                                                          {% endfor %}
+
+                                                                {% for account in _accounts %}
+                                                                    <option data-account_name="{{ account.name }}" data-account_description="{{ account.description }}"  data-account_id="{{ account.id }}" value="{{ account.id }}" class="nav-link">{{ account.name }}</option>
+                                                                {% endfor %}
+                                                            #}
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-2" style="width:20%;">
+                                                <a class="btn btn-default btn-sm change_phone_number_btn" href="#" data-user_id = "{{ _profile.id }}" data-toggle="modal" data-target="#change_phone_number_modal">
+                                                    <i class="fas fa-edit">
+                                                    </i>
+                                                    Change
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="name" class="col-sm-2 col-form-label">Name</label>
+                                            <div class="col-sm-10">
+                                                <small id="account_name-feedback"></small>
+                                                <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="description" class="col-sm-2 col-form-label">Description</label>
+                                            <div class="col-sm-10">
+                                                <small id="account_description-feedback"></small>
+                                                <textarea class="form-control" id="description" name="description" placeholder="Description" value=""></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="offset-sm-2 col-sm-10 account_action_div_btn">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane" id="security_settings">
+                                    <!--// email and phone Number verification -->
+                                    <form class="form-horizontal">
+                                        <div class="form-group row">
+                                            <div class="modal-content" style="background: #f4f6f9; box-shadow: none;">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">IMPORTANT MESSAGE</h4>
+                                                </div>
+                                                <div class="modal-body text-center" id="info_status_content_popUp" name="info_status_content_popUp">
+                                                    <p><br>Our DatiCash sales department will contact you very soon. To reduce the waiting time, your contacts should be verified.
+                                                    <hr>
+                                                    <div class="row col-12 text-right mb-3" id="div_emailActivate"  name="div_emailActivate">
+                                                        <div class="col-6" id="label_email_status" name="label_email_status">
+                                                            EMAIL {% if _profile.isEmailActivated == true %} ALREADY {% else %} UN{% endif %}VERIFIED&nbsp;
+                                                            {% if _profile.isEmailActivated == true %}<i class="fa fa-check text-success pull-left" style = "margin-right: 12px" aria-hidden="true"></i>{% else %}<i class="fa fa-times text-danger pull-left" aria-hidden="true"></i>{% endif %}
+
+                                                        </div>
+                                                        <div class="col-6" id="action_and_info_email_status" name="action_and_info_email_status" style="max-width: max-content;">
+                                                            {% if _profile.isEmailActivated == true %}{% else %}<button type="button" class="btn btn-primary" id="dati_resend_me_mail_btn" data-toggle="modal" data-target="#dati_resend_me_mail_modal">Verify now</button>{% endif %}
+                                                        </div>
+                                                        <!-- /.modal -->
+                                                        <div class="modal fade" id="dati_resend_me_mail_modal">
+                                                            <div class="modal-dialog modal-md">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header mb-2">
+                                                                        <h4 class="modal-title">Verify your Email</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">×</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="col-6" id="action_and_info_phone_status" name="action_and_info_phone_status" style="max-width: max-content;">
+                                                                        <div class="login-feedback"></div>
+                                                                        <div class="row text-center" style="max-width: max-content;">
+                                                                            <div class="col-12  text-center" id="dati_check_whith_email" >
+                                                                            </div>
+                                                                        </div>
+                                                                        <p class="alert text-danger text-center"></p>
+                                                                    </div>
+                                                                    <div class="modal-footer justify-content-between">
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- /.modal-content -->
+                                                            </div>
+                                                            <!-- /.modal-dialog -->
+                                                        </div>
+                                                        <!-- /.modal -->
+                                                    </div>
+
+                                                    <div class="row col-12 text-right" id="div_phoneActivate" name="div_emailActivate">
+                                                        <div class="col-6" id="label_phone_status" name="label_phone_status">
+                                                            PHONE {% if _profile.isPhoneActivated == true %} ALREADY {% else %} UN{% endif %}VERIFIED&nbsp;
+                                                            {% if _profile.isPhoneActivated == true %}<i class="fa fa-check text-success pull-left" style = "margin-right: 12px" aria-hidden="true"></i>{% else %}<i class="fa fa-times text-danger pull-left" aria-hidden="true"></i>{% endif %}
+
+                                                        </div>
+                                                        <div class="col-6" id="action_and_info_phone_status" name="action_and_info_phone_status" style="max-width: max-content;">
+                                                            {% if _profile.isPhoneActivated == true %}{% else %}<button type="button" class="btn btn-primary" id="dati_sms_btn" data-toggle="modal" data-target="#dati_sms_modal">Verify now</button>{% endif %}
+                                                        </div>
+                                                        <!-- /.modal -->
+                                                        <div class="modal fade" id="dati_sms_modal">
+                                                            <div class="modal-dialog modal-md">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header mb-2">
+                                                                        <h4 class="modal-title">Verify your Phone Number</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">×</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="col-6" id="action_and_info_phone_status" name="action_and_info_phone_status" style="max-width: max-content;">
+                                                                        <div class="login-feedback"></div>
+                                                                        <div class="row text-center" style="max-width: max-content;">
+                                                                            <div class="col-12" id="dati_check_whith_sms" >
+                                                                            </div>
+                                                                        </div>
+                                                                        <p class="alert text-danger text-center"></p>
+                                                                    </div>
+                                                                    <div class="modal-footer justify-content-between">
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- /.modal-content -->
+                                                            </div>
+                                                            <!-- /.modal-dialog -->
+                                                        </div>
+                                                        <!-- /.modal -->
+                                                    </div>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                </form>
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div><!-- /.card-body -->
+                </div>
+                <!-- /.nav-tabs-custom -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+
+{% block javascripts %}
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Waves Effect Plugin Js -->
+    <script src="{{ asset('adminLTE/plugins/node-waves/waves.js') }}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script>
+    <!-- numeric keypad jQuery-->
+    <script src="{{ asset('assets/js/jquery.plugin.min.js') }}"></script>
+    <!-- numeric keypad script-->
+    <script src="{{ asset('assets/js/jquery.keypad.js') }}"></script>
+    <!-- International Telephone Input-->
+    <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
+    <script type="text/javascript"><!--
+        var left_time = 30
+        var second = 60;
+        var _rebordCount;
+        var user_email = "{{ _profile.email }}";
+        var user_id = "{{ _profile.id }}";
+
+        var daticash_current_phone_number;
+        function configure_intlTelInput(){
+            var phone_number = document.querySelector("#phone_number");
+            daticash_current_phone_number = window.intlTelInput(phone_number, {
+                // allowDropdown: false,
+                // autoHideDialCode: false,
+                // autoPlaceholder: "off",
+                // dropdownContainer: document.body,
+                // excludeCountries: ["us"],
+                // formatOnDisplay: false,
+                geoIpLookup: function(callback) {
+                    $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+                        var countryCode = (resp && resp.country) ? resp.country : "";
+                        callback(countryCode);
+                    });
+                },
+                // hiddenInput: "full_number",
+                // initialCountry: "auto",
+                // localizedCountries: { 'de': 'Deutschland' },
+                nationalMode: true,
+                // onlyCountries: ['cm', 'ng', 'eg', 'ci', 'sn'],
+                // placeholderNumberType: "MOBILE",
+                // preferredCountries: ['cn', 'jp'],
+                separateDialCode: true,
+                utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",//get value
+            });
+
+            var output = document.querySelector("#phone-feedback");
+
+            var handleChange = function() {
+                //impose the numeric characters
+                var value = jQuery(this).val();
+                value = value.replace(/[^0-9]+/g, '');
+                jQuery(this).val(value);
+
+                //show message if incorrect phone number
+                var text = (daticash_current_phone_number.isValidNumber()) ? 'International: ' + daticash_current_phone_number.getNumber() + ' ✓ Valid': "Please enter a valid number below";
+                var textNode = document.createTextNode(text);
+                output.innerHTML = "";
+                output.appendChild(textNode);
+
+                /* change style color*/
+                if(daticash_current_phone_number.isValidNumber()){
+                    $("#phone-feedback").attr("class",'text-success');
+                    $("#phone_number").removeClass("error").addClass("success");
+
+                }else{
+                    $("#phone-feedback").attr("class",'text-danger');
+                    $("#phone_number").addClass("error").removeClass("success");
+                    $(this).parent().find("#input-group-text").css("color: #ff7c7c; border-color:#ff7c7c");
+                }
+
+            };
+
+            // listen to "keyup", but also "change" to update when the user selects a country
+            phone_number.addEventListener('change', handleChange);
+            phone_number.addEventListener('keyup', handleChange);
+        }
+
+        function autoChoose_country_code(country_code){
+            configure_intlTelInput()
+            $("#input_group_appendto_phone").remove()
+            $('#phone_number').after('<div class="input-group-append"><div class="input-group-text" style="border-bottom-left-radius: 0;border-top-left-radius: 0;"><span class="fas fa-phone"></span></div></div>');
+
+            $(".iti__selected-flag").trigger("click");
+            $(".iti__country[data-dial-code='"+country_code+"']").trigger("click");
+        }
+
+        function show_alert(type = "error", message, dismissible = 1){
+            switch(type.toLowerCase()) {
+                case "error":
+                    if (dismissible === 1){
+                        return ('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp'+ message +'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    }else{
+                        return ('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i>&nbsp'+ message +'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    }
+                    break;
+
+                case "success":
+                    if (dismissible === 1){
+                        return ('<div class="alert alert-success alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp'+ message +'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    }else{
+                        return ('<div class="alert alert-success"><i class="fa fa-exclamation-circle"></i>&nbsp'+ message +'<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                    }
+                    break;
+
+                default :
+                    return ('');
+            }
+        }
+
+        (function ($) {
+            /*Textbox Events*/
+            $(document)
+            /*Tab Highlighter Functionality*/
+                .on('change', 'select#daticash__account-listbox', function(){
+                    var $this = $(this).find("option:selected");
+                    DatiOptItem.set($this);
+                })
+                .on('click', '.account-name', function(e){
+                    e.preventDefault();
+                    var pid = $(this).attr("data-account_id");
+
+                    $('select#daticash__account-listbox').find('option[selected]').attr("selected", false)
+                    $('select#daticash__account-listbox').find('option[data-account_id="'+pid+'"]').attr("selected", true)
+
+                    $('select#daticash__account-listbox').trigger("change")
+                })
+
+                .on('click', '.account-name', function(e){
+                    e.preventDefault();
+                    var pid = $(this).attr("data-account_id");
+
+                    $('select#daticash__account-listbox').find('option[selected]').attr("selected", false)
+                    $('select#daticash__account-listbox').find('option[data-account_id="'+pid+'"]').attr("selected", true)
+
+                    $('select#daticash__account-listbox').trigger("change")
+                })
+
+            var DatiOptItem = {
+                set: function($this){
+                    pid = $($this).attr("data-account_id");
+                    switch(pid) {
+                        case "0":// withdraw
+                            init.add();
+                            break;
+                        default:
+                            init.default($this);
+                    }
+                },
+                refresh: function(){
+                    var $this = $('select#daticash__account-listbox').find("option[selected]");
+                    {% if app.request.get('item') is defined and app.request.get('item') is not empty %}
+                    {% if app.request.get('item') == "account_settings" and app.request.get('aid') is defined and app.request.get('aid') is not empty %}
+
+                    var id = "{{ app.request.get('aid') }}";
+                    $this = $('select#daticash__account-listbox').find('option[data-account_id="'+id+'"]');
+                    {% endif %}
+                    {% endif %}
+
+                    switch(pid = $($this).attr("data-account_id")) {
+                        case "0":// add
+                            init.add();
+                            break;
+                        default:
+                            init.default($this);
+                    }
+
+                }
+            };
+
+            $(document).ready(function(){
+                DatiOptItem.refresh();
+            });
+
+            var init = {
+                //se connecter au gestionnaire de session puis recuperer l'état de la session
+                add: function (){
+
+                    $('.form-daticash_account_type').remove();
+
+                    $('.form-daticash_account').after(
+                        '<div class="form-group row form-daticash_account_type">'+
+                        '<label for="name" class="col-sm-2 col-form-label">Type</label>'+
+                        '<div class="col-sm-10">'+
+                        '<select class="swal2-select" style="display: flex; margin: 0; width: 100%;" name="daticash__account_type-listbox" id="daticash__account_type-listbox">'+
+                        '<option value="" disabled="" selected="selected">Please Select </option>'+
+                            {% for accountGroup in _accountGroupAll %}
+                        '<option value="{{ accountGroup.name[5:] }}" class="account_type" {% if app.request.get('aid') == "0" and app.request.get('create') is defined and app.request.get('create') == accountGroup.name %} selected="selected"{% endif %}>{{ accountGroup.description }}</option>'+
+                            {% endfor %}
+                        '</select>'+
+                        '</div>'+
+                        '</div>'
+                    );
+
+                    $('.account_action_div_btn').empty();
+                    $('.account_action_div_btn').append('<button type="submit" id="save_account_add_btn" class="btn btn-info float-right">Create</button>');
+                    $('#name').val("").focus();
+                    $('#description').val("");
+
+                    {% if app.request.get('item') is defined and app.request.get('item') is not empty %}
+                    {% if app.request.get('item') == "account_settings" and app.request.get('aid') is defined and app.request.get('aid') is not empty %}
+                    setTimeout(function(){ $('.nav-link[href^="#account_settings"]').click()}, 100);
+                    {% endif %}
+                    {% endif %}
+
+                },
+
+
+                default: function($this){
+                    $('.form-daticash_account_type').remove();
+                    $('.account_action_div_btn').empty();
+
+                    $('.account_action_div_btn').append('<button type="submit" id="save_account_delete_btn" class="btn btn-danger float-right">delete</button>');
+                    $('.account_action_div_btn').append('<button type="submit" id="save_account_change_btn" class="btn btn-info float-right mr-2">Update</button>');
+
+                    pid = $($this).attr("data-account_id");
+                    pname = $($this).attr("data-account_name");
+                    pdesc = $($this).attr("data-account_description");
+
+                    $('#name').val(pname);
+                    $('#description').val(pdesc);
+
+                    var elem = $('a[href^="#account_settings"]');
+
+                    if(pid){
+                        var elemTop = elem.first().offset().top;
+                        $('html,body').animate({
+                            scrollTop:elemTop
+                        }, "fast");
+
+                    }
+
+
+                    {% if app.request.get('item') is defined and app.request.get('item') is not empty %}
+                    {% if app.request.get('item') == "account_settings" and app.request.get('aid') is defined and app.request.get('aid') is not empty %}
+                    setTimeout(function(){ $('.nav-link[href^="#account_settings"]').click()}, 100);
+
+                    {% endif %}
+                    {% endif %}
+                    $('select#daticash__account-listbox').find('option[selected]').attr("selected", false)
+                    $('select#daticash__account-listbox').find('option[data-account_id="'+pid+'"]').attr("selected", true)
+
+
+                },
+
+            };
+
+        })(jQuery);
+
+        $(document).ready(function(){
+            /*Textbox Events*/
+            $("body")
+                .on('click', '.iti__country' , function(e) {
+                    let sender_country_code = "1";
+                    let recipient_country_code = "237";
+                    let default_country_code = "cm";
+
+                    var $this = $(this);
+                    let _currency_received_txt = false;
+                    default_country_code = $($this).attr("data-country-code");
+                    var pid = $($this).attr("id")
+
+                    sender_country_code = $this.find(".iti__dial-code").text();
+                    sender_country_code = sender_country_code.substring(1, sender_country_code.length);
+
+                    recipient_country_code = $this.find(".iti__dial-code").text();
+                    recipient_country_code = recipient_country_code.substring(1, recipient_country_code.length);
+
+
+                    if(_currency_received_txt = $this.parents('.form-daticash_phone').length){
+                        //alert(recipient_country_code)
+                        $('#country_code').val(recipient_country_code);
+                    }
+
+
+                    //alert($this.parents('.form-daticash_phone').length)
+                    //alert(default_country_code)
+                    //alert(_currency_received_txt)
+
+                })
+                .on('change', '.profile input[type="file"]' , function(e) {
+                    var input = this;
+                    var myForm = document.getElementById('upload-file');
+                    var formData = new FormData(myForm);
+                    console.log(formData)
+                    var user_id="{{ _profile.id }}";
+
+                    var uploadAvatarPath = '{{ path("profile_file_upload", {'id':'user_id'}) }}';
+                    uploadAvatarPath = uploadAvatarPath.replace("user_id", user_id);
+
+                    {#  {{ path("profile_file_upload") }}
+                                                                      var myHeaders = new Headers({
+                                                                          "apikey": "sec_5ed93806dd2ca",
+                                                                      });
+
+                                                                      var myInit = { method: 'PUT',
+                                                                                     headers: myHeaders,
+                                                                                     enctype: 'multipart/form-data',
+                                                                                     data : formData,
+                                                                      };
+
+                                                                      fetch(`https://api.daticash.com/api/user/${user_id}/edit`, myInit)
+                                                                      .then(function(response) {
+
+                                                                      })
+
+                    #}
+
+
+                    fetch(uploadAvatarPath+"/edit", {'method': 'PUT', data: formData, 'headers': {'apikey': 'sec_5ed93806dd2ca', 'accept': 'application/json', 'Content-Type': 'multipart/form-data'}})//check status url
+                        .then(
+                            function(response) {
+                                if (!response.ok) {
+                                    console.log("application response = ");
+                                    console.log(response);
+                                }else{
+                                    $("#upload-file").append(
+                                        '<div class="spinner" id="loading_image" style="display: hidden;">'+
+                                        '<div class="bounce1"></div>'+
+                                        '<div class="bounce2"></div>'+
+                                        '<div class="bounce3"></div>'+
+                                        '<h4>Uploading...</h4>'+
+                                        '</div>'
+                                    );
+                                    console.log("application response after submit profile_file_upload = " + response);
+                                    // Examine the text in the response
+                                    response.json().then(function(data) {
+                                        console.log("api response after submit profile_file_upload  = " + data);
+                                        if(data.code == 200){
+                                            var reader = new FileReader();
+                                            reader.onload = function (e) {
+                                                console.log(e);
+                                                $('.profile-user-img').attr('src', e.target.result);
+                                            }
+
+                                            reader.readAsDataURL(input.files[0])
+                                                .then(function(response) {
+                                                    $('.profile-user-img').remove();
+                                                });
+                                        }
+                                    })
+                                }
+                            })
+
+                    {#    				$.ajax({
+                                            url: imagePath,
+                                            data: formData,
+                                            type: "POST",
+                                            enctype: 'multipart/form-data',
+                                            cache: false,
+                                            processData: false,
+                                            contentType: false,
+                                            success: function(data){
+                                                if(data.response == "OK"){
+
+                                                }else{
+
+                                                }
+                                            },
+                                            error: function(data,err){
+                                                console.log("Ooops !!! Problème de connexion au serveur...:"+err);
+                                            }
+                                        });
+                    */
+                    #}
+                })
+                .on('click', '#dati_sms_btn', function(f){
+                    var that = this;
+                    $('#dati_sms_btn').text('Processing...').prop('disabled', true);
+                    $(".login-feedback").empty();
+
+                    var resendSMSPath = '{{ path("send_sms", {'type': 'sms', 'id':'user_id'}) }}';
+                    resendSMSPath = resendSMSPath.replace("user_id", user_id);
+
+                    fetch(resendSMSPath, {"method": "GET", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                    {#fetch("https://api.daticash.com/api/users/" + user_id + "/send-activation-sms" , {"method": "GET", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url#}
+                        .then(
+                            function(response) {
+                                if (!response.ok) {
+                                    console.log("application response after request sms code submit = ");
+                                    console.log(response);
+
+                                }else{
+                                    console.log("application response after request sms code submit = ");
+                                    console.log(response);
+                                    // Examine the text in the response
+                                    response.json().then(function(data) {
+                                        console.log("api response after submit  = " + data);
+                                        if(data.waiting_time){
+                                            //valeur possible: resend ok/bad, key= phone
+                                            left_time = data.waiting_time;
+                                            //var sender_phone = that.tampon_data.phone_number.replace(/\d{6}$/i, "******");
+                                            var phone_number = data.phone
+                                            //alert(sender_phone)
+                                            clearInterval(_rebordCount);
+                                            $("#dati_sms_modal").modal("show");
+
+                                            $("#dati_check_whith_sms").html('<label for="dati_code">A SMS has been sent to '+phone_number+', please provide the token sent below...</label>'+
+                                                '<input type="text" style="font-size: 55px;text-align: center;width: 80%;" name="daticash_sms_code_input" id="daticash_sms_code_input" style="font-size: 55px;text-align: center;" maxlength="6" placeholder="xxxxxx">'+
+                                                '<div class="col-12" style="flex-flow: row-reverse;">'+
+                                                '<div class="js_resend_sms">'+
+                                                '</div>'+
+                                                '</div>'
+                                            );
+                                            $('#daticash_request_sms_code_btn').prop('disabled', true);
+                                            $('#daticash_sms_code_input').focus();
+
+
+                                            _rebordCount = setInterval(function() {
+
+                                                //requiert un numero de téléphone : créer la zone du numero de tel + boutn d'envoi
+                                                $(".js_resend_sms").empty().append(
+                                                    '<p style="color: green;">SMS Successfully sent... </p>To try again please wait : '+left_time+' min : '+ second +'s</p>'
+
+                                                );
+                                                second = second - 1;
+
+                                                if(second === 0 && left_time === 0){
+                                                    $(".js_resend_sms").empty().append(
+                                                        '<p style="color: #000; float: right;" class="mb-0"><span style="color: #000;">You hav\'n\'receive the SMS?&nbsp;</span>'+
+                                                        '<a id ="resend_sms" name ="resend_sms" href="#">Resend now?&nbsp;&nbsp; |&nbsp;&nbsp;</a>'+
+                                                        '<a id ="dati_cancel_sms_btn" name ="dati_cancel_sms_btn" href="#">Annuler</a></p>'
+                                                    );
+                                                    clearInterval(_rebordCount);
+
+                                                }else{
+                                                    if(second === 0){
+                                                        second = 59;
+                                                        left_time = left_time - 1;
+                                                    }
+                                                }
+                                            }, 1000);
+
+                                        }else{
+                                            $(".login-feedback").append(
+                                                '<div class="alert alert-warning alert-dismissible  flash-notice">'+
+                                                '<i class="fa fa-exclamation-circle"></i>&nbspImpossible to send SMS Now, please try again later or check with your email, otherwise contact the Administrator"</a>'+
+                                                '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                                                '</div>'
+                                            )
+
+                                            $('#daticash_request_sms_code_btn').text('Send me a sms to activate').prop('disabled', false);
+                                        }
+                                    })
+                                }
+                            })
+
+                    f.stopImmediatePropagation();
+                })
+                .on('click', '#dati_resend_me_mail_btn', function(f){
+                    var resendMailPath = '{{ path("send_sms", {'type': 'mail', 'id':'user_id'}) }}';
+                    resendMailPath = resendMailPath.replace("user_id", user_id);
+                    $('.login-feedback').empty();
+                    $("#dati_check_whith_email").empty();
+                    $("#dati_resend_me_mail_modal").modal("show");
+                    $("#dati_check_whith_email").append(
+                        '<div class="spinner" id="loading_image" style="display: hidden;">'+
+                        '<div class="bounce1"></div>'+
+                        '<div class="bounce2"></div>'+
+                        '<div class="bounce3"></div>'+
+                        '<h4>Please wait...</h4>'+
+                        '</div>'
+                    );
+
+                    fetch(resendMailPath, {"method": "GET", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                        .then(
+                            function(response) {
+                                console.log("application response after submit checkUserStatus = " + response);
+                                // Examine the text in the response
+                                response.json().then(function(data) {
+                                    console.log("api response after submit checkUserStatus  = " + data);
+                                    console.log(data);
+                                    $("#dati_resend_me_mail_modal").modal("hide");
+                                    switch(data.code) {
+                                        case 202:
+                                            $('.login-feedback').append('<div class="alert alert-success alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspMail have been successfully resend<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                            break;
+                                        case 208:
+                                            $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspThis user is already enabled and his mail has already been verified. sending Mail Canceled.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                            break;
+                                        case 400:
+                                            $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspSomething is wrong with the request, possibly missing or improperly formatted parameter.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                            break;
+                                        case 403:
+                                            $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp Used ApiKey owner does not have permission to access this resource.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                            break;
+                                        default :
+                                            $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp Error Connection<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                    }
+                                })
+                            })
+                })
+                .on('keyup', '#daticash_sms_code_input', function(event){
+                    var that = this;
+                    event.stopImmediatePropagation();
+                    $(".alert").empty()//supprimer le message d'erreur s'il existe
+
+                    var caveVal = jQuery("#daticash_sms_code_input").val();
+                    var caveWidth = caveVal.length;
+                    var value = jQuery(this).val();
+                    value = value.replace(/[^0-9]+/g, '');
+                    jQuery(this).val(value);
+
+                    if (caveWidth == 6){
+                        $('#daticash_sms_code_input').before('<div class="login_image_js"><img src="{{ absolute_url(asset("assets/img/loader-status.gif")) }}" /> Processing...</div>').remove(); // loader image apprears in the <div id="newComment"></div>
+                        $('#daticash_sms_code_input').remove();
+
+                        var proceedActivatePath = '{{ path("verify") }}';
+
+                        fetch(proceedActivatePath + "?id="+user_id+"&token="+caveVal+"&type=sms", {"method": "POST", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                            .then(
+                                function(response) {
+                                    if (!response.ok) {
+                                        console.log("application response after confirm code submit = ");
+                                        console.log(response);
+                                    }else{
+                                        console.log("api response after confirm code submit = ");
+                                        console.log(response);
+
+                                        // Examine the text in the response
+                                        response.json().then(function(data) {
+                                            console.log("api response after submit  = " + data);
+                                            if(data.code === 200){//activation reussi
+                                                $('.login-feedback').html(show_alert('success', "Succefully activated", 1));
+                                                $('.login_image_js').remove();
+                                            }else{
+
+                                                $('.login-feedback').html(show_alert('error', "Activation Failed. Check code and try again", 1));
+                                                $('.login_image_js').remove();
+                                                $('#dati_check_whith_sms hr').remove();
+                                                $('#dati_check_whith_sms').prepend(
+                                                    '<input type="text" style="font-size: 55px;text-align: center;width: 80%;" name="daticash_sms_code_input" id="daticash_sms_code_input" maxlength="6" placeholder="xxxxxx">'
+                                                );
+
+                                            }
+                                        })
+                                    }
+                                })
+
+
+                    }
+                })
+                .on('focus', 'input, textarea' , function() {
+                    $(".alert").remove()
+                    $(".text-danger").remove()
+                })
+                .on('click', '#save_account_change_btn' , function(e) {
+                    e.preventDefault();
+                    $('#save_account_change_btn').text("Processing...").prop("disabled", true);
+                    $('#save_account_delete_btn').prop("disabled", true);
+                    var name = $("#name").val();
+                    var description = $("#description").val();
+                    var $this = $('select#daticash__account-listbox').find("option:selected");
+                    var pid = $($this).attr("data-account_id");
+
+                    fetch(`https://api.daticash.com/api/account/${pid}/edit?name=${name}&description=${description}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "PUT"})//check status url //for test
+                        .then(
+                            function(response) {
+                                if (!response.ok) {
+                                    console.log("application response after confirm code submit = ");
+                                    console.log(response);
+                                }else{
+                                    console.log("api response after confirm code submit = ");
+                                    console.log(response);
+
+                                    // Examine the text in the response
+                                    response.json().then(function(data) {
+                                        console.log("api response after submit  = " + data);
+                                        if(data.id){//activation reussi
+                                            $('.login-feedback').html(show_alert('success', "Succefully updated", 1));
+                                            $('#save_account_change_btn').text("Update").prop("disabled", false);
+                                            $('#save_account_delete_btn').prop("disabled", false);
+                                        }else{
+                                            console.log()
+                                            switch(data.code) {
+                                                case 400:
+                                                    $('.login-feedback').append('<div class="alert alert-success alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspSomething is wrong with the request, possibly missing or improperly formatted parameter<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                    break;
+                                                case 300:
+                                                    $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspused ApiKey owner does not have permission to access this resource.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                    break;
+                                                case 409:
+                                                    $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspThe user this account belong to already have an account with the same name as given.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                    break;
+                                                default :
+                                                    $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp Error Connection<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                            }
+                                        }
+                                        $('#save_account_change_btn').text("Update").prop("disabled", false);
+                                        $('#save_account_delete_btn').prop("disabled", false);
+                                    })
+                                }
+
+                            })
+
+
+                })
+                .on('click', '#save_account_add_btn' , function(e) {
+                    e.preventDefault();
+                    var $btn = $(this);
+                    var $this = $('select#daticash__account_type-listbox').find("option:selected");
+                    var pid = $($this).attr("value");
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: 'btn swal2-btn btn-info',
+                            cancelButton: 'btn swal2-btn btn-default'
+                        },
+                        buttonsStyling: false
+                    });
+
+                    if(pid !== "" && $("#name").val() !== "" && $("#description").val() !== ""){
+                        $btn.text("Processing...").prop("disabled", true);
+                        fetch(`https://api.daticash.com/api/account/${pid}/estimate`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "GET"})//check status url
+                            .then(
+                                function(response) {
+                                    if (!response.ok) {
+                                        throw new Error(response.statusText)
+                                        response.json().then(function(data) {
+                                            console.log(data);
+                                        })
+                                    }else{
+                                        //Action successfully
+                                        response.json().then(function(data) {
+                                            console.log(data);
+                                            var user_id = "{{ _profile.id }}";
+                                            var name = $("#name").val();
+                                            var description = $("#description").val();
+                                            var confirm_code = "";
+
+                                            if(data.registration_fees > 0 || data.monthly_fees > 0){
+                                                swalWithBootstrapButtons.fire({
+                                                    title: 'Alert!',
+                                                    text: "Vous êtes sur le point de créer un compte. cette opération vous coutera "+ data.monthy_fees+" "+ data.currency +"/Mois. Un code de confirmation vous sera envoyé par SMS à votre numéro.",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Yes, create it!'
+                                                }).then((result) => {
+                                                    if (result.value) {
+                                                    return fetch(`https://api.daticash.com/api/account/${user_id}/generate-confirm-code?by=SMS`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "GET"} )//confirm-password url //for test
+                                                        .then(
+                                                            function(response) {
+                                                                if (!response.ok) {
+                                                                    response.json().then(function(data) {
+                                                                        console.log(data);
+                                                                    })
+                                                                }else{
+                                                                    response.json().then(function(data) {
+                                                                        console.log(data);
+                                                                        //data.message = "message";    //for test
+                                                                        if(data.message !== undefined ){
+                                                                            $btn.text("Create").prop("disabled", false);
+                                                                            swalWithBootstrapButtons.fire({
+                                                                                title: "Confirm!",
+                                                                                text: "Entrer le Code recu par SMS pour confirmer la Création du nouveau compte:",
+                                                                                input: "text",
+                                                                                //closeOnConfirm: true,
+                                                                                inputPlaceholder: "SMS Code",
+                                                                                inputAttributes: {
+                                                                                    autocapitalize: "off"
+                                                                                },
+                                                                                showCancelButton: false,
+                                                                                showLoaderOnConfirm: true,
+                                                                                focusConfirm: false,
+                                                                                confirmButtonText:'<i class="fa fa-thumbs-up"></i> Confirm',
+                                                                                confirmButtonAriaLabel: "Thumbs up, great!",
+                                                                                cancelButtonText:'<i class="fa fa-thumbs-down"></i>',
+                                                                                cancelButtonAriaLabel: "Thumbs down",
+                                                                                preConfirm: (confirm_code) => {
+                                                                                let confirmPath = "{{ path("transactions_update") }}";
+
+                                                                            return fetch(`https://api.daticash.com/api/account/new?user_id=${user_id}&role=${pid}&name=${name}&description=${description}&confirm_code=${confirm_code}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "POST"} )//confirm-password url //for test
+                                                                                .then(response => {
+                                                                                if (!response.ok) {
+                                                                                throw new Error(response.statusText)
+                                                                            }
+                                                                            return response.json()
+                                                                        })
+                                                                        .catch(error => {
+                                                                                swalWithBootstrapButtons.showValidationMessage(
+                                                                                `Request failed: ${error}`
+                                                                            )
+                                                                        })
+                                                                        },
+                                                                            allowOutsideClick: () => !swalWithBootstrapButtons.isLoading()
+                                                                        }).then((result) => {
+                                                                                console.log(result)
+                                                                            //if (result.id) {
+                                                                            if (result.value.id) { // for test
+                                                                                $btn.text("Create").prop("disabled", false);
+                                                                                swalWithBootstrapButtons.fire(
+                                                                                    'Created!',
+                                                                                    'Your account has been Created successfully.',
+                                                                                    'success'
+                                                                                )
+                                                                            }else{
+                                                                                $btn.text("Create").prop("disabled", false);
+                                                                                console.log(data);
+                                                                                //data.code=412; //for test
+                                                                                switch(data.code) {
+                                                                                    case 400://Action error
+                                                                                        swalWithBootstrapButtons.fire(
+                                                                                            "ERROR!",
+                                                                                            "Something is wrong with the request, possibly missing or improperly formatted parameter.",
+                                                                                            "error"
+                                                                                        )
+
+                                                                                        break;
+                                                                                    case 403://Action error
+                                                                                        swalWithBootstrapButtons.fire(
+                                                                                            "ERROR!",
+                                                                                            "used ApiKey owner does not have permission to access this resource.",
+                                                                                            "error"
+                                                                                        )
+
+                                                                                        break;
+                                                                                    case 409://Action error
+                                                                                        swalWithBootstrapButtons.fire(
+                                                                                            "ALERT!",
+                                                                                            "This user already have an account with the same name as given.",
+                                                                                            "warning"
+                                                                                        )
+
+                                                                                        break;
+                                                                                    case 412://Action error
+                                                                                        swalWithBootstrapButtons.fire({
+                                                                                            title: 'WARNNING!',
+                                                                                            html:
+                                                                                            'The default account does not have sufficient balance. ' +
+                                                                                            '<br><a href="operation?cid=1&sid=2" class="topup_btn"><b>TopUp Now</b></a>' +
+                                                                                            ' or change your default account and try again.',
+                                                                                            icon: 'info',
+                                                                                            showCancelButton: false,
+                                                                                            focusConfirm: false,
+                                                                                            confirmButtonText:
+                                                                                                '<i class="fa fa-thumbs-up"></i> Great!',
+                                                                                            confirmButtonAriaLabel: 'Thumbs up, great!',
+                                                                                        })
+
+                                                                                        break;
+                                                                                    default:
+                                                                                        $btn.text("Create").prop("disabled", false);
+                                                                                        swalWithBootstrapButtons.fire(
+                                                                                            "ERROR REQUEST!",
+                                                                                            "Request computed failed",
+                                                                                            "error"
+                                                                                        )
+                                                                                }
+                                                                            }
+                                                                        })
+
+                                                                        }else{
+                                                                            $btn.text("Create").prop("disabled", false);
+                                                                            swalWithBootstrapButtons.fire(
+                                                                                "ERROR REQUEST!",
+                                                                                "Request computed failed; Try again later",
+                                                                                "error"
+                                                                            )
+                                                                        }
+                                                                    })
+                                                                }
+                                                            })
+
+                                                }else{
+                                                    $btn.text("Create").prop("disabled", false);
+                                                }
+
+                                            })
+
+                                            }else{
+                                                return fetch(`https://api.daticash.com/api/account/new?user_id=${user_id}&role=${pid}&name=${name}&description=${description}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "POST"} )//confirm-password url //for test
+                                                    .then(response => {
+                                                    if (!response.ok) {
+                                                    response.json().then(function(data) {
+                                                        console.log(data);
+                                                        throw new Error(response.statusText)
+                                                    })
+                                                }else{
+                                                    response.json().then(function(data) {
+                                                        console.log(data);
+                                                        if(data.id){
+                                                            $btn.text("Create").prop("disabled", false);
+                                                            swalWithBootstrapButtons.fire(
+                                                                "Complete!",
+                                                                "new account successfully registered..",
+                                                                "success"
+                                                            )
+                                                        }else{
+                                                            $btn.text("Create").prop("disabled", false);
+                                                            console.log(data);
+                                                            switch(data.code) {
+                                                                case 400://Action error
+                                                                    swalWithBootstrapButtons.fire(
+                                                                        "ERROR!",
+                                                                        "Something is wrong with the request, possibly missing or improperly formatted parameter.",
+                                                                        "error"
+                                                                    )
+
+                                                                    break;
+                                                                case 403://Action error
+                                                                    swalWithBootstrapButtons.fire(
+                                                                        "ERROR!",
+                                                                        "used ApiKey owner does not have permission to access this resource.",
+                                                                        "error"
+                                                                    )
+
+                                                                    break;
+                                                                case 409://Action error
+                                                                    swalWithBootstrapButtons.fire(
+                                                                        "ALERT!",
+                                                                        "This user already have an account with the same name as given.",
+                                                                        "warning"
+                                                                    )
+
+                                                                    break;
+                                                                case 412://Action error
+                                                                    swalWithBootstrapButtons.fire({
+                                                                        title: 'WARNNING!',
+                                                                        html:
+                                                                        'The default account does not have sufficient balance. ' +
+                                                                        '<br><a href="operation?cid=1&sid=2" class="topup_btn"><b>TopUp Now</b></a>' +
+                                                                        ' or change your default account and try again.',
+                                                                        icon: 'info',
+                                                                        showCancelButton: false,
+                                                                        focusConfirm: false,
+                                                                        confirmButtonText:
+                                                                            '<i class="fa fa-thumbs-up"></i> Great!',
+                                                                        confirmButtonAriaLabel: 'Thumbs up, great!',
+                                                                    })
+
+                                                                    break;
+                                                                default:
+                                                                    $btn.text("Create").prop("disabled", false);
+                                                                    swalWithBootstrapButtons.fire(
+                                                                        "ERROR REQUEST!",
+                                                                        "Request computed failed",
+                                                                        "error"
+                                                                    )
+                                                            }
+                                                        }
+                                                    })
+                                                }
+                                            })
+                                            .catch(error => {
+                                                    swalWithBootstrapButtons.showValidationMessage(
+                                                    `Request failed: ${error}`
+                                                )
+                                            })
+                                                $btn.text("Create").prop("disabled", false);
+                                            }
+                                        })
+
+                                    }
+                                }).catch(error => {console.log(`${error}`)});
+
+                    }else{
+                        if($("#name").val() === ""){
+                            $('#account_name-feedback').html("<div class='text-danger'>Invalid name</div>");
+                        }
+
+                        if($("#description").val() === ""){
+                            $('#account_description-feedback').html("<div class='text-danger'>Invalid description</div>");
+                        }
+
+                        if(pid === ""){
+                            $("#daticash__account_type-listbox").addClass("input-error");
+                        }
+                    }
+                })
+                .on('click', '#save_profile_change_btn' , function(e) {
+                    e.preventDefault();
+                    var $btn = $(this);
+                    var user_id = "{{ _profile.id }}";
+                    var firstname = jQuery("#firstname").val();
+                    var lastname = jQuery("#lastname").val();
+
+                    $btn.text("Processing...").prop("disabled", true);
+
+                    var updateProfilePath = '{{ path("profile", {'id':'user_id'}) }}';
+                    updateProfilePath = updateProfilePath.replace("user_id", user_id);
+
+                    fetch(updateProfilePath + "?firstname="+firstname+"&lastname="+lastname, {"method": "POST", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                        .then(
+                            function(response) {
+                                if (!response.ok) {
+                                    console.log("application response after confirm code submit = ");
+                                    console.log(response);
+                                }else{
+                                    console.log("api response after confirm code submit = ");
+                                    console.log(response);
+
+                                    // Examine the text in the response
+                                    response.json().then(function(data) {
+                                        console.log("api response after submit  = " + data);
+                                        if(data.code === 202){//activation reussi
+                                            $('.login-feedback').html(show_alert('success', "Succefully activated", 1));
+
+                                        }else{
+                                            console.log()
+                                            switch(data.code) {
+                                                case 208:
+                                                    $('.login-feedback').append('<div class="alert alert-success alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspanother account user with the given mail or username already exists. Update Canceled.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                    break;
+                                                case 400:
+                                                    $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspSomething is wrong with the request, possibly missing or improperly formatted parameter.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                    break;
+                                                case 403:
+                                                    $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspused ApiKey owner does not have permission to access this resource.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                    break;
+                                                default :
+                                                    $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp Error Connection<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                            }
+                                        }
+                                    })
+                                }
+                                $btn.text("Save Changes").prop("disabled", false);
+                            })
+
+                })
+                .on('click', '#save_account_delete_btn' , function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.value) {
+                        $('#save_account_delete_btn').text("Processing...").prop("disabled", true);
+                        $('#save_account_change_btn').prop("disabled", true);
+                        var name = $("#name").val();
+                        var description = $("#description").val();
+                        var $this = $('select#daticash__account-listbox').find("option:selected");
+                        var pid = $($this).attr("data-account_id");
+
+                        fetch(`https://api.daticash.com/api/account/${pid}/delete`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "DELETE"})//check status url //for test
+                            .then(
+                                function(response) {
+                                    if (!response.ok) {
+                                        console.log("application response after confirm code submit = ");
+                                        console.log(response);
+                                    }else{
+                                        console.log("api response after confirm code submit = ");
+                                        console.log(response);
+
+                                        // Examine the text in the response
+                                        response.json().then(function(data) {
+                                            console.log("api response after submit  = " + data);
+                                            if(data.message){//activation reussi
+                                                $('.login-feedback').html(show_alert('success', "Account successfully deleted.", 1));
+                                                $('#save_account_delete_btn').text("Delete").prop("disabled", false);
+                                                $('#save_account_change_btn').prop("disabled", false);
+                                            }else{
+                                                switch(data.code) {
+                                                    case 202:
+                                                        $('.login-feedback').append('<div class="alert alert-success alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspaccount successfully deleted.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        break;
+                                                    case 400:
+                                                        $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspSomething is wrong with the request, possibly missing or improperly formatted parameter.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        break;
+                                                    case 403:
+                                                        $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspused ApiKey owner does not have permission to access this resource.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                    case 412:
+                                                        $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspThe account has been mark_as_deleted[archived] rather than being deleted.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        break;
+                                                    default :
+                                                        $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp Error Connection<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                }
+                                            }
+                                            $('#save_account_delete_btn').text("Delete").prop("disabled", false);
+                                            $('#save_account_change_btn').prop("disabled", false);
+                                        })
+                                    }
+                                })
+                    }
+                })
+                })
+                .on('change', 'select#daticash__account_type-listbox' , function(e) {
+                    $(this).removeClass("input-error");
+                })
+                .on('click', '.nav-link' , function(e) {
+                    pid = $(this).attr("href");
+                    switch(pid) {
+                        case "#profile_settings":// profile settings
+                            $("#help_card-body").empty().append(
+                                '<div class="text-center">'+
+                                '<img class="profile-user-img img-fluid img-circle"'+
+                                'src="{% if _profile.avatar is null %}{{ asset("assets/img/mascotte.png") }} {% else %} {{ _profile.avatar }} {% endif %}"'+
+                                'alt="User profile picture"'+
+                                'style="cursor: pointer; height: 100px;">'+
+                                '</div>'+
+                                '<form id="upload-file" class="upload-file" enctype="multipart/form-data" action="" method="post">'+
+                                '<label id="avatar" class="profile" >'+
+                                '<input type="file" name="avatar" class="file" id="image_upload" />'+
+                                '</label>'+
+                                '</form>'+
+
+                                '<h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{ _username }}</h3>'+
+                                '<p class="text-muted text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{ _profile.email }}</p>'+
+                                '<p class="text-muted text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{ _user_phone }}</p>'
+
+                            );
+
+                            $("#help_card-footer").empty().append(
+                                    {% for userRight in _profile.roles %}
+                                    {% if 'ROLE_BUSINESS' not in userRight and 'ROLE_ADMIN' not in userRight and 'ROLE_USER' in userRight %}
+                                '<div class="row">'+
+                                '<div class="col-sm-6 mb-2" style="display: inline-grid;">'+
+                                '<a href="{{ path('profile') }}?item=account_settings&aid=0&create=ROLE_MERCHANT" class="btn btn-sm btn-info float-left" name="become_CM_account" id="become_CM_account">Become Merchant</a>'+
+                                '</div>'+
+                                '<div class="col-sm-6 mb-2" style="display: inline-grid;">'+
+                                '<a href="{{ path('profile') }}?item=account_settings&aid=0&create=ROLE_DEVELOPER" class="btn btn-sm btn-info float-rigth" name="become_CD_account" id="become_CD_account">Become Developer</a>'+
+                                '</div>'+
+                                '</div>'
+                                    {% endif %}
+                                    {% endfor %}
+                            );
+
+                            break;
+                        case "#account_settings":// account settings
+                            $("#help_card-body").empty().append(
+                                '<div class="text-center">'+
+                                '<img class="img-fluid"'+
+                                'src="{{ asset("assets/img/account-illu.png") }}"'+
+                                'alt="Account picture"'+
+                                'style="height: 100px; width: auto;">'+
+                                '</div>'+
+                                '<h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="miniHelp_title">Manage your Account</h3>'+
+                                '<p class="text-muted text-center text-ellipsied" id="miniHelp_description">You can Add, update and Migrate your account... Choose one action in selector and submit your request.</p>'+
+                                '<div class="pin-block text-right">'+
+                                '<span class="pincode_label">'+
+                                '<a href="javascript:void(0)" id="show_more_description">Show more</a>'+
+                                '</span>'+
+                                '</div>'
+                            );
+
+                            $("#help_card-footer").empty();
+
+                            $('#daticash__account-listbox').prop("disabled", false);
+                            $('#daticash__account_type-listbox').prop("disabled", false);
+
+                        {% if app.request.get('aid') is defined and app.request.get('aid') == "0" and app.request.get('create') is defined and app.request.get('create') is not empty %}
+                            $('#daticash__account-listbox').prop("disabled", true);
+                            $('#daticash__account_type-listbox').prop("disabled", true);
+
+                        {% endif %}
+
+                            break;
+
+                        case "#security_settings":// profile settings
+                            $("#help_card-body").empty().append(
+                                '<div class="text-center img-circle">'+
+                                '<img class="img-fluid"'+
+                                'src="{{ asset('assets/img/security-illu.png') }}"'+
+                                'alt="Account picture"'+
+                                'style="height: 100px; width: auto;">'+
+                                '</div>'+
+                                '<h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="miniHelp_title">Verify your contact</h3>'+
+                                '<p class="text-muted text-center text-ellipsied" id="miniHelp_description">Verify you Email and your phone Number to securise yourselve... Just click to "verify now" and your contact will be verified.</p>'+
+                                '<div class="pin-block text-right">'+
+                                '<span class="pincode_label">'+
+                                '<a href="javascript:void(0)" id="show_more_description">Show more</a>'+
+                                '</span>'+
+                                '</div>'
+                            );
+
+                            $("#help_card-footer").empty();
+
+                            break;
+                        default:
+                            $("#help_card-body img").attr("src", "{% if _profile.avatar is null %}{{ asset('assets/img/mascotte.png') }} {% else %} {{ _profile.avatar }} {% endif %}").addClass("img-circle");
+                    }
+
+
+                })
+                .on('click', '#show_more_description' , function(e) {
+                    e.preventDefault();
+                    $("#miniHelp_description").removeClass("text-ellipsied");
+                    $(this).text("Show less");
+                    $(this).attr("id","show_less_description");
+                })
+                .on('click', '#show_less_description' , function(e) {
+                    e.preventDefault();
+                    $("#miniHelp_description").addClass("text-ellipsied");
+                    $(this).text("Show more");
+                    $(this).attr("id","show_more_description");
+                })
+
+            $('.profile-user-img, .profile-user-label').click(function(e){
+                e.preventDefault();
+                $('.profile input[type="file"]').click();
+            });
+
+            autoChoose_country_code({{ _profile.countryCode }});
+            $("#phone_number").prop('disabled', true);
+
+
+
+        })
+
+
+
+        //--></script>
+
+{% endblock %}

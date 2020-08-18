@@ -14,13 +14,17 @@ class WebserviceUser implements UserInterface, EquatableInterface
     private $salt;
     private $roles;
     private $lastname ;
-    private $firstname ;
+    private $firstname;
     private $currency_code ;
     private $accounts ;
     private $services ;
     private $enabled;
     private $id ;
     private $email ;
+    private $is_email_activated;
+    private $is_phone_activated;
+    private $avatar;
+    private $userInfos;
 
     /**
      * @return mixed
@@ -85,9 +89,6 @@ class WebserviceUser implements UserInterface, EquatableInterface
     {
         $this->avatar = $avatar;
     }
-    private $is_email_activated;
-    private $is_phone_activated;
-    private $avatar;
 
     
     public function __construct( )
@@ -295,5 +296,21 @@ class WebserviceUser implements UserInterface, EquatableInterface
         }
 
         return true;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserInfos()
+    {
+        return $this->userInfos;
+    }
+
+    /**
+     * @param mixed $userInfos
+     */
+    public function setUserInfos($userInfos): void
+    {
+        $this->userInfos = $userInfos;
     }
 }

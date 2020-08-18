@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use DateInterval;
+use DateTime;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -22,6 +24,8 @@ class DashboardController extends Controller
     private $deposit_amount=0;
     private $security;
     private $services;
+    private $account_types;
+
 
 
     public function __construct(HttpClientInterface $client,Security $security)
@@ -130,7 +134,6 @@ class DashboardController extends Controller
 
                      if (isset($services[$i]["roles"])){
 
-                         echo("-------------->");
                          foreach ($services[$i]["roles"] as $role){
                              if (!in_array($role, $user_roles)) {
                                  array_splice($services,$i,1);
@@ -165,15 +168,27 @@ class DashboardController extends Controller
 
             }
             $this->services=$services;
+
+        $endpoint="accounts/types";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+
+        $params=[];
+        $account_types=$this->make_get_request($params,$headers,$endpoint);
+        $this->account_types=$account_types;
         $session = $this->get('session');
         $session->set('services', $this->services);
+        $session->set('account_types', $this->account_types);
 
 
 
 
 
 
-       if( isset($user)){
+
+        if( isset($user)){
         $this->accounts = $user["accounts"];
 
         foreach ($this->accounts  as $account) {
@@ -225,30 +240,35 @@ class DashboardController extends Controller
             'Accept' => 'application/json',
             "apikey"=> $this->apikey
         ];
+        $now = new DateTime( 'now');
+        //echo $now->format('Y-m-d H:i:s');
+        $limitDate=$now->format('Y-m-d H:i:s');
+        try {
+            $limitDate=$now->sub(new DateInterval('P30D'));
+           // echo $limitDate->format('Y-m-d H:i:s');
+
+        } catch (\Exception $e) {
+        }
+        //echo $now;
         $params=[
             'order' => 'asc',
             'user_id' => $this->user_id,
-            'start_at'=> '2020-01-01 00:00:00',
-            'end_at'=>'2021-01-01 00:00:00',
+            'start_at'=> $now->format('Y-m-d H:i:s'),
+            'end_at'=>$limitDate->format('Y-m-d H:i:s'),
             'page'=> '1',
-            'limit'=>'10'
+            'limit'=>'100'
         ];
         try {
             $this->transactions=$this->make_get_request($params,$headers,$endpoint);
             if(!(isset($this->transactions) && isset($this->transactions[0]['id']))){
                 $this->transactions=[];
             }
-
-
-
         } catch (\Throwable $th) {
             //throw $th;
         }
+
         return $this->render('pages/history.html.twig', [
-
-
             'transactions' =>$this->transactions,
-
         ]);
 
     }

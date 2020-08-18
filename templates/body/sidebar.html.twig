@@ -59,7 +59,13 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="{{ path('settings') }}" class="nav-link {% if 'history' in app.request.pathinfo %} active {% endif %}">
+            <a href="{{ path('profile') }}" class="nav-link {% if 'profile' in app.request.pathinfo %} active {% endif %}">
+              <i class="nav-icon fas fa-user"></i>
+              <p> Profile</p>
+            </a>
+          </li>	
+          <li class="nav-item">
+            <a href="{{ path('profile') }}" class="nav-link {% if 'profile' in app.request.pathinfo %} active {% endif %}">
               <i class="nav-icon fas fa-cog"></i>
               <p> Settings</p>
             </a>

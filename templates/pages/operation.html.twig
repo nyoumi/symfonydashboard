@@ -374,262 +374,277 @@
     %}  
 #}
 {% block stylesheets %}
-            <!-- Font Awesome -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
-            <!-- Ionicons -->
-            <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-            <!-- Theme style -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
-            <!-- Google Font: Source Sans Pro -->
-            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">	
-            <!-- International Telephone Input -->
-            <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- International Telephone Input -->
+    <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
+    <!-- Format Currency -->
+    <link href="{{ asset('assets/js/formatCurrency/jquery-1.4.2.min.js') }}" rel="stylesheet">
+    <!-- Format Currency -->
+    <link href="{{ asset('assets/js/formatCurrency/jquery.formatCurrency-1.4.0.js') }}" rel="stylesheet">
 
-            <style>
-                .body_mask:before{
-                    margin: 0;
-                    padding: 0;
-                }
+    <style>
+        .body_mask:before{
+            margin: 0;
+            padding: 0;
+        }
 
-                .body_mask:before{
-                    content:'';
-                    position:fixed;
-                    top:0;
-                    left:0;
-                    width:100vw;
-                    height:100vh;
-                    background-image: url(../img/girl2.jpg);
-                    background-position:center center;
-                    background-repeat:no-repeat;
-                    background-attachment:fixed;
-                    -webkit-background-size:cover;
-                    background-size:cover;
-                /* 	-webkit-filter:blur(10px);
-                    -moz-filter:blur(10px); */
-                    z-index: 9999999;
-                }
+        .body_mask:before{
+            content:'';
+            position:fixed;
+            top:0;
+            left:0;
+            width:100vw;
+            height:100vh;
+            background-image: url(../img/girl2.jpg);
+            background-position:center center;
+            background-repeat:no-repeat;
+            background-attachment:fixed;
+            -webkit-background-size:cover;
+            background-size:cover;
+            /* 	-webkit-filter:blur(10px);
+                -moz-filter:blur(10px); */
+            z-index: 9999999;
+        }
 
-                .body_card_daticash_login{
-                    background-color: rgba(255, 255, 255, 0.74);
-                    border-style: solid;
-                    border-width: 1px 1px 1px 1px;
-                    border-color: #000000;
-                    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
-                    transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
-                    margin: 0px 0px 0px 0px;
-                }
+        .body_card_daticash_login{
+            background-color: rgba(255, 255, 255, 0.74);
+            border-style: solid;
+            border-width: 1px 1px 1px 1px;
+            border-color: #000000;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+            transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
+            margin: 0px 0px 0px 0px;
+        }
 
-                .body_card_daticash_quick_sent{
-                    background-color: rgba(255, 255, 255, 0.74);
-                    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
-                    transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
-                    margin: 0px 0px 0px 0px;
-                }
+        .body_card_daticash_quick_sent{
+            background-color: rgba(255, 255, 255, 0.74);
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+            transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
+            margin: 0px 0px 0px 0px;
+        }
 
-                .daticash_btn{
-                    font-family: "century-gothic_content", century gothic;
-                    font-size: 23px;
-                    border-style: solid;
-                    border-width: 1px 1px 1px 1px;
-                    border-radius: 88px 88px 88px 88px;
-                    padding: 10px 10px 10px 10px;
-                    margin-bottom: 12px;
-                }
+        .daticash_btn{
+            font-family: "century-gothic_content", century gothic;
+            font-size: 23px;
+            border-style: solid;
+            border-width: 1px 1px 1px 1px;
+            border-radius: 88px 88px 88px 88px;
+            padding: 10px 10px 10px 10px;
+            margin-bottom: 12px;
+        }
 
-                .btn-daticash {
-                    color: #fff;
-                    background-color: #0A4F68;
-                    border-color: rgba(0, 0, 0, 0);
-                    box-shadow: none;
-                }
+        .btn-daticash {
+            color: #fff;
+            background-color: #0A4F68;
+            border-color: rgba(0, 0, 0, 0);
+            box-shadow: none;
+        }
 
-                .btn-daticash:hover {
-                    color: #fff;
-                    background-color: #0A4F68;
-                    border-color: rgba(0, 0, 0, 0);
-                }
+        .btn-daticash:hover {
+            color: #fff;
+            background-color: #0A4F68;
+            border-color: rgba(0, 0, 0, 0);
+        }
 
-                .dati_popup{
-                        transition: transform .3s ease-out;
-                        -moz-transition: all 0.9s ease 0s;
-                        -webkit-transition: all 0.9s ease 0s;
-                        -o-transition: all 0.9s ease 0s;    
-                        visibility: visible;
-                        animation-duration: 1000ms;
-                        animation-delay: 1000ms;
-                        
-                }
-            </style>
+        .dati_popup{
+            transition: transform .3s ease-out;
+            -moz-transition: all 0.9s ease 0s;
+            -webkit-transition: all 0.9s ease 0s;
+            -o-transition: all 0.9s ease 0s;
+            visibility: visible;
+            animation-duration: 1000ms;
+            animation-delay: 1000ms;
+
+        }
+    </style>
 
 {% endblock %}
 
 {% block head_javascripts %}
-            <!-- Sweet alert scripts-->
-            <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>	
+    <!-- Sweet alert scripts-->
+    <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>
 
 {% endblock %}
 
 {% block navbar %}
-   {% include "body/navbar.html.twig" ignore missing %}
+    {% include "body/navbar.html.twig" ignore missing %}
 {% endblock %}
 
 {% block sidebar %}
-   {% include "body/sidebar.html.twig" ignore missing %}
+    {% include "body/sidebar.html.twig" ignore missing %}
 {% endblock %}
 
 {% block content_header %}
     <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Operation</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ path('dashboard.index') }}">Home</a></li>
-              <li class="breadcrumb-item active">Operation</li>
-                {% for categorie in _categories %}
-                    {% for service in categorie.services %}
-                        {% if app.request.get('sid') is defined and app.request.get('sid') == service.id %} 
-                            <li class="breadcrumb-item active">{{  service.label  }}</li>
-                        {% endif %}
-                    {% endfor %}
-                {% endfor %}              
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Operation</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ path('dashboard.index') }}">Home</a></li>
+                        <li class="breadcrumb-item active">Operation</li>
+                        {% for categorie in _categories %}
+                            {% for service in categorie.services %}
+                                {% if app.request.get('sid') is defined and app.request.get('sid') == service.id %}
+                                    <li class="breadcrumb-item active">{{  service.label  }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
     </section>
 {% endblock %}
-                
+
 {% block content_main %}
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <!-- left column -->
                 <div class="col-md-3">
-                    
+
                     <!-- Profile Image -->
                     <div class="card card-primary card-outline">
-                      <div class="card-body box-profile">
-                        <div class="text-center">
-                          <img class="profile-user-img img-fluid"
-                               src="{{ asset('assets/img/mtn-et-orange-money-paris-sportifs.png') }}"
-                               alt="User profile picture"
-                               style="cursor: pointer;">
-                        </div>               
-                        <h3 class="profile-username text-center"></h3>
-        
-                        <p class="text-muted text-center"></p>
-                        
-                      </div>
-                      <!-- /.card-body -->
+                        <div class="card-body box-profile">
+                            <div class="text-center">
+                                <img class="profile-user-img img-fluid"
+                                     src="{{ asset('assets/img/mtn-et-orange-money-paris-sportifs.png') }}"
+                                     alt="User profile picture"
+                                     style="cursor: pointer;">
+                            </div>
+
+                            <h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">Operation Title</h3> {# for test #}
+                            <p class="text-muted text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">Here we going Describe the operation... </p> {# for test #}
+
+                            {% for categorie in _categories %}
+                                {% for service in categorie.services %}
+                                    {% if app.request.get('sid') is defined and app.request.get('sid') == service.id %}
+                                        <h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="miniHelp_title">{{  service.label  }}</h3>
+                                        <p class="text-muted text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="miniHelp_description">{{  service.description  }}</p>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+
+
+                        </div>
+                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->                    
-                    
-                    
+                    <!-- /.card -->
+
+
                 </div>
 
 
 
 
                 <div class="col-md-9">
-                    
+
                     <div id="operation_header_card">
                         <div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;">
                             <div class="card-header d-flex justify-content-between" style="align-items: center;">
                                 <div class="col-md-6">
                                     <select class="swal2-select" style="display: flex;" name="operation_type" id="daticash__service-listbox">
-                                        <option value="" disabled="">Select Operation Type</option>                    
+                                        <option value="" disabled="">Select Operation Type</option>
                                         {% for categorie in _categories %}
                                             <optgroup data-category_label = "{{  categorie.label  }}" data-category_description = "{{  categorie.description  }}"  data-category_id = "{{  categorie.id  }}" label="{{ categorie.label }}">
-                                            {% for service in categorie.services %}
-                                                <option class="dati_opt_item" data-service_description = "" data-service_label = "{{  service.label  }}" data-service_id = "{{  service.id  }}" value="{{  service.id  }}" {% if app.request.get('sid') is defined and app.request.get('sid') == service.id %}selected{% endif %}>{{  service.label  }}</option>
-                                            {% endfor %}
+                                                {% for service in categorie.services %}
+                                                    <option class="dati_opt_item" data-service_description = "" data-service_label = "{{  service.label  }}" data-service_id = "{{  service.id  }}" value="{{  service.id  }}" {% if app.request.get('sid') is defined and app.request.get('sid') == service.id %}selected{% endif %}>{{  service.label  }}</option>
+                                                {% endfor %}
+                                            </optgroup>
                                         {% endfor %}
                                     </select>
                                 </div>
-    
+
                                 <div class="col-md-6">
                                     <select class="swal2-select" style="display: flex;" name="daticash__account-listbox" id="daticash__account-listbox">
                                         <option value="" disabled="">Select Account Reference</option>
                                         <optgroup label="Daticash Account">
-                                        {% for categorie in _categories %}
-                                            {% for service in categorie.services %}
-                                            
-                                                {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and (service.id == 1) %}
-                                                    <option data-account_name = "daticash" data-account_description = "Daticash default account"  data-account_id = "" value="" selected >Daticash Account</option>
-                                                {% endif %}
-                                                
-                                                {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and (service.id > 2) %}
-                                                    <option data-account_name = "{{  account.name  }}" data-account_description = "{{  account.description  }}"  data-account_id = "{{  account.id  }}" value="{{  account.id  }}">Default</option>
-                                                {% endif %}
-                
-                                                {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and service.id == 2 %}
-                                                    {% for account in _accounts %}
-                                                        <option data-account_name = "{{  account.name  }}" data-account_description = "{{  account.description  }}"  data-account_id = "{{  account.id  }}" value="{{  account.id  }}">{{  account.name  }}</option>
-                                                    {% endfor %}  
-                                                {% endif %}
+                                            {% for categorie in _categories %}
+                                                {% for service in categorie.services %}
+
+                                                    {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and (service.id == 1) %}
+                                                        <option data-account_name = "daticash" data-account_description = "Daticash default account"  data-account_id = "" value="" selected >Daticash Account</option>
+                                                    {% endif %}
+
+                                                    {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and (service.id > 2) %}
+                                                        <option data-account_name = "{{  account.name  }}" data-account_description = "{{  account.description  }}"  data-account_id = "{{  account.id  }}" value="{{  account.id  }}">Default</option>
+                                                    {% endif %}
+
+                                                    {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and service.id == 2 %}
+                                                        {% for account in _accounts %}
+                                                            <option data-account_name = "{{  account.name  }}" data-account_description = "{{  account.description  }}"  data-account_id = "{{  account.id  }}" value="{{  account.id  }}">{{  account.name  }}</option>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% endfor %}
                                             {% endfor %}
-                                        {% endfor %}         
                                         </optgroup>
                                         {% for categorie in _categories %}
                                             {% for service in categorie.services %}
                                                 {% if app.request.get('sid') is defined and app.request.get('sid') == service.id and (service.id == 1 or service.id == 2) %}
-                                                <optgroup label="Other Account">
-                                                    <option value="mobilemoney">Mobile Money</option>
-                                                    <option value="creditcard">Credit Card</option>
-                                                    <option value="bankaccount">Bank Account</option>
-                                                    <option value="paypal">Paypal</option>
-                                                </optgroup>
+                                                    <optgroup label="Other Account">
+                                                        <option value="mobilemoney">Mobile Money</option>
+                                                        <option value="creditcard">Credit Card</option>
+                                                        <option value="bankaccount">Bank Account</option>
+                                                        <option value="paypal">Paypal</option>
+                                                    </optgroup>
                                                 {% endif %}
                                             {% endfor %}
                                         {% endfor %}
-                                        
-                                    </select>  
-                                </div>                              
+
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    
-                    <div id="operation_body_card">      
+
+                    <div id="operation_body_card">
                         <div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;" >
                             <div class="card-header d-flex justify-content-between" style="align-items: center;">
                                 <h3 class="card-title" style="margin: 1rem auto 1rem; align-self: center;">Send To&nbsp;&nbsp;<span id="country_name"></span></h3>
                                 <p id="country_img"></p>
                                 <div class="send-feedback m-2" style="position: absolute;width: 93%;"></div>
-    						</div>
-    
+                            </div>
+
                             <div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">
                                 <small id="allow_reset-feedback"></small>
                                 <form class="form" method="post" style="margin: auto;" action="http://api.daticash.com/api/mobilemoney/new">
                                     <input type="hidden" name="type" id="type" value="withdraw">
                                     <input type="hidden" name="imput_account_ref" id="imput_account_ref" value="default">
                                     <input type="hidden" name="mode" id="mode" value="mobilemoney">
-    
+
                                     <p class="waiting_text"></p>
-                                    <div class="row">				
+                                    <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group form-group-sender_phone">
-                                            <label for="sender_phone" style="width: 100%; margin-bottom: .5rem;">
-                                                <font style="vertical-align: inherit;">Sender Phone&nbsp</font>
-                                                <small id="sender_phone-feedback" style="display: block;"></small>											
-                                            </label>
+                                                <label for="sender_phone" style="width: 100%; margin-bottom: .5rem;">
+                                                    <font style="vertical-align: inherit;">Sender Phone&nbsp</font>
+                                                    <small id="sender_phone-feedback" style="display: block;"></small>
+                                                </label>
                                                 <input type="hidden" name="sender_country_code" id="sender_country_code" value="{{ app.user.countryCode  }}">
                                                 <input type="tel" name="sender_phone" id="sender_phone" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                        <div class="form-group form-group-recipient_phone">
-                                            <label for="recipient_phone" style="width: 100%; margin-bottom: .5rem;">
-                                                <font style="vertical-align: inherit;">Recipient Phone&nbsp</font>
-                                                <small id="recipient_phone-feedback" style="display: block;"></small>											
-                                            </label>							
-                                            <input type="hidden" name="recipient_country_code" id="recipient_country_code" value="237">
-                                            <input type="text" name="recipient_phone" id="recipient_phone" class="form-control">
-                                            {# recipient account number. This parameter is needed when there is no recipient phone due to the nature of the transaction... for instance when we submit electricity bill payment. #}
-                                            <input type="hidden" name="recipient_account_num" id="recipient_account_num" class="form-control" value="">
-                                        </div>
+                                            <div class="form-group form-group-recipient_phone">
+                                                <label for="recipient_phone" style="width: 100%; margin-bottom: .5rem;">
+                                                    <font style="vertical-align: inherit;">Recipient Phone&nbsp</font>
+                                                    <small id="recipient_phone-feedback" style="display: block;"></small>
+                                                </label>
+                                                <input type="hidden" name="recipient_country_code" id="recipient_country_code" value="237">
+                                                <input type="text" name="recipient_phone" id="recipient_phone" class="form-control">
+                                                {# recipient account number. This parameter is needed when there is no recipient phone due to the nature of the transaction... for instance when we submit electricity bill payment. #}
+                                                <input type="hidden" name="recipient_account_num" id="recipient_account_num" class="form-control" value="">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -637,23 +652,23 @@
                                             <div class="form-group ">
                                                 <label for="amount_sent" style="width: 100%; margin-bottom: .5rem;">
                                                     <font style="vertical-align: inherit;">Send Amount&nbsp <sapn id="currency_sent_txt">(USD)</sapn></font>
-                                                    <small id="amount_sent-feedback" style="display: block;"></small>											
+                                                    <small id="amount_sent-feedback" style="display: block;"></small>
                                                 </label>
                                                 <input type="text" name="amount_sent" id="amount_sent" class="form-control sent" value="">
                                                 <input type="hidden" name="currency_sent" id="currency_sent" value="USD">
                                             </div>
-                                        </div>						  
+                                        </div>
                                         <div class="col-md-2" id="div_wait_convertion">
                                             <span id="span_wait_convertion" style="text-align: -webkit-center; align-items: center;"></span>
-                                            <img id="mannuel_convert" src="{{ asset('assets/img/fleches.png') }}" style="position: relative;width: 70px; cursor: pointer;" /> 
+                                            <img id="mannuel_convert" src="{{ asset('assets/img/fleches.png') }}" style="position: relative;width: 70px; cursor: pointer;" />
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group">
                                                 <label for="amount_received" style="width: 100%; margin-bottom: .5rem;">
                                                     <font style="vertical-align: inherit;">Receive Amount&nbsp <sapn id="currency_received_txt">(XAF)</sapn></font>
-                                                    <small id="amount_received-feedback" style="display: block;"></small>											
+                                                    <small id="amount_received-feedback" style="display: block;"></small>
                                                 </label>
-                                                <input type="text" name="amount_received" id="amount_received" class="form-control receive" value="100">
+                                                <input type="text" name="amount_received" id="amount_received" class="form-control receive" value="">
                                                 <input type="hidden" name="currency_received" id="currency_received" value="XAF">
                                             </div>
                                         </div>
@@ -662,9 +677,9 @@
                                         <div class="col-md-12">
                                             <div class="form-group ">
                                                 <label for="imput_reason">What is the reason for the transfer ? (optional)</label>
-                                                <input type="text" name="imput_reason" id="imput_reason" class="form-control sent" maxlength="30" placeholder="This message will be sent to the receiver">							  						
+                                                <input type="text" name="imput_reason" id="imput_reason" class="form-control sent" maxlength="30" placeholder="This message will be sent to the receiver">
                                             </div>
-                                        </div>	
+                                        </div>
                                     </div>
                                     <div class="card mt-2 mb-2">
                                         <div class="card-body p-1 m-0 font-weight-bold">
@@ -674,25 +689,25 @@
                                         <div class="card-body p-1 m-0 font-weight-bold">
                                             <div class="float-left">Fees</div>
                                             <input type="hidden" name="fees" id="fees" value="0.0">
-                                        <div class="float-right"><span id="span_fees_currency">$</span>&nbsp;<span id="span_fees">0.0</span></div>
+                                            <div class="float-right"><span id="span_fees_currency">$</span>&nbsp;<span id="span_fees">0.0</span></div>
                                         </div>
                                         <div class="card-body m-0 p-1 font-weight-bold">
                                             <div class="float-left">Total Pay:</div>
-                                            <input type="hidden" name="total_pay" id="total_pay" value="0.0">	
-                                        <div class="float-right"><span id="span_total_pay_currency">$</span>&nbsp;<span id="span_total_pay">0.0</span></div>
+                                            <input type="hidden" name="total_pay" id="total_pay" value="0.0">
+                                            <div class="float-right"><span id="span_total_pay_currency">$</span>&nbsp;<span id="span_total_pay">0.0</span></div>
                                         </div>
                                         <div class="card-body m-0 p-1 font-weight-bold">
                                             <div class="float-left">Your Recipient Gets</div>
                                             <div class="float-right"><span id="span_amount_received_currency">$</span>&nbsp;<span id="span_amount_received">0.0</span></div>
                                         </div>
                                     </div>
-                                    <div class="mt-2 mb-2">											
+                                    <div class="mt-2 mb-2">
                                         <button type="button" class="daticash_btn btn-daticash btn-block sendBtn" style="background-color:#1B5368">Send</button>
                                     </div>
                                 </form>
                             </div>
-                        </div>            
-                    </div> 
+                        </div>
+                    </div>
 
                 </div>
 
@@ -708,913 +723,996 @@
 
 {% block javascripts %}
 
-            <!-- Waves Effect Plugin Js -->
-            <script src="{{ asset('adminLTE/plugins/node-waves/waves.js') }}"></script>
-            <!-- AdminLTE App -->
-            <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
-            <!-- AdminLTE for demo purposes -->
-            <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script> 
-            <!-- International Telephone Input-->	
-            <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
-            <!-- Daticash QS-->	
-            <script src="{{ asset('assets/js/daticashQS.js') }}"></script>
-<script>
+    <!-- Waves Effect Plugin Js -->
+    <script src="{{ asset('adminLTE/plugins/node-waves/waves.js') }}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script>
+    <!-- International Telephone Input-->
+    <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
+    <!-- Daticash QS-->
+    <script src="{{ asset('assets/js/daticashQS.js') }}"></script>
 
-	var daticash_operation_card_body_popUp = (
-                        '<div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;" >'+ 
-                            '<div class="card-header d-flex justify-content-between" style="align-items: center;">'+
-                                '<h3 class="card-title" style="margin: 1rem auto 1rem; align-self: center;">Send To&nbsp;&nbsp;<span id="country_name"></span></h3>'+
-                                '<p id="country_img"></p>'+
-                                '<div class="send-feedback m-2" style="position: absolute;width: 93%;"></div>'+
-    						'</div>'+
-    
-                            '<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+
-                                '<small id="allow_reset-feedback"></small>'+
-                                '<form class="form" method="post" style="margin: auto;" action="http://api.daticash.com/api/mobilemoney/new">'+
-                                    '<input type="hidden" name="type" id="type" value="withdraw">'+
-                                    '<input type="hidden" name="imput_account_ref" id="imput_account_ref" value="default">'+
-                                    '<input type="hidden" name="mode" id="mode" value="mobilemoney">'+
-                                    '<input type="hidden" name="mode" id="local" value="local">'+
-    
-                                    '<p class="waiting_text"></p>'+
-                                   '<div class="row">'+				
-                                       '<div class="col-md-6">'+
-                                           '<div class="form-group form-group-sender_phone">'+
-                                           '<label for="sender_phone" style="width: 100%; margin-bottom: .5rem;">'+
-                                               '<font style="vertical-align: inherit;">Sender Phone&nbsp</font>'+
-                                               '<small id="sender_phone-feedback" style="display: block;"></small>'+											
-                                           '</label>'+
-                                               '<input type="hidden" name="sender_country_code" id="sender_country_code" value="{{ app.user.countryCode  }}">'+
-                                               '<input type="tel" name="sender_phone" id="sender_phone" class="form-control">'+
-                                           '</div>'+
-                                       '</div>'+
-                                       '<div class="col-md-6">'+
-                                       '<div class="form-group form-group-recipient_phone">'+
-                                           '<label for="recipient_phone" style="width: 100%; margin-bottom: .5rem;">'+
-                                               '<font style="vertical-align: inherit;">Recipient Phone&nbsp</font>'+
-                                               '<small id="recipient_phone-feedback" style="display: block;"></small>'+											
-                                           '</label>'+							
-                                           '<input type="hidden" name="recipient_country_code" id="recipient_country_code" value="237">'+
-                                           '<input type="text" name="recipient_phone" id="recipient_phone" class="form-control">'+
-                                       '</div>'+
-                                       '</div>'+
-                                   '</div>'+
-                                   '<div class="row">'+
-                                       '<div class="col-md-5">'+
-                                           '<div class="form-group ">'+
-                                               '<label for="amount_sent" style="width: 100%; margin-bottom: .5rem;">'+
-                                                   '<font style="vertical-align: inherit;">Send Amount&nbsp <sapn id="currency_sent_txt">(USD)</sapn></font>'+
-                                                   '<small id="amount_sent-feedback" style="display: block;"></small>'+											
-                                               '</label>'+
-                                               '<input type="text" name="amount_sent" id="amount_sent" class="form-control sent" value="">'+
-                                               '<input type="hidden" name="currency_sent" id="currency_sent" value="USD">'+
-                                           '</div>'+
-                                       '</div>'+						  
-                                       '<div class="col-md-2" id="div_wait_convertion">'+
-                                           '<span id="span_wait_convertion" style="text-align: -webkit-center; align-items: center;"></span>'+
-                                           '<img id="mannuel_convert" src="{{ asset('assets/img/fleches.png') }}" style="position: relative;width: 70px; cursor: pointer;" />'+ 
-                                       '</div>'+
-                                       '<div class="col-md-5">'+
-                                           '<div class="form-group">'+
-                                               '<label for="amount_received" style="width: 100%; margin-bottom: .5rem;">'+
-                                                   '<font style="vertical-align: inherit;">Receive Amount&nbsp <sapn id="currency_received_txt">(XAF)</sapn></font>'+
-                                                   '<small id="amount_received-feedback" style="display: block;"></small>'+											
-                                               '</label>'+
-                                               '<input type="text" name="amount_received" id="amount_received" class="form-control receive" value="100">'+
-                                               '<input type="hidden" name="currency_received" id="currency_received" value="XAF">'+
-                                           '</div>'+
-                                       '</div>'+
-                                   '</div>'+
-                                   '<div class="row">'+
-                                       '<div class="col-md-12">'+
-                                           '<div class="form-group ">'+
-                                               '<label for="imput_reason">What is the reason for the transfer ? (optional)</label>'+
-                                               '<input type="text" name="imput_reason" id="imput_reason" class="form-control sent" maxlength="30" placeholder="This message will be sent to the receiver">'+							  						
-                                           '</div>'+
-                                       '</div>'+	
-                                   '</div>'+
-                                   '<div class="card mt-2 mb-2">'+
-                                       '<div class="card-body p-1 m-0 font-weight-bold">'+
-                                           '<div class="float-left">Send Amount</div>'+
-                                           '<div class="float-right"><span id="span_amount_sent_currency">$</span>&nbsp;<span id="span_amount_sent">0.0</span></div>'+
-                                       '</div>'+
-                                       '<div class="card-body p-1 m-0 font-weight-bold">'+
-                                           '<div class="float-left">Fees</div>'+
-                                           '<input type="hidden" name="fees" id="fees" value="0.0">'+
-                                       '<div class="float-right"><span id="span_fees_currency">$</span>&nbsp;<span id="span_fees">0.0</span></div>'+
-                                       '</div>'+
-                                       '<div class="card-body m-0 p-1 font-weight-bold">'+
-                                           '<div class="float-left">Total Pay:</div>'+
-                                           '<input type="hidden" name="total_pay" id="total_pay" value="0.0">'+	
-                                       '<div class="float-right"><span id="span_total_pay_currency">$</span>&nbsp;<span id="span_total_pay">0.0</span></div>'+
-                                       '</div>'+
-                                       '<div class="card-body m-0 p-1 font-weight-bold">'+
-                                           '<div class="float-left">Your Recipient Gets</div>'+
-                                           '<div class="float-right"><span id="span_amount_received_currency">$</span>&nbsp;<span id="span_amount_received">0.0</span></div>'+
-                                       '</div>'+
-                                   '</div>'+
-                                   '<div class="mt-2 mb-2">'+											
-                                       '<button type="button" class="daticash_btn btn-daticash btn-block sendBtn" style="background-color:#1B5368">Send</button>'+
-                                   '</div>'+
-                               '</form>'+
-                           '</div>'+
-                       '</div>'  
-				);
+    <script>
 
-    (function ($) {
-        /*Textbox Events*/
-        $(document)
-        		/*Tab Highlighter Functionality*/
-        		.on('change', 'select#daticash__service-listbox', function(){
-        				var $this = $(this).find("option:selected");
-        				DatiOptItem.set($this);
-        				
-        			});
-    
-        var DatiOptItem = {
-            set: function($this){
-                 pid = $($this).attr("data-service_id");
-        		switch(pid) {
-        			case "1":// withdraw
-        				init.withdraw();
-        				break;
-        			case "2":// deposit
-        				init.deposit();
-        				break;
-        			default:
-        				init.default();
-        		}						
-            },
-            refresh: function(){
-                var $this = $('#daticash__service-listbox optgroup option[selected]');
-    
-        		switch(pid = $($this).attr("data-service_id")) {
-        			case "1":// withdraw
-        				init.withdraw();
-        				break;
-        			case "2":// deposit
-        				init.deposit();
-        				break;
-        			default:
-        				init.default();
-        		}	
-        					
-            }
-        };
-    /*    
-        $(document).ready(function(){
-        	DatiOptItem.refresh();
-        });
-    */    
-        var init = {
-        		//se connecter au gestionnaire de session puis recuperer l'état de la session
-        	deposit: function (){
-                $('#operation_body_card').empty().append(
-                    '<div class="alert alert-warning alert-dismissible  flash-notice">'+
+        var daticash_operation_card_body_popUp = (
+            '<div class="card bg-light body_card_daticash_quick_sent" style="padding: 0; margin:10px;" >'+
+            '<div class="card-header d-flex justify-content-between" style="align-items: center;">'+
+            '<h3 class="card-title" style="margin: 1rem auto 1rem; align-self: center;">Send To&nbsp;&nbsp;<span id="country_name"></span></h3>'+
+            '<p id="country_img"></p>'+
+            '<div class="send-feedback m-2" style="position: absolute;width: 93%;"></div>'+
+            '</div>'+
+
+            '<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+
+            '<small id="allow_reset-feedback"></small>'+
+            '<form class="form" method="post" style="margin: auto;" action="http://api.daticash.com/api/mobilemoney/new">'+
+            '<input type="hidden" name="type" id="type" value="withdraw">'+
+            '<input type="hidden" name="imput_account_ref" id="imput_account_ref" value="default">'+
+            '<input type="hidden" name="mode" id="mode" value="mobilemoney">'+
+            '<input type="hidden" name="mode" id="local" value="local">'+
+
+            '<p class="waiting_text"></p>'+
+            '<div class="row">'+
+            '<div class="col-md-6">'+
+            '<div class="form-group form-group-sender_phone">'+
+            '<label for="sender_phone" style="width: 100%; margin-bottom: .5rem;">'+
+            '<font style="vertical-align: inherit;">Sender Phone&nbsp</font>'+
+            '<small id="sender_phone-feedback" style="display: block;"></small>'+
+            '</label>'+
+            '<input type="hidden" name="sender_country_code" id="sender_country_code" value="{{ app.user.countryCode  }}">'+
+            '<input type="tel" name="sender_phone" id="sender_phone" class="form-control">'+
+            '</div>'+
+            '</div>'+
+            '<div class="col-md-6">'+
+            '<div class="form-group form-group-recipient_phone">'+
+            '<label for="recipient_phone" style="width: 100%; margin-bottom: .5rem;">'+
+            '<font style="vertical-align: inherit;">Recipient Phone&nbsp</font>'+
+            '<small id="recipient_phone-feedback" style="display: block;"></small>'+
+            '</label>'+
+            '<input type="hidden" name="recipient_country_code" id="recipient_country_code" value="237">'+
+            '<input type="text" name="recipient_phone" id="recipient_phone" class="form-control">'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '<div class="row">'+
+            '<div class="col-md-5">'+
+            '<div class="form-group ">'+
+            '<label for="amount_sent" style="width: 100%; margin-bottom: .5rem;">'+
+            '<font style="vertical-align: inherit;">Send Amount&nbsp <sapn id="currency_sent_txt">(USD)</sapn></font>'+
+            '<small id="amount_sent-feedback" style="display: block;"></small>'+
+            '</label>'+
+            '<input type="text" name="amount_sent" id="amount_sent" class="form-control sent" value="">'+
+            '<input type="hidden" name="currency_sent" id="currency_sent" value="USD">'+
+            '</div>'+
+            '</div>'+
+            '<div class="col-md-2" id="div_wait_convertion">'+
+            '<span id="span_wait_convertion" style="text-align: -webkit-center; align-items: center;"></span>'+
+            '<img id="mannuel_convert" src="{{ asset('assets/img/fleches.png') }}" style="position: relative;width: 70px; cursor: pointer;" />'+
+            '</div>'+
+            '<div class="col-md-5">'+
+            '<div class="form-group">'+
+            '<label for="amount_received" style="width: 100%; margin-bottom: .5rem;">'+
+            '<font style="vertical-align: inherit;">Receive Amount&nbsp <sapn id="currency_received_txt">(XAF)</sapn></font>'+
+            '<small id="amount_received-feedback" style="display: block;"></small>'+
+            '</label>'+
+            '<input type="text" name="amount_received" id="amount_received" class="form-control receive" value="">'+
+            '<input type="hidden" name="currency_received" id="currency_received" value="XAF">'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '<div class="row">'+
+            '<div class="col-md-12">'+
+            '<div class="form-group ">'+
+            '<label for="imput_reason">What is the reason for the transfer ? (optional)</label>'+
+            '<input type="text" name="imput_reason" id="imput_reason" class="form-control sent" maxlength="30" placeholder="This message will be sent to the receiver">'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '<div class="card mt-2 mb-2">'+
+            '<div class="card-body p-1 m-0 font-weight-bold">'+
+            '<div class="float-left">Send Amount</div>'+
+            '<div class="float-right"><span id="span_amount_sent_currency">$</span>&nbsp;<span id="span_amount_sent">0.0</span></div>'+
+            '</div>'+
+            '<div class="card-body p-1 m-0 font-weight-bold">'+
+            '<div class="float-left">Fees</div>'+
+            '<input type="hidden" name="fees" id="fees" value="0.0">'+
+            '<div class="float-right"><span id="span_fees_currency">$</span>&nbsp;<span id="span_fees">0.0</span></div>'+
+            '</div>'+
+            '<div class="card-body m-0 p-1 font-weight-bold">'+
+            '<div class="float-left">Total Pay:</div>'+
+            '<input type="hidden" name="total_pay" id="total_pay" value="0.0">'+
+            '<div class="float-right"><span id="span_total_pay_currency">$</span>&nbsp;<span id="span_total_pay">0.0</span></div>'+
+            '</div>'+
+            '<div class="card-body m-0 p-1 font-weight-bold">'+
+            '<div class="float-left">Your Recipient Gets</div>'+
+            '<div class="float-right"><span id="span_amount_received_currency">$</span>&nbsp;<span id="span_amount_received">0.0</span></div>'+
+            '</div>'+
+            '</div>'+
+            '<div class="mt-2 mb-2">'+
+            '<button type="button" class="daticash_btn btn-daticash btn-block sendBtn" style="background-color:#1B5368">Send</button>'+
+            '</div>'+
+            '</form>'+
+            '</div>'+
+            '</div>'
+        );
+
+        (function ($) {
+            /*Textbox Events*/
+            $(document)
+            /*Tab Highlighter Functionality*/
+                .on('change', 'select#daticash__service-listbox', function(){
+                    var $this = $(this).find("option:selected");
+                    DatiOptItem.set($this);
+
+                });
+
+            var DatiOptItem = {
+                set: function($this){
+                    pid = $($this).attr("data-service_id");
+                    switch(pid) {
+                        case "1":// withdraw
+                            init.withdraw();
+                            break;
+                        case "2":// deposit
+                            init.deposit();
+                            break;
+                        default:
+                            init.default();
+                    }
+                },
+                refresh: function(){
+                    var $this = $('#daticash__service-listbox optgroup option[selected]');
+
+                    switch(pid = $($this).attr("data-service_id")) {
+                        case "1":// withdraw
+                            init.withdraw();
+                            break;
+                        case "2":// deposit
+                            init.deposit();
+                            break;
+                        default:
+                            init.default();
+                    }
+
+                }
+            };
+            /*
+                $(document).ready(function(){
+                    DatiOptItem.refresh();
+                });
+            */
+            var init = {
+                //se connecter au gestionnaire de session puis recuperer l'état de la session
+                deposit: function (){
+                    $('#operation_body_card').empty().append(
+                        '<div class="alert alert-warning alert-dismissible  flash-notice">'+
                         '<i class="fa fa-exclamation-circle"></i>&nbsp Here ! deposit form coming soon</a>'+
                         '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
-                    '</div>'
-                );
-        	},
-        	withdraw: function(){
-        	    $('#operation_body_card').empty().append(daticash_operation_card_body_popUp);
-        	},
-         
-        	default: function(){
-                $('#operation_body_card').empty().append(
-                            '<div class="alert alert-success alert-dismissible  flash-notice">'+
-                                '<i class="fa fa-exclamation-circle"></i>&nbsp Here ! the default form coming soon</a>'+
-                                '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
-                            '</div>'
-                );
-        	},
-         
+                        '</div>'
+                    );
+                },
+                withdraw: function(){
+                    $('#operation_body_card').empty().append(daticash_operation_card_body_popUp);
+                },
+
+                default: function(){
+                    $('#operation_body_card').empty().append(
+                        '<div class="alert alert-success alert-dismissible  flash-notice">'+
+                        '<i class="fa fa-exclamation-circle"></i>&nbsp Here ! the default form coming soon</a>'+
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
+                        '</div>'
+                    );
+                },
+
+            };
+
+        })(jQuery);
+
+    </script>
+
+    <script>
+        //function dQS_isValidNumber() {
+        //Check if Phone number is valid
+        //$script = '
+        //<script>
+        //$(document).ready(function() {
+
+        var input_sender_phone = document.querySelector("#sender_phone");
+        var input_recipient_phone = document.querySelector("#recipient_phone");
+
+        var sender_phone_feedback = document.querySelector("#sender_phone-feedback");
+        var recipient_phone_feedback = document.querySelector("#recipient_phone-feedback");
+
+        // initialise plugin
+        var iti_sender_phone = window.intlTelInput(input_sender_phone, {
+            // allowDropdown: false,
+            // autoHideDialCode: false,
+            // autoPlaceholder: "off",
+            // dropdownContainer: document.body,
+            // excludeCountries: ["us"],
+            // formatOnDisplay: false,
+            // geoIpLookup: function(callback) {
+            //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+            //     var countryCode = (resp && resp.country) ? resp.country : "";
+            //     callback(countryCode);
+            //   });
+            // },
+            // hiddenInput: "full_number",
+            // initialCountry: "auto",
+            // localizedCountries: { 'de': 'Deutschland' },
+            nationalMode: true,
+            // onlyCountries: ["cm", "ng", "eg", "ci", "sn"],
+            // placeholderNumberType: "MOBILE",
+            // preferredCountries: ['cn', 'jp'],
+            separateDialCode: true,
+            utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",
+        });
+
+        // initialise plugin
+        var iti_recipient_phone = window.intlTelInput(input_recipient_phone, {
+            // allowDropdown: false,
+            // autoHideDialCode: false,
+            // autoPlaceholder: "off",
+            // dropdownContainer: document.body,
+            // excludeCountries: ["us"],
+            // formatOnDisplay: false,
+            // geoIpLookup: function(callback) {
+            //   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+            //     var countryCode = (resp && resp.country) ? resp.country : "";
+            //     callback(countryCode);
+            //   });
+            // },
+            // hiddenInput: "full_number",
+            // initialCountry: "auto",
+            // localizedCountries: { 'de': 'Deutschland' },
+            // nationalMode: false,
+            onlyCountries: ["cm", "ng", "eg", "ci", "sn"],
+            // placeholderNumberType: "MOBILE",
+            // preferredCountries: ['cn', 'jp'],
+            separateDialCode: true,
+            utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",
+        });
+
+        var handleChange_input_sender_phone = function() {
+            !iti_sender_phone.isValidNumber() ? $("#sender_phone-feedback").html('<div class="text-danger">Please enter a valid number</div>') : ""
+            !iti_recipient_phone.isValidNumber() ? $("#recipient_phone-feedback").html('<div class="text-danger">Please enter a valid number</div>') : ""
+
+            //impose the numeric characters
+            var value = jQuery(this).val();
+            value = value.replace(/[^0-9]+/g, "");
+            jQuery(this).val(value);
+
+            //show message if incorrect phone number
+            var text = (iti_sender_phone.isValidNumber()) ? iti_sender_phone.getNumber() + " ✓ Valid": "Please enter a valid number";
+            var textNode = document.createTextNode(text);
+            sender_phone_feedback.innerHTML = "";
+            sender_phone_feedback.appendChild(textNode);
+
+            /* change style color*/
+            if(iti_sender_phone.isValidNumber()){
+                $("#sender_phone-feedback").attr("class","text-success");
+                $("#sender_phone").removeClass("error").addClass("success");
+            }else{
+                $("#sender_phone-feedback").attr("class","text-danger");
+                $("#sender_phone").removeClass("success").addClass("error");
+            }
+
         };
-        
-    })(jQuery);
-    
 
-</script>
-            <script>
-				var input_sender_phone = document.querySelector("#sender_phone");		
-				var input_recipient_phone = document.querySelector("#recipient_phone");
-				
-				var sender_phone_feedback = document.querySelector("#sender_phone-feedback");
-				var recipient_phone_feedback = document.querySelector("#recipient_phone-feedback");
-				
-				// initialise plugin
-				var iti_sender_phone = window.intlTelInput(input_sender_phone, {
-					// allowDropdown: false,
-					// autoHideDialCode: false,
-					// autoPlaceholder: "off",
-					// dropdownContainer: document.body,
-					// excludeCountries: ["us"],
-					// formatOnDisplay: false,
-					// geoIpLookup: function(callback) {
-					//   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
-					//     var countryCode = (resp && resp.country) ? resp.country : "";
-					//     callback(countryCode);
-					//   });
-					// },
-					// hiddenInput: "full_number",
-					// initialCountry: "auto",
-					// localizedCountries: { 'de': 'Deutschland' },
-					nationalMode: true,
-					// onlyCountries: ["cm", "ng", "eg", "ci", "sn"],
-					// placeholderNumberType: "MOBILE",
-					// preferredCountries: ['cn', 'jp'],
-					separateDialCode: true,
-					utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",				
-				});
-				
-				// initialise plugin
-				var iti_recipient_phone = window.intlTelInput(input_recipient_phone, {
-					// allowDropdown: false,
-					// autoHideDialCode: false,
-					// autoPlaceholder: "off",
-					// dropdownContainer: document.body,
-					// excludeCountries: ["us"],
-					// formatOnDisplay: false,
-					// geoIpLookup: function(callback) {
-					//   $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
-					//     var countryCode = (resp && resp.country) ? resp.country : "";
-					//     callback(countryCode);
-					//   });
-					// },
-					// hiddenInput: "full_number",
-					// initialCountry: "auto",
-					// localizedCountries: { 'de': 'Deutschland' },
-					// nationalMode: false,
-					onlyCountries: ["cm", "ng", "eg", "ci", "sn"],
-					// placeholderNumberType: "MOBILE",
-					// preferredCountries: ['cn', 'jp'],
-					separateDialCode: true,
-					utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",
-				});
-				
-			var handleChange_input_sender_phone = function() {
-				//impose the numeric characters
-				var value = jQuery(this).val();
-				value = value.replace(/[^0-9]+/g, "");
-				jQuery(this).val(value);		
-				
-			  //show message if incorrect phone number	
-			  var text = (iti_sender_phone.isValidNumber()) ? iti_sender_phone.getNumber() + " ✓ Valid": "Please enter a valid Sender Phone Number below";
-			  var textNode = document.createTextNode(text);
-			  sender_phone_feedback.innerHTML = "";
-			  sender_phone_feedback.appendChild(textNode);
-			  
-				  /* change style color*/
-				  if(iti_sender_phone.isValidNumber()){
-					$("#sender_phone-feedback").attr("class","text-success");
-					$("#sender_phone").removeClass("error").addClass("success");
-				  }else{
-					$("#sender_phone-feedback").attr("class","text-danger");		  
-					$("#sender_phone").removeClass("success").addClass("error");
-				  } 	
-			
-			};	
-			
-			var handleChange_input_recipient_phone = function() {
-				//impose the numeric characters
-				var value = jQuery(this).val();
-				value = value.replace(/[^0-9]+/g, "");
-				jQuery(this).val(value);		
-				
-			  //show message if incorrect phone number	
-			  var text = (iti_recipient_phone.isValidNumber()) ? iti_recipient_phone.getNumber() + " ✓ Valid": "Please enter a valid Phone Number below";
-			  var textNode = document.createTextNode(text);
-			  recipient_phone_feedback.innerHTML = "";
-			  recipient_phone_feedback.appendChild(textNode);
-			  
-				  /* change style color*/
-				  if(iti_recipient_phone.isValidNumber()){
-					$("#recipient_phone-feedback").attr("class","text-success");
-					$("#recipient_phone").removeClass("error").addClass("success");
-				  }else{
-					$("#recipient_phone-feedback").attr("class","text-danger");		  
-					$("#recipient_phone").removeClass("success").addClass("error");
-				  } 	
-			
-			};	
+        var handleChange_input_recipient_phone = function() {
+            !iti_sender_phone.isValidNumber() ? $("#sender_phone-feedback").html('<div class="text-danger">Please enter a valid number</div>') : ""
+            !iti_recipient_phone.isValidNumber() ? $("#recipient_phone-feedback").html('<div class="text-danger">Please enter a valid number</div>') : ""
+
+            //impose the numeric characters
+            var value = jQuery(this).val();
+            value = value.replace(/[^0-9]+/g, "");
+            jQuery(this).val(value);
+
+            //show message if incorrect phone number
+            var text = (iti_recipient_phone.isValidNumber()) ? iti_recipient_phone.getNumber() + " ✓ Valid": "Please enter a valid number";
+            var textNode = document.createTextNode(text);
+            recipient_phone_feedback.innerHTML = "";
+            recipient_phone_feedback.appendChild(textNode);
+
+            /* change style color*/
+            if(iti_recipient_phone.isValidNumber()){
+                $("#recipient_phone-feedback").attr("class","text-success");
+                $("#recipient_phone").removeClass("error").addClass("success");
+            }else{
+                $("#recipient_phone-feedback").attr("class","text-danger");
+                $("#recipient_phone").removeClass("success").addClass("error");
+            }
+
+        };
 
 
-			// listen to "keyup", but also "change" to update when the user selects a country
-			input_sender_phone.addEventListener("change", handleChange_input_sender_phone);
-			input_sender_phone.addEventListener("keyup", handleChange_input_sender_phone);
-			
-			input_recipient_phone.addEventListener("change", handleChange_input_recipient_phone);
-			input_recipient_phone.addEventListener("keyup", handleChange_input_recipient_phone);	
+        // listen to "keyup", but also "change" to update when the user selects a country
+        input_sender_phone.addEventListener("change", handleChange_input_sender_phone);
+        input_sender_phone.addEventListener("keyup", handleChange_input_sender_phone);
 
-			$("body")
-				.on("focus", "input", ".login-form input, .login-form textarea" , function() {
-					//$("#pin_code-feedback").empty();
-					$("#password-feedback").empty();
-					$("#username-feedback").empty();
-					$("#email-feedback").empty();
-					$(".send-feedback").empty();
-					
-				// daticash reset or change pin	
-					$("#amount_sent-feedback").empty();
-				})
-				.on("keyup", "#amount_sent", function(event){
-	
-						event.stopImmediatePropagation();
-					var value = jQuery(this).val();
-					value = value.replace(/[^0-9]+/g, "");
-					jQuery(this).val(value);
-				})	
-				.on("keyup", "#amount_received", function(event){
-	
-						event.stopImmediatePropagation();
-					var value = jQuery(this).val();
-					value = value.replace(/[^0-9]+/g, "");
-					jQuery(this).val(value);
-				})
-				
-					
-			</script>
+        input_recipient_phone.addEventListener("change", handleChange_input_recipient_phone);
+        input_recipient_phone.addEventListener("keyup", handleChange_input_recipient_phone);
+
+        $("body")
+            .on("focus", "input", ".login-form input, .login-form textarea" , function() {
+                //$("#pin_code-feedback").empty();
+                $("#password-feedback").empty();
+                $("#username-feedback").empty();
+                $("#email-feedback").empty();
+                $(".send-feedback").empty();
+
+                // daticash reset or change pin
+                $("#amount_sent-feedback").empty();
+            })
+            .on("keyup", "#amount_sent", function(event){
+
+                event.stopImmediatePropagation();
+                var value = jQuery(this).val();
+                value = value.replace(/[^0-9]+/g, "");
+                jQuery(this).val(value);
+            })
+            .on("keyup", "#amount_received", function(event){
+
+                event.stopImmediatePropagation();
+                var value = jQuery(this).val();
+                value = value.replace(/[^0-9]+/g, "");
+                jQuery(this).val(value);
+            });
+
+        //)}';<\/script>}/////////////----End dQS_isValidNumber function---------///////////////////</script>
+
+    <script>
+        $(document).ready(function() {
+            //function dQS_convert() {
+            //Adding a preview button in side bar widget
+            //$script         = '
+            //<script>
+            //$(document).ready(function() {
+
+            let from_currency;
+            let to_currency;
+            let unit_received;
+            let unit_send;
+
+            function ProcessConvert(_this){
+                //$("#div_wait_convertion").empty().append(\'<img src="{{ asset('assets/img/fleches.png') }}" />\');
+
+                //$("#amount_received").val(kamount_received*_this.val());
+
+                if(from_currency !== jQuery("#currency_sent").val() || to_currency !== jQuery("#currency_received").val()){
+                    amount = _this.val();
+                    from_currency  = jQuery("#currency_sent").val();
+                    to_currency  = jQuery("#currency_received").val();
+
+                    fetch(`https://api.daticash.com/api/mobilemoney/convert?from_currency=${from_currency}&to_currency=${to_currency}&amount=${amount}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "GET"})//check status url
+                        .then(
+                            function(response) {
+                                if (!response.ok) {
+                                    throw new Error(response.statusText)
+                                    response.json().then(function(data) {
+                                        console.log(data);
+                                    })
+                                }else{
+                                    //Action successfully
+                                    response.json().then(function(data) {
+                                        console.log(data);
+
+                                        unit_received = data.converted_amount/data.amount;
+                                        unit_send = data.amount/data.converted_amount;
+
+                                        _this.hasClass("sent") ? $("#amount_received").val(unit_received*_this.val()) : $("#amount_sent").val(unit_send*_this.val());
+                                        _this.trigger("change");
+
+                                        daticashPricing();
+
+                                        /*
+                                        Swal.fire(
+                                          "ONLINE CONVERT!",
+                                          "Conversion computed successfully",
+                                          "success"
+                                        )
+                                        */
+                                    })
+
+                                }
+                            }).catch(error => {console.log(`${error}`)});
+
+                }else{
+                    _this.hasClass("sent") ? $("#amount_received").val(unit_received*_this.val()) : $("#amount_sent").val(unit_send*_this.val());
+                    daticashPricing();
+                    /*
+                    Swal.fire(
+                      "LOCAL CONVERT !",
+                      "Conversion computed successfully",
+                      "info"
+                    )
+                    */
+                }
+            }
+
+            function daticashPricing(){
+                if(iti_sender_phone.isValidNumber() && iti_recipient_phone.isValidNumber()){
+                    let amount_sent = "";
+                    let amount_received = $("#amount_received").val();
+
+                    let currency_sent = $("#currency_sent").val();
+                    let currency_received = $("#currency_received").val();
+
+                    let recipient_phone = $("#recipient_phone").val();
+                    let recipient_country_code = $("#recipient_country_code").val();
+
+                    let sender_phone = $("#sender_phone").val();
+                    let sender_country_code = $("#sender_country_code").val();
+
+                    $("#mannuel_convert").remove();
+                    $("#span_wait_convertion").html('<img src="{{ asset('assets/img/loader-status.gif') }}" />');
+
+                    $.ajax({
+                        url: "https://api.daticash.com/api/mobilemoney/pricing",
+                        dataType: "JSON",
+                        method: "GET",
+                        headers: {"apikey": "sec_5ed93806dd2ca"},
+                        data:{"currency_sent": currency_sent, "currency_received":currency_received, "amount_sent": amount_sent, "amount_received": amount_received, "recipient_phone":recipient_phone, "recipient_country_code": recipient_country_code, "sender_phone": sender_phone, "sender_country_code": sender_country_code},
+                        success:function(response){
+                            console.log(response)
+                            if(response !== undefined){
+                                console.log(response)
+                                //alert("response.amount_received = "+response.amount_received)
+                                //alert("response.amount_sent = "+response.amount_sent)
+                                //alert("response.fees = "+response.fees)
+                                //alert("esponse.currency_sent = "+esponse.currency_sent)
+                                //alert("response.currency_received = "+response.currency_received)
+                                //alert("response.total_pay = "+response.total_pay)
+                                //alert("response.get = "+response.amount_received)
 
 
-			<script>
-			
-			
-				$(document).ready(function() {
-				    
-				    $('#account_ref').on('change', function() {
-				        alert("change")
-				    })
-				    
+                                //text values
+                                $("#span_amount_received").empty().text(response.amount_received).trigger("blur");
+                                $("#span_amount_received_currency").empty().text(response.currency_received)
+
+                                $("#span_amount_sent").empty().text(response.amount_sent).trigger("blur");;
+                                $("#span_amount_sent_currency").empty().text(response.currency_sent)
+
+                                $("#span_fees").empty().text(response.fees)
+                                $("#span_fees_currency").text(response.currency_sent)
+
+                                $("#span_total_pay").empty().text(response.total_pay).trigger("blur")
+                                $("#span_total_pay_currency").empty().text(response.currency_sent)
+
+                                //imput values
+                                //$("#amount_received").empty().val(response.amount_received)
+                                //$("#amount_sent").empty().val(response.amount_sent)
+                                //$("#total_pay").empty().val(response.total_pay)
+                                //$("#fees").empty().val(response.fees)
+
+                                $("#div_wait_convertion").empty();
+                                $("#div_wait_convertion").append('<img id="mannuel_convert" src="{{ asset('assets/img/fleches.png') }}" style="position: relative;width: 70px; cursor: pointer;" />');
+
+
+                            }else{
+                                $("#div_wait_convertion").empty();
+                                $("#div_wait_convertion").append('<img id="mannuel_convert" src="{{ asset('assets/img/fleches.png') }}" style="position: relative;width: 70px; cursor: pointer;" />');
+
+
+                            }
+                        },
+
+                        error:function(){
+                            console.log("error: convert, please contact the Administrator")
+                        }
+                    })
+                }
+            }
+
+            $(document)
+                .on("click", "#mannuel_convert", function(e){
+                    $("#amount_sent").trigger("change");
+                })
+                .on("click", ".iti__country", function(e){
+                    let _iTimer = setInterval(function(){
+                        $("#amount_sent").trigger("change");
+                        clearInterval(_iTimer);
+                    }, 100);
+                })
+                .on("keydown", "#amount_sent,#amount_received", function(e){
+                    let _this = $(this);
+                    let _iTimer = setInterval(function(){
+                        _this.trigger("change");
+                        clearInterval(_iTimer);
+                    }, 100);
+                })
+
+            $("#sender_phone,#recipient_phone,#currency_received,#currency_sent").change(function(e) {
+                if(iti_sender_phone.isValidNumber() && iti_recipient_phone.isValidNumber() && ($("#amount_sent").val() > 0 || $("#amount_received").val() > 0)){
+                    if($("#amount_sent").val() > 0){
+                        $("#amount_sent").trigger("change");
+                    }else{
+                        if($("#amount_received").val() > 0){
+                            $("#amount_sent").trigger("change");
+                        }else{
+                            $("#amount_sent").val("1");
+                            $("#amount_received").val("");
+                            $("#amount_sent").trigger("change");
+                        }
+                    }
+                }
+            });
+
+            $("#amount_sent,#amount_received").change(function(e) {
+                let _this = $(this);
+                if($("#amount_sent").val() > 0 || $("#amount_received").val() > 0){
+                    ProcessConvert(_this);
+                }else{
+                    $("#amount_sent").val("1");
+                    $("#amount_received").val("");
+                    ProcessConvert(_this);
+                }
+            });
+
+            //)}';<\/script>}/////////////----End dQS_convert function---------///////////////////
+
+            //function dQS_eventListening(){
+            //Listening the menu choose event and show the related view
+            //$script         = '
+            //<script>
+            //$(document).ready(function() {
+            $('#account_ref').on('change', function() {
+                alert("change")
+            })
+
+            $('#payment-form').css('display', 'none')
+            $('#paypalMethodFrom').css('display', 'none')
+            $('#bankPaymentMethod').css('display', 'none')
+            $('#paymentMethod').on('change', function() {
+                let paymentMethod = $('#paymentMethod').val()
+                if(paymentMethod == 'momo') {
+                    $('#mobileMethodForm').css('display', 'block')
                     $('#payment-form').css('display', 'none')
-					$('#paypalMethodFrom').css('display', 'none')
-					$('#bankPaymentMethod').css('display', 'none')
-					$('#paymentMethod').on('change', function() {
-					  let paymentMethod = $('#paymentMethod').val()
-					  if(paymentMethod == 'momo') {
-						$('#mobileMethodForm').css('display', 'block')
-						$('#payment-form').css('display', 'none')
-						$('#paypalMethodFrom').css('display', 'none')
-					  } else if(paymentMethod == 'cc') {
-						$('#mobileMethodForm').css('display', 'none')
-						$('#paypalMethodFrom').css('display', 'none')
-						$('#payment-form').css('display', 'block')
-					  } else if(paymentMethod == 'pp') {
-						$('#mobileMethodForm').css('display', 'none')
-						$('#paypalMethodFrom').css('display', 'block')
-						$('#payment-form').css('display', 'none')
-					  } else if(paymentMethod == 'bank'){
-						  /*const local = $('#localisation').val()
-						  if(local != 1){
-							// Display a success notification
-							notyf.error('Not available for your location area!');
-						  }*/
-						  $('#bankPaymentMethod').css('display', 'block')
-						  $('#mobileMethodForm').css('display', 'none')
-						  $('#paypalMethodFrom').css('display', 'none')
-						  $('#payment-form').css('display', 'none')
-					  }
-					})
-									    
-				    
-				    
-					processConvert();
+                    $('#paypalMethodFrom').css('display', 'none')
+                } else if(paymentMethod == 'cc') {
+                    $('#mobileMethodForm').css('display', 'none')
+                    $('#paypalMethodFrom').css('display', 'none')
+                    $('#payment-form').css('display', 'block')
+                } else if(paymentMethod == 'pp') {
+                    $('#mobileMethodForm').css('display', 'none')
+                    $('#paypalMethodFrom').css('display', 'block')
+                    $('#payment-form').css('display', 'none')
+                } else if(paymentMethod == 'bank'){
+                    /*const local = $('#localisation').val()
+                    if(local != 1){
+                      // Display a success notification
+                      notyf.error('Not available for your location area!');
+                    }*/
+                    $('#bankPaymentMethod').css('display', 'block')
+                    $('#mobileMethodForm').css('display', 'none')
+                    $('#paypalMethodFrom').css('display', 'none')
+                    $('#payment-form').css('display', 'none')
+                }
+            })
 
-					$("#amount_sent,#amount_received,#currency_received,#currency_sent").change(function(e) {
-					  e.stopImmediatePropagation;
-					  let _this = $(this);
-					  let amount_sent = _this.hasClass("sent") ? $("#amount_sent").val() : "";
-					  let amount_received = _this.hasClass("receive") ? $("#amount_received").val() : "";
-					  
-					  let currency_sent = jQuery("#currency_sent").val();
-					  let currency_received = jQuery("#currency_received").val();
-					  
-						update(amount_sent, amount_received, currency_sent, currency_received);
-					})
 
-					$("body")
-							.on("click", "#mannuel_convert", function(e){
-							  processConvert();
-							})
-                            .on('click', '.iti__country' , function(e) {
-                                $("#mannuel_convert").trigger("click");
-                                
-                                let sender_country_code = "1";
-                                let recipient_country_code = "237";
-                                let default_country_code = "cm";
-            
-                                var $this = $(this);
-                                let _currency_received_txt = false;
-                                default_country_code = $($this).attr("data-country-code");
-                                var pid = $($this).attr("id")
-            
-                                sender_country_code = $this.find(".iti__dial-code").text();
-                                sender_country_code = sender_country_code.substring(1, sender_country_code.length);
-            
-                                recipient_country_code = $this.find(".iti__dial-code").text();
-                                recipient_country_code = recipient_country_code.substring(1, recipient_country_code.length);
-            
-                                if(_currency_received_txt = $this.parents('form-group-sender_phone').length){
-                                    //alert(recipient_country_code)
-                                    $('#sender_country_code').val(sender_country_code);
-                                }
-                                if(_currency_received_txt = $this.parents('.form-group-recipient_phone').length){
-                                    //alert(recipient_country_code)
-                                    $('#recipient_country_code').val(recipient_country_code);
-                                }
-                                
-                                //alert($this.parents('.form-daticash_phone').length)
-                                //alert(default_country_code)
-                                //alert(_currency_received_txt)
-            
-                            })
-					
-					
-					function processConvert(){
-					  let _this = $(this);
-					  let amount_sent = "";
-					  let amount_received = $("#amount_received").val();
-					  
-					  let currency_sent = $("#currency_sent").val();
-					  let currency_received = $("#currency_received").val();
+            $("#sender_phone").val("{{  app.user.phoneNumber }}");
 
-					  update(amount_sent, amount_received, currency_sent, currency_received);						
-					}
-					
-					
-					function update(amount_sent, amount_received, currency_sent, currency_received){
-					  let socketclienttype = "DATICASH_CLIENT";
-					  let type = "convert";
-					  $("#mannuel_convert").remove();
-					  $("#span_wait_convertion").html('<img id="mannuel_convert" src="{{ asset("assets/img/loader-status.gif") }}" style="position: relative;width: 70px; cursor: pointer;" />');
-					  
-					  $.ajax({
-						url: "{{ asset('assets/classes/action.php') }}",
-						dataType: "JSON",
-						method: "POST",
-						data:{"action": "convert", "currency_sent": currency_sent, "currency_received":currency_received, "amount_sent": amount_sent, "amount_received":amount_received},
-						success:function(response){
-							if(response.match === true){
-	/* 							alert("response.details.amount_received = "+response.details.amount_received)
-								alert("response.details.amount_sent = "+response.details.amount_sent)
-								alert("response.details.fees = "+response.details.fees)
-								alert("esponse.details.currency_sent = "+esponse.details.currency_sent)
-								alert("response.details.currency_received = "+response.details.currency_received)
-								alert("response.details.total_pay = "+response.details.total_pay)
-								alert("response.details.get = "+response.details.amount_received) */
-								
-								//text values
-								$("#span_amount_received").empty().text(response.details.amount_received).trigger("blur");
-								$("#span_amount_received_currency").empty().text(response.details.currency_received)
-								
-								$("#span_amount_sent").empty().text(response.details.amount_sent).trigger("blur");
-								$("#span_amount_sent_currency").empty().text(response.details.currency_sent)
-								
-								$("#span_fees").empty().text(response.details.fees)
-								$("#span_fees_currency").text(response.details.currency_sent)	
-								
-								$("#span_total_pay").empty().text(response.details.total_pay).trigger("blur")
-								$("#span_total_pay_currency").empty().text(response.details.currency_sent)
-								
-								//imput values
-								$("#amount_received").empty().val(response.details.amount_received)
-								$("#amount_sent").empty().val(response.details.amount_sent)
-								$("#total_pay").empty().val(response.details.total_pay)
-								$("#fees").empty().val(response.details.fees)
-								
-								$("#span_wait_convertion").empty();
-								$("#mannuel_convert").remove();								
-								$("#div_wait_convertion").append('<img id="mannuel_convert" src="{{ asset("assets/img/fleches.png") }}" style="position: relative;width: 70px; cursor: pointer;" />');
-													
-									
-							}else{
-								$(".send-feedback").html('<div class="alert alert-danger text-center">'+response.details+'</div>');
-								$("#span_wait_convertion").empty();
-								$("#mannuel_convert").remove();
-								$("#div_wait_convertion").append('<img id="mannuel_convert" src="{{ asset("assets/img/fleches.png") }}" style="position: relative;width: 70px; cursor: pointer;" />');
-																			
-							
-							}
-						},
-						
-						error:function(){
-							alert("error: convert, please contact the Administrator")			
-						}
-					  })
-					}
-					
-                    $("#sender_phone").val("{{  app.user.phoneNumber }}");
+            $(".form-group-sender_phone").find(".iti__selected-flag").trigger("click");
+            $(".iti__country[data-dial-code='{{ app.user.countryCode }}']").trigger("click");
 
-                   $(".form-group-sender_phone").find(".iti__selected-flag").trigger("click");
-                   $(".iti__country[data-dial-code='{{ app.user.countryCode }}']").trigger("click");
-                   
-                   $(".form-group-recipient_phone").find(".iti__selected-flag").trigger("click");
-                   $(".iti__country[data-dial-code='{{ app.user.countryCode }}']").trigger("click");    
-				})
-				
-	
-			</script>
+            $(".form-group-recipient_phone").find(".iti__selected-flag").trigger("click");
+            $(".iti__country[data-dial-code='{{ app.user.countryCode }}']").trigger("click");
 
-            <script>
-			$(document).ready(function() {			
-				$(".sendBtn").on("click", function(e) {
-					e.preventDefault();	
+            //)}';<\/script>}/////////////----End dQS_eventListening function---------///////////////////
 
-				  let action = "init_mobilemoney_transaction";
-				  let id = $("select#daticash__service-listbox").find("option:selected").attr("data-service_id");//id du service
-				  let type = "withdraw";
-				  let account_ref = $("select#daticash__account-listbox").find("option:selected").attr("data-account_id");
-				  let amount_sent = $("#amount_sent").val();
-				  let currency_sent = $("#currency_sent").val();
-				  let recipient_phone = $("#recipient_phone").val();
-				  let recipient_country_code = $("#recipient_country_code").val();
-				  let sender_phone = $("#sender_phone").val();
-				  let sender_country_code = $("#sender_country_code").val();
-				  let reason = $("#imput_reason").val();
-				  let recipient_account_num = $("#recipient_account_num").val();
-				  let local = "local";
+        })
+    </script>
 
-/* 				  let currency_received = $("#currency_received").val();
-				  let amount_received = $("#amount_received").val();
-				  let total_pay = $("#total_pay").text();
-				  let fees = $("#fees").text();
-				  let mode = "mobilemoney";//$("#mode").val() 
-  			
-			alert(action);
-			alert(type);
-			alert(account_ref);
-			alert(amount_sent);
-			alert(currency_sent);
-			alert(recipient_phone);
-			alert(recipient_country_code);
-			alert(sender_phone);
-			alert(sender_country_code);
-			alert(reason);
-			alert(iti_sender_phone.isValidNumber());
+    <script>
+        $(document).ready(function() {
+            //function dQS_submitTransaction() {
+            //Submit the informations to valide and proceed the transaction (complete version)
+            //$script         = '
+            //<script>
+            //$(document).ready(function() {
+            $(".sendBtn").on("click", function(e) {
+                e.preventDefault();
 
-			alert(currency_received);
-			alert(amount_received);
-			alert(total_pay);
-			alert(fees);
-			alert(mode);
+                let id = $("select#daticash__service-listbox").find("option:selected").attr("data-service_id");//id du service
+                let recipient_account_num = $("#recipient_account_num").val();
+                let local = "local";
 
- */
-		
-						if (amount_sent > 0 && iti_sender_phone.isValidNumber() === true && iti_recipient_phone.isValidNumber() === true ) {
-							$(".sendBtn").text("Processing...").prop("disabled", true);			
+                let action = "init_mobilemoney_transaction";
+                let type = "withdraw";
+                let account_ref = $("select#daticash__account-listbox").find("option:selected").attr("data-account_id");
+                let amount_sent = $("#amount_sent").val();
+                let currency_sent = $("#currency_sent").val();
+                let recipient_phone = $("#recipient_phone").val();
+                let recipient_country_code = $("#recipient_country_code").val();
+                let sender_phone = $("#sender_phone").val().replace(/[^0-9]+/g, "");
+                let sender_country_code = $("#sender_country_code").val();
+                let reason = $("#imput_reason").val();
 
-								let curl_data = "?currency_sent="+currency_sent+"&id="+id+"&local="+local+"&amount_sent="+amount_sent+"&type=withdraw&sender_phone="+sender_phone+"&sender_country_code="+sender_country_code+"&recipient_country_code="+recipient_country_code+"&recipient_phone="+recipient_phone+"&recipient_account_num="+recipient_account_num+"&account_ref="+account_ref
-                                let status						
-                                let timerInterval
-                                let transaction_id
-                                Swal.fire({
-                                  title: "Initiate Transaction",
-                                  html: "STATUS : <b class=\"status_js\">Checking service availability.</b>.",
-                                  icon: "info",
-                                  timer: 10000,
-                                  timerProgressBar: true,
-                                  onBeforeOpen: () => {
-                                	Swal.showLoading()
-                                	//return fetch(`//api.github.com/users/bouba`)
-                                	fetch("{{path('transactions_create')  }}"+curl_data  , {"method": "POST" })//confirm-password url
-                                	//return fetch("{{path('transactions_create')  }}" + `?currency_sent=XAF&amount_sent=122220&type=withdraw&sender_phone=676558870&sender_country_code=237&recipient_country_code=237&recipient_phone=691752255&recipient_account_num=&account_ref=`, {"method": "POST"})//confirm-password url
-                                	//return fetch(`https://api.daticash.com/api/mobilemoney/new?currency_sent=XAF&amount_sent=122220&type=withdraw&sender_phone=676558870&sender_country_code=237&recipient_country_code=237&recipient_phone=691752255&recipient_account_num=&account_ref=`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "POST"})//confirm-password url(error)
-                                	//return fetch(`//api.github.com/users/bouba`)//confirm-password url(success)
-                                	//.then(response => response.text())
-		                            //.then(contents => console.log(contents))
-		                            //.then(response => response.json())
-		                                .then(function(response){
-		                                    var contentStatus = response.status;
-		                                    if(contentStatus == 201) {// app success
-		                                        return response.json().then(function(json) {// api response
-                                                    console.log(contentStatus)
-                                                    console.log(json)
-                                                    
-                                                    	if (json.id) {
-                                                        /**********************************begin process transaction*********************************************/
-                                                    		let transaction_id = json.id
-                                                    		let status						
-                                                    		let timerInterval
-                                                    		let checkPath = "{{ path("transactions_view") }}";
-                                                    		
-                                                    		Swal.fire({
-                                                    		  title: "Traitement en cour",
-                                                    		  html: "STATUS : <b class=\"status_js\">Mise à jour de l\'historique de la transaction.</b>.",
-                                                    		  icon: "info",
-                                                    		  timer: 10000,
-                                                    		  timerProgressBar: true,
-                                                    		  onBeforeOpen: () => {
-                                                    			Swal.showLoading()
-                                                    			timerInterval = setInterval(() => {
-                                                    				//return fetch(`https://api.daticash.com/api/mobilemoney/${transaction_id}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}})//confirm-password url
-                                                    				return fetch(checkPath + "/" + transaction_id , {"method": "GET"})//check status url
-                                                    				  .then(
-                                                    					function(response) {
-                                                    						console.log("application response = " + response);
-                                                    					  if (!response.ok) {
-                                                    					  // Examine the text in the response
-                                                    						  response.json().then(function(data) {
-                                                    							 status = data.step_description
-                                                    							console.log(data.step_description);
-                                                    							
-                                                    						})
-                                                    					  }else{
-                                                    					  // Examine the text in the response
-                                                    						  response.json().then(function(data) {
-                                                    							 status = data.step_description
-                                                    							console.log("api response = " +data.step_description);
-                                                    						
-                                                    							switch(data.status.toLowerCase()) {
-                                                    								case "completed"://Action successfully
-                                                    										Swal.fire(
-                                                    										  "Complete!",
-                                                    										  "Your transaction Successfully Completed.",
-                                                    										  "success"
-                                                    										)
-                                                    										
-                                                    									break;
-                                                    									
-                                                    								case "failed"://BAD_REQUEST
-                                                    										Swal.fire(
-                                                    										  "ERROR!",
-                                                    										  "Something is wrong with the request, possibly missing or improperly formatted parameters",
-                                                    										  "error"
-                                                    										)
-                                                    										
-                                                    									break;
-                                                    									
-                                                    								case "confirm_requested"://CONFIRM-PIN-CODE
-                                                    								    clearInterval(timerInterval)
-                                                    								    Swal.stopTimer()//Stops the timer in case when timer parameter is set. Returns the time left
-                                                    								    Swal.isTimerRunning()//Returns the status of a timer: true if is running, false if it's paused
-                                                    										//let currency_sent = data.currency_sent;
-                                                    										//let amount_sent = data.amount_sent;
-                                                    										//let recipient_phone = data.recipient_phone;
-                                                    										let recipient_username = data.recipient_username;
-                                                    										let confirmPath = "{{ path("transactions_update") }}";
-                                                    										
-                                                    										Swal.fire({
-                                                    										  title: "Confirm Transaction!",
-                                                    										  text: "Vous etes sur le point d\'effectuer une transaction de "+amount_sent+" "+currency_sent+" vers le "+recipient_phone+"("+recipient_username+"). entrer votre PIN pour confirmer la transaction:",
-                                                    										  input: "password",
-                                                    											//closeOnConfirm: true,
-                                                    											inputPlaceholder: "Your PIN Code",				  
-                                                    										  inputAttributes: {
-                                                    											autocapitalize: "off"
-                                                    										  },
-                                                    										  showCancelButton: false,				  
-                                                    										  showLoaderOnConfirm: true,
-                                                    										  focusConfirm: false,
-                                                    										  confirmButtonText:'<i class="fa fa-thumbs-up"></i> Confirm',
-                                                    										  confirmButtonAriaLabel: "Thumbs up, great!",
-                                                    										  cancelButtonText:'<i class="fa fa-thumbs-down"></i>',
-                                                    										  cancelButtonAriaLabel: "Thumbs down",				  
-                                                    										  preConfirm: (password) => {
-                                                    											//return fetch(`//api.github.com/users/${password}`)//confirm-password url
-                                                    											return fetch(confirmPath + "/" + transaction_id  + "?password=" +`${password}`, {"method": "PUT"})//confirm-password url
-                                                    											  .then(response => {
-                                                    												if (!response.ok) {
-                                                    												  throw new Error(response.statusText)
-                                                    												}
-                                                    												return response.json()
-                                                    												
-                                                    											  })
-                                                    											  .catch(error => {
-                                                    												Swal.showValidationMessage(
-                                                    												  `Request failed: ${error}`
-                                                    												)
-                                                    												
-                                                    											  })
-                                                    										  },
-                                                    										  allowOutsideClick: () => !Swal.isLoading()
-                                                    										}).then((result) => {
-                                                    											if (result.code == 201) {
-                                                    												let status						
-                                                    												let timerInterval						
-                                                    												Swal.fire({
-                                                    												  title: "Traitement en cour",
-                                                    												  html: "STATUS : <b class=\"status_js\">Mise à jour de l\'historique de la transaction.</b>.",
-                                                    												  icon: "info",
-                                                    												  timer: 10000,
-                                                    												  timerProgressBar: true,
-                                                    												  onBeforeOpen: () => {
-                                                    													Swal.showLoading()
-                                                    													timerInterval = setInterval(() => {
-                                                    														//return fetch(`https://api.daticash.com/api/mobilemoney/${transaction_id}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}})//confirm-password url
-                                                                                            				return fetch(checkPath + "/" + transaction_id , {"method": "GET"})//check status url
-                                                                                            				  .then(
-                                                                                            					function(response) {
-                                                                                            						console.log("application response after confirm = " + response);
-                                                                                            					  if (!response.ok) {
-                                                                                            					  // Examine the text in the response
-                                                                                            						  response.json().then(function(data) {
-                                                                                            							 status = data.step_description
-                                                                                            							console.log(data.step_description);
-                                                                                            							
-                                                                                            						})
-                                                                                            					  }else{
-                                                                                            					  // Examine the text in the response
-                                                                                            						  response.json().then(function(data) {
-                                                                                            							 status = data.step_description
-                                                                                            							console.log("api response after confirm = " +data.step_description);
-                                                                                            						
-                                                                                            							switch(data.status.toLowerCase()) {
-                                                                                            								case "completed"://Action successfully
-                                                                                            										Swal.fire(
-                                                                                            										  "Complete!",
-                                                                                            										  "Your transaction Successfully Completed.",
-                                                                                            										  "success"
-                                                                                            										)
-                                                                                            										
-                                                                                            									break;
-                                                                                            									
-                                                                                            								case "failed"://BAD_REQUEST
-                                                                                            										Swal.fire(
-                                                                                            										  "ERROR!",
-                                                                                            										  "Something is wrong with the request, possibly missing or improperly formatted parameters",
-                                                                                            										  "error"
-                                                                                            										)
-                                                                                            										
-                                                                                            									break;
-                                                                                            							}
-                                                    															  
-                                                        															  const content = Swal.getContent()
-                                                        															  if (content) {
-                                                        																const b = content.querySelector(".status_js")
-                                                        																if (b) {
-                                                        																  b.textContent = status
-                                                        																}
-                                                        															  }							  
-                                                        															})
-                                                                                            					  }
-                                                                                            					})
-                                                        														  .catch(function(err) {
-                                                        															console.log("Fetch Error :-S", err);
-                                                        														  });			  
-                                                    
-                                                    													}, 1000);							
-                                                    												  },						  
-                                                    												  showLoaderOnConfirm: true,
-                                                    												  onClose: () => {
-                                                    													clearInterval(timerInterval)
-                                                    													Swal.fire(
-                                                    													  "Aborded!",
-                                                    													  "Your session has been closed. But your transaction take too time...",
-                                                    													  "info"
-                                                    													)
-                                                    													
-                                                    												  }						  
-                                                    												}).then((result) => {
-                                                    												  // Read more about handling dismissals below 
-                                                    												  if (result.dismiss === Swal.DismissReason.timer) {
-                                                    													console.log("I was closed by the timer")
-                                                    													Swal.fire({
-                                                    													  title: "<strong>STATUS TRANSACTION</strong>",
-                                                    													  icon: "info",
-                                                    													  html:
-                                                    														"Was closed by the timer. Your transaction <b>take too time</b>, go to your " +
-                                                    														"<a href=\"//daticash.com/dashborad\" target=\"_blank\">dashborad</a> " +
-                                                    														"to check manually this transaction status",
-                                                    													  showCloseButton: true,
-                                                    													  showCancelButton: false,
-                                                    													  focusConfirm: false,
-                                                    													  confirmButtonText:"OK",
-                                                    													})
-                                                    													
-                                                    												  }
-                                                    												})	
-                                                    
-                                                    											}
-                                                    										})									
-                                                    									break;
-                                                    									
-                                                    								default :
-                                                    								
-                                                    							}
-                                                    					                                            						      
-                                                    						      
-                                                    						  })
-                                                    						  
-                                                    						  
-                                                    					  }
-                                                    					  
-                                                    					  const content = Swal.getContent()
-                                                    					  if (content) {
-                                                    						const b = content.querySelector(".status_js")
-                                                    						if (b) {
-                                                    						  b.textContent = status
-                                                    						}
-                                                    					  }							  
-                                                    					}
-                                                    				  )
-                                                    				  .catch(function(err) {
-                                                    					console.log("Fetch Error :-S", err);
-                                                    				  });			  
-                                                    
-                                                    			}, 1000);							
-                                                    		  },						  
-                                                    		  showLoaderOnConfirm: true,
-                                                    		  onClose: () => {
-                                                    			clearInterval(timerInterval)
-                                                    			Swal.fire(
-                                                    			  "Aborded!",
-                                                    			  "Your session has been closed. But your transaction take too time...",
-                                                    			  "info"
-                                                    			)
-                                                    			
-                                                    		  }						  
-                                                    		}).then((result) => {
-                                                    		  // Read more about handling dismissals below 
-                                                    		  if (result.dismiss === Swal.DismissReason.timer) {
-                                                    			console.log("I was closed by the timer")
-                                                    			Swal.fire({
-                                                    			  title: "<strong>STATUS TRANSACTION</strong>",
-                                                    			  icon: "info",
-                                                    			  html:
-                                                    				"Was closed by the timer. Your transaction <b>take too time</b>, go to your " +
-                                                    				"<a href=\"//daticash.com/dashborad\" target=\"_blank\">dashborad</a> " +
-                                                    				"to check manually this transaction status",
-                                                    			  showCloseButton: true,
-                                                    			  showCancelButton: false,
-                                                    			  focusConfirm: false,
-                                                    			  confirmButtonText:"OK",
-                                                    			})
-                                                    			
-                                                    		  }
-                                                    		})	
-                                                        /************************************************************ end process transaction ***********************************/
-                                                    	}else{
-                                                    	    Swal.fire(
-                                                			  "Failed!",
-                                                			  "Unknow transaction Identifier. Your transaction initiation have been maiby initiated, but processing failed...",
-                                                			  "error"
-                                                			)
-                                                			
-                                                    	    
-                                                    	}	
-                                                  
+                if (amount_sent > 0 && iti_sender_phone.isValidNumber() === true && iti_recipient_phone.isValidNumber() === true ) {
+                    $(".sendBtn").text("Processing...").prop("disabled", true);
+
+                    let curl_data = "?currency_sent="+currency_sent+"&id="+id+"&local="+local+"&amount_sent="+amount_sent+"&type=withdraw&sender_phone="+sender_phone+"&sender_country_code="+sender_country_code+"&recipient_country_code="+recipient_country_code+"&recipient_phone="+recipient_phone+"&recipient_account_num="+recipient_account_num+"&account_ref="+account_ref
+                    let status
+                    let timerInterval
+                    let transaction_id
+                    Swal.fire({
+                        title: "Initiate Transaction",
+                        html: "STATUS : <b class=\"status_js\">Checking service availability.</b>.",
+                        icon: "info",
+                        timer: 10000,
+                        timerProgressBar: true,
+                        onBeforeOpen: () => {
+                        Swal.showLoading()
+                    fetch("{{path('transactions_create')  }}"+curl_data  , {"method": "POST" })//confirm-password url
+                    //return fetch(`https://api.daticash.com/api/mobilemoney/new?currency_sent=XAF&id=1&amount_sent=122220&type=withdraw&sender_phone=676558870&sender_country_code=237&recipient_country_code=237&recipient_phone=691752255&recipient_account_num=&account_ref=`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "POST"})//confirm-password url(error) //for test
+                        .then(function(response){
+                            var contentStatus = response.status;
+                            if(contentStatus == 201) {// app success
+                                return response.json().then(function(json) {// api response
+                                    console.log(contentStatus)
+                                    console.log(json)
+
+                                    if (json.id) {
+                                        /************************************************************ begin process transaction ******************************************/
+                                        let transaction_id = json.id
+                                        let status
+                                        let timerInterval
+                                        let checkPath = "{{ path("transactions_view") }}";
+
+                                        Swal.fire({
+                                            title: "Traitement en cour",
+                                            html: "STATUS : <b class=\"status_js\">Mise à jour de l\'historique de la transaction.</b>.",
+                                            icon: "info",
+                                            timer: 10000,
+                                            timerProgressBar: true,
+                                            onBeforeOpen: () => {
+                                            // afficher le satatu de la transaction
+                                            $('#daticash_display_transaction_status_topUp').remove();
+                                        $('.swal2-container').append(daticash_display_transaction_status_topUp());
+                                        $('#daticash_display_transaction_status_topUp').css(
+                                            {
+                                                "position" : "fixed",
+                                                "top" : "inherit",
+                                                "padding-top" : "12px"
+                                            });
+
+                                        daticash_select_transaction_status_position(3);
+                                        Swal.showLoading()
+                                        timerInterval = setInterval(() => {
+                                            //return fetch(`https://api.daticash.com/api/mobilemoney/${transaction_id}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}})//confirm-password url
+                                            return fetch(checkPath + "/" + transaction_id , {"method": "GET"})//check status url
+                                                .then(
+                                                    function(response) {
+                                                        console.log("application response = " + response);
+                                                        if (!response.ok) {
+                                                            // Examine the text in the response
+                                                            response.json().then(function(data) {
+                                                                status = data.step_description
+                                                                console.log(data.step_description);
+                                                            })
+                                                        }else{
+                                                            // Examine the text in the response
+                                                            response.json().then(function(data) {
+
+                                                                if(data.code === undefined){
+                                                                    status = data.step_description
+                                                                    console.log("api response = " +data.step_description);
+
+                                                                    switch(data.status.toLowerCase()) {
+                                                                        case "completed"://Action successfully
+                                                                            Swal.fire(
+                                                                                "Complete!",
+                                                                                "Your transaction Successfully Completed.",
+                                                                                "success"
+                                                                            )
+                                                                            break;
+
+                                                                        case "failed"://BAD_REQUEST
+                                                                            Swal.fire(
+                                                                                "ERROR!",
+                                                                                "Something is wrong with the request, possibly missing or improperly formatted parameters",
+                                                                                "error"
+                                                                            )
+                                                                            break;
+
+                                                                        case "confirm_requested"://CONFIRM-PIN-CODE
+                                                                            clearInterval(timerInterval)
+                                                                            Swal.stopTimer()//Stops the timer in case when timer parameter is set. Returns the time left
+                                                                            Swal.isTimerRunning()//Returns the status of a timer: true if is running, false if it's paused
+                                                                            //let currency_sent = data.currency_sent;
+                                                                            //let amount_sent = data.amount_sent;
+                                                                            //let recipient_phone = data.recipient_phone;
+                                                                            let recipient_username = data.recipient_username;
+                                                                            let confirmPath = "{{ path("transactions_update") }}";
+
+                                                                            Swal.fire({
+                                                                                title: "Confirm Transaction!",
+                                                                                text: "Vous etes sur le point d\'effectuer une transaction de "+amount_sent+" "+currency_sent+" vers le "+recipient_phone+"("+recipient_username+"). entrer votre PIN pour confirmer la transaction:",
+                                                                                input: "password",
+                                                                                //closeOnConfirm: true,
+                                                                                inputPlaceholder: "Your PIN Code",
+                                                                                inputAttributes: {
+                                                                                    autocapitalize: "off"
+                                                                                },
+                                                                                showCancelButton: false,
+                                                                                showLoaderOnConfirm: true,
+                                                                                focusConfirm: false,
+                                                                                confirmButtonText:'<i class="fa fa-thumbs-up"></i> Confirm',
+                                                                                confirmButtonAriaLabel: "Thumbs up, great!",
+                                                                                cancelButtonText:'<i class="fa fa-thumbs-down"></i>',
+                                                                                cancelButtonAriaLabel: "Thumbs down",
+                                                                                preConfirm: (password) => {
+                                                                                //return fetch(`//api.github.com/users/${password}`)//confirm-password url
+                                                                                return fetch(confirmPath + "/" + transaction_id  + "?password=" +`${password}`, {"method": "PUT"})//confirm-password url
+                                                                                    .then(response => {
+                                                                                    if (!response.ok) {
+                                                                            throw new Error(response.statusText)
+                                                                        }
+                                                                            return response.json()
+                                                                    })
+                                                                .catch(error => {
+                                                                        Swal.showValidationMessage(
+                                                                        `Request failed: ${error}`
+                                                                    )
+                                                                })
+                                                                },
+                                                                    allowOutsideClick: () => !Swal.isLoading()
+                                                                }).then((result) => {
+                                                                        if (result.code == 201) {
+                                                                        let status
+                                                                        let timerInterval
+                                                                        Swal.fire({
+                                                                            title: "Traitement en cour",
+                                                                            html: "STATUS : <b class=\"status_js\">Mise à jour de l\'historique de la transaction.</b>.",
+                                                                            icon: "info",
+                                                                            timer: 10000,
+                                                                            timerProgressBar: true,
+                                                                            onBeforeOpen: () => {
+                                                                            Swal.showLoading()
+                                                                        timerInterval = setInterval(() => {
+                                                                            //return fetch(`https://api.daticash.com/api/mobilemoney/${transaction_id}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}})//confirm-password url
+                                                                            return fetch(checkPath + "/" + transaction_id , {"method": "GET"})//check status url
+                                                                                .then(
+                                                                                    function(response) {
+                                                                                        console.log("application response after confirm = " + response);
+                                                                                        if (!response.ok) {
+                                                                                            // Examine the text in the response
+                                                                                            response.json().then(function(data) {
+                                                                                                status = data.step_description
+                                                                                                console.log(data.step_description);
+                                                                                            })
+                                                                                        }else{
+                                                                                            // Examine the text in the response
+                                                                                            response.json().then(function(data) {
+                                                                                                status = data.step_description
+                                                                                                console.log("api response after confirm = " +data.step_description);
+
+                                                                                                switch(data.status.toLowerCase()) {
+                                                                                                    case "completed"://Action successfully
+                                                                                                        Swal.fire(
+                                                                                                            "Complete!",
+                                                                                                            "Your transaction Successfully Completed.",
+                                                                                                            "success"
+                                                                                                        )
+                                                                                                        break;
+
+                                                                                                    case "failed"://BAD_REQUEST
+                                                                                                        Swal.fire(
+                                                                                                            "ERROR!",
+                                                                                                            "Something is wrong with the request, possibly missing or improperly formatted parameters",
+                                                                                                            "error"
+                                                                                                        )
+                                                                                                        break;
+                                                                                                }
+
+                                                                                                const content = Swal.getContent()
+                                                                                                if (content) {
+                                                                                                    const b = content.querySelector(".status_js")
+                                                                                                    if (b) {
+                                                                                                        b.textContent = status
+                                                                                                    }
+                                                                                                }
+                                                                                            })
+                                                                                        }
+                                                                                    })
+                                                                                .catch(function(err) {
+                                                                                    console.log("Fetch Error :-S", err);
+                                                                                });
+
+                                                                    }, 1000);
+                                                                    },
+                                                                        showLoaderOnConfirm: true,
+                                                                            onClose: () => {
+                                                                            clearInterval(timerInterval)
+                                                                            Swal.fire(
+                                                                                "Aborded!",
+                                                                                "Your session has been closed. But your transaction take too time...",
+                                                                                "info"
+                                                                            )
+                                                                        }
+                                                                    }).then((result) => {
+                                                                            // Read more about handling dismissals below
+                                                                            if (result.dismiss === Swal.DismissReason.timer) {
+                                                                            console.log("I was closed by the timer")
+                                                                            Swal.fire({
+                                                                                title: "<strong>STATUS TRANSACTION</strong>",
+                                                                                icon: "info",
+                                                                                html:
+                                                                                "Was closed by the timer. Your transaction <b>take too time</b>, go to your " +
+                                                                                "<a href=\"//daticash.com/dashborad\" target=\"_blank\">dashborad</a> " +
+                                                                                "to check manually this transaction status",
+                                                                                showCloseButton: true,
+                                                                                showCancelButton: false,
+                                                                                focusConfirm: false,
+                                                                                confirmButtonText:"OK",
+                                                                            })
+                                                                        }
+                                                                    })
+
+                                                                    }
+                                                                })
+                                                                    break;
+
+                                                                default :
+
+                                                                }
+                                                                    //end success process transaction
+                                                                }else{
+                                                                    Swal.fire({
+                                                                        title: "ERROR!",
+                                                                        icon: "error",
+                                                                        text: "Bad Request thrown(Something is wrong with the request, possibly missing or improperly formatted parameter) or Resource Not Found(The given id may be wrong...) ",
+                                                                        showCloseButton: true,
+                                                                        showCancelButton: false,
+                                                                        focusConfirm: false,
+                                                                        confirmButtonText:"OK",
+                                                                    })//.then(function() {
+                                                                    //window.location = "{{ path("dashboard.index") }}";
+                                                                    //})
+                                                                    $(".sendBtn").text("Send").prop("disabled", false);
+                                                                }
+                                                                //end error process transaction
+
+                                                            })
+                                                        }
+
+                                                        const content = Swal.getContent()
+                                                        if (content) {
+                                                            const b = content.querySelector(".status_js")
+                                                            if (b) {
+                                                                b.textContent = status
+                                                            }
+                                                        }
+                                                    }
+                                                )
+                                                .catch(function(err) {
+                                                    console.log("Fetch Error :-S", err);
+                                                    Swal.fire({
+                                                        title: "ERROR!",
+                                                        icon: "error",
+                                                        text: "Connection failed",
+                                                        showCloseButton: true,
+                                                        showCancelButton: false,
+                                                        focusConfirm: false,
+                                                        confirmButtonText:"OK",
+                                                    })//.then(function() {
+                                                    //window.location = "{{ path("dashboard.index") }}";
+                                                    //})
+                                                    $(".sendBtn").text("Send").prop("disabled", false);
                                                 });
-                                                
-		                                    }else{// app error
-		                                        Swal.fire(
-                                    			  "Failed!",
-                                    			  "Application error, try again later or contact administrator...",
-                                    			  "error"
-                                    			)					  
-                                    			Swal.showValidationMessage(
-                                    			  "Request failed: " + response.statusText
-                                    			)
-                                    			
-                                            }
-		                                     
-		                                })
-                                		/*.then(response => {
-                                			if (!response.ok) {
-                                			  throw new Error(response.statusText)
-                                			}
-                                			return response.json()
-                                		  })
-                                		  .catch(error => {
-                                			Swal.fire(
-                                			  "Failed!",
-                                			  "Service not avalaible Now, trys again later. Your transaction initiation have been aborded...",
-                                			  "error"
-                                			)					  
-                                			//Swal.showValidationMessage(
-                                			 // `Request failed: ${error}`
-                                			)
-                                		  })*/						
-                                  },						  
-                                  onClose: () => {
-                                	Swal.fire(
-                                	  "Aborded!",
-                                	  "Your session has been closed. The initiation of transaction take too time...",
-                                	  "info"
-                                	)
-                                  }						  
+
+                                    }, 1000);
+                                    },
+                                        showLoaderOnConfirm: true,
+                                            onClose: () => {
+                                            clearInterval(timerInterval)
+                                            Swal.fire(
+                                                "ABORDED!",
+                                                "Your session has been closed. But your transaction take too time...",
+                                                "info"
+                                            )
+                                        }
+                                    }).then((result) => {
+                                            // Read more about handling dismissals below
+                                            if (result.dismiss === Swal.DismissReason.timer) {
+                                            console.log("I was closed by the timer")
+                                            Swal.fire({
+                                                title: "<strong>STATUS TRANSACTION</strong>",
+                                                icon: "info",
+                                                html:
+                                                "Was closed by the timer. Your transaction <b>take too time</b>, go to your " +
+                                                "<a href=\"//daticash.com/dashborad\" target=\"_blank\">dashborad</a> " +
+                                                "to check manually this transaction status",
+                                                showCloseButton: true,
+                                                showCancelButton: false,
+                                                focusConfirm: false,
+                                                confirmButtonText:"OK",
+                                            })//.then(function() {
+                                            //window.location = "{{ path("dashboard.index") }}";
+                                            //})
+                                            $(".sendBtn").text("Send").prop("disabled", false);
+                                        }
+                                    })
+                                        /*********************************************************** end process transaction *********************************************/
+                                    }else{
+                                        Swal.fire({
+                                            title: "ERROR!",
+                                            icon: "error",
+                                            text: "Unknow transaction Identifier.(Your transaction initiation have been maiby initiated, but processing failed...); Check your history to see more details).",
+                                            showCloseButton: true,
+                                            showCancelButton: false,
+                                            focusConfirm: false,
+                                            confirmButtonText:"OK",
+                                        })//.then(function() {
+                                        //window.location = "{{ path("dashboard.index") }}";
+                                        //})
+                                    }
                                 })
+                            }else{
+                                Swal.fire({
+                                    title: "ERROR!",
+                                    icon: "error",
+                                    text: "Error conection (Check your connection and try again later...) ",
+                                    showCloseButton: true,
+                                    showCancelButton: false,
+                                    focusConfirm: false,
+                                    confirmButtonText:"OK",
+                                })//.then(function() {
+                                //window.location = "{{ path("dashboard.index") }}";
+                                //})
                                 $(".sendBtn").text("Send").prop("disabled", false);
-						    
-						    
-						}else{
-							$(".sendBtn").text("Send").prop("disabled", false);
-							
-							if(amount_sent <= 0){
-								$("#amount_sent-feedback").html('<div class="text-danger">Please enter a valid amount to send</div>');
-							}
-							
-							if(!iti_sender_phone.isValidNumber()){
-								$("#sender_phone-feedback").html('<div class="text-danger">Please enter a valid Phone Number below</div>');
-							}
-							
-							if(!iti_recipient_phone.isValidNumber()){
-								$("#recipient_phone-feedback").html('<div class="text-danger">Please enter a valid Phone Number below</div>');
-							}	
-													
-						} 
-				  
-				  
-				})	
-			})				
-			</script>
-            
+                            }
+                        })
+                }
+                })
+                }else{
+                    $(".sendBtn").text("Send").prop("disabled", false);
+
+                    if(amount_sent <= 0){
+                        $("#amount_sent-feedback").html('<div class="text-danger">Please enter a valid amount to send</div>');
+                    }
+
+                    if(!iti_sender_phone.isValidNumber()){
+                        $("#sender_phone-feedback").html('<div class="text-danger">Please enter a valid number</div>');
+                    }
+
+                    if(!iti_recipient_phone.isValidNumber()){
+                        $("#recipient_phone-feedback").html('<div class="text-danger">Please enter a valid number</div>');
+                    }
+
+                }
+
+            })
+
+            //)}';<\/script>}/////////////----End dQS_eventListening function---------///////////////////
+        })
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            //function dQS_formatAmount() {
+            //Convert the amounts for a simple reading
+            //$script         = '
+            //<script>
+            //$(document).ready(function() {
+            /*
+                                    $("#span_amount_sent").blur(function() {
+                                        $(this).formatCurrency({ colorize: true, negativeFormat: "-%s%n", roundToDecimalPlace: 2 });
+                                    })
+                                    $("#span_amount_received").blur(function() {
+                                        $(this).formatCurrency({ colorize: true, negativeFormat: "-%s%n", roundToDecimalPlace: 2 });
+                                    })
+                                    $("#span_fees").blur(function() {
+                                        $(this).formatCurrency({ colorize: true, negativeFormat: "-%s%n", roundToDecimalPlace: 2 });
+                                    })
+                                    $("#span_total_pay").blur(function() {
+                                        $(this).formatCurrency({ colorize: true, negativeFormat: "-%s%n", roundToDecimalPlace: 2 });
+                                    })
+            */
+            //)}';<\/script>}/////////////----End dQS_formatAmount function---------///////////////////
+        })
+    </script>
+
 {% endblock %}

@@ -69,7 +69,7 @@
     									'</a>'+
     								'</div>'+									
     								'<div class="login-feedback">'+
-{#    								
+    								
                                         '{% for flashError in app.flashes('error') %}'+ 
                                             '<div class="alert alert-danger alert-dismissible" role="alert">'+
                                                 '<i class="fa fa-exclamation-circle"></i>&nbsp{{ flashError }}'+
@@ -83,16 +83,15 @@
                                             '</div>'+
                                         '{% endfor %}'+
                                     
-                                        '{# read and display several types of flash messages #}'+
                                         '{% for label, messages in app.flashes(['success']) %}'+
                                             '{% for message in messages %}'+                            
                                                 '<div class="alert alert-success alert-dismissible">'+
-                                                    '<i class="fa fa-exclamation-circle"></i>&nbsp{{ message }} }}'+
+                                                    '<i class="fa fa-exclamation-circle"></i>&nbsp{{ message }}'+
                                                     '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
                                                 '</div>'+
                                             '{% endfor %}'+
                                         '{% endfor %}'+ 
-#}
+
     								'</div>'+
     									'<div class="card body_card_daticash_login">'+
     										'<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+								  										
@@ -143,7 +142,7 @@
     										'</a>'+
     									'</div>'+
     								  '<div class="login-feedback">'+
-{#    								
+    								
                                         '{% for flashError in app.flashes('error') %}'+ 
                                             '<div class="alert alert-danger alert-dismissible" role="alert">'+
                                                 '<i class="fa fa-exclamation-circle"></i>&nbsp{{ flashError }}'+
@@ -157,16 +156,15 @@
                                             '</div>'+
                                         '{% endfor %}'+
                                     
-                                        '{# read and display several types of flash messages #}'+
                                         '{% for label, messages in app.flashes(['success']) %}'+
                                             '{% for message in messages %}'+                            
                                                 '<div class="alert alert-success alert-dismissible">'+
-                                                    '<i class="fa fa-exclamation-circle"></i>&nbsp{{ message }} }}'+
+                                                    '<i class="fa fa-exclamation-circle"></i>&nbsp{{ message }}'+
                                                     '<button type="button" class="close" data-dismiss="alert">&times;</button>'+
                                                 '</div>'+
                                             '{% endfor %}'+
                                         '{% endfor %}'+ 
-#}  
+  
     								  '</div>'+									
     								  '<div class="card body_card_daticash_login">'+
     									'<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+								  
@@ -329,7 +327,7 @@
                     								    
                     										//requiert un numero de téléphone : créer la zone du numero de tel + boutn d'envoi
                     										$(".js_resend_sms").empty().append(
-                    																		    '<p style="color: green;">SMS Successfully sent... </p>To try again please wait : '+left_time+'min :'+ that.second +'s</p>'								
+                    																		    '<p style="color: green;">SMS Successfully sent... </p>To try again please wait : '+left_time+' min : '+ second +'s</p>'								
                     																		       
                     																		);	
                     									second = second - 1;																		
@@ -378,7 +376,7 @@
 					jQuery(this).val(value);
 
 					if (caveWidth == 6){
-        						$('#daticash_sms_code_input').before('<div class="login_image_js"><img src="'+ self.imgLocation +'/loader-status.gif" /> Processing...</div>').remove(); // loader image apprears in the <div id="newComment"></div>			
+        						$('#daticash_sms_code_input').before('<div class="login_image_js"><img src="{{ absolute_url(asset("assets/img/loader-status.gif")) }}" /> Processing...</div>').remove(); // loader image apprears in the <div id="newComment"></div>			
 						        $('#daticash_sms_code_input').remove();
     			        
     			        var proceedActivatePath = '{{ path("activate", {'id':'user_id', 'token': 'token'}) }}'; 
@@ -386,7 +384,7 @@
                         proceedActivatePath = proceedActivatePath.replace("token", caveVal);
                         
                         
-                            fetch(proceedActivatePath, {"method": "PUT", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                            fetch(proceedActivatePath, {"method": "GET", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
                         	  .then(
                         		function(response) {
                             		  if (!response.ok) {
@@ -401,15 +399,15 @@
                             				if(data.code === 200){//activation reussi
                             				    {% if app.session.get('phone_number') is defined and app.session.get('phone_number')|length > 0 %}    
  				                                
-                                                    $(".card body_card_daticash_login").append(
-                                                                    '<form method="POST" action="http://locahost:8080/" enctype="multipart/form-data" id="fileUploadForm">'+
+                                                    $("body").append(
+                                                                    '<form method="POST" action="{{ path("transactions_create_anonymous") }}" enctype="multipart/form-data" id="fileUploadForm">'+
                                                                         '<input type="text" name="id" value="1"/>'+
                                                                         '<input type="text" name="type" value="withdraw"/>'+
                                                                         '<input type="text" name="account_ref" value=""/>'+
                                                                         '<input type="text" name="amount_sent" value="app.session.get("amount_sent")"/>'+
                                                                         '<input type="text" name="currency_sent" value="app.session.get("currency_sent")"/>'+
                                                                         '<input type="text" name="recipient_phone" value="app.session.get("recipient_phone")"/>'+ 
-                                                                        '<input type="text" name="recipient_phone" value="app.session.get("recipient_country_code")"/>'+ 
+                                                                        '<input type="text" name="recipient_country_code" value="app.session.get("recipient_country_code")"/>'+ 
                                                                         '<input type="text" name="sender_phone" value="app.session.get("sender_phone")"/>'+
                                                                         '<input type="text" name="sender_country_code" value="app.session.get("sender_country_code")"/>'+
                                                                         '<input type="text" name="reason" value="app.session.get("reason")"/>'+
@@ -417,7 +415,7 @@
 
                                                                     '</form>');
                                                                     
-                                                        $(".form").submit();
+                                                        $("#fileUploadForm").submit();
                                                         
             										
                     							{% endif %}
@@ -457,6 +455,7 @@
                 		  // Examine the text in the response
                 			  response.json().then(function(data) {
                 				console.log("api response after submit checkUserStatus  = " + data);
+                				console.log(data);
                 				switch(data.code) {
                             		case 202:
                 			            $('.login-feedback').append('<div class="alert alert-success alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspMail have been successfully resend<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
@@ -488,6 +487,10 @@
 					$("#retype_new_pin_code_label").removeClass('text-danger');
 					
 				})
+                .on('click', '#exit_btn' , function() {
+                        var href = '{{ path("dashboard.index") }}';
+                        window.location = href;
+    				})
 				
         /*TextBox Action */
             $('#body_mask').after(daticash_confirm_token_form_popUp(user_email));
@@ -502,12 +505,35 @@
             		  // Examine the text in the response
             			  response.json().then(function(data) {
             				console.log("api response after submit checkUserStatus  = " + data);
-            				if(data.activated == true){
+            				if(data.enabled == true){
             					clearInterval(_autoTimer);
             					$(".chat-popup").remove();
             						
             					$('#body_mask').after(daticash_email_verified_popUp());
             			        $('.login-feedback').append('<div class="alert alert-success text-center">Great !!!</div>');
+
+            				    {% if app.session.get('phone_number') is defined and app.session.get('phone_number')|length > 0 %}    
+                                 
+                                    $("body").append(
+                                                    '<form method="POST" action="{{ path("transactions_create_anonymous") }}" enctype="multipart/form-data" id="fileUploadForm">'+
+                                                        '<input type="text" name="id" value="1"/>'+
+                                                        '<input type="text" name="type" value="withdraw"/>'+
+                                                        '<input type="text" name="account_ref" value=""/>'+
+                                                        '<input type="text" name="amount_sent" value="app.session.get("amount_sent")"/>'+
+                                                        '<input type="text" name="currency_sent" value="app.session.get("currency_sent")"/>'+
+                                                        '<input type="text" name="recipient_phone" value="app.session.get("recipient_phone")"/>'+ 
+                                                        '<input type="text" name="recipient_country_code" value="app.session.get("recipient_country_code")"/>'+ 
+                                                        '<input type="text" name="sender_phone" value="app.session.get("sender_phone")"/>'+
+                                                        '<input type="text" name="sender_country_code" value="app.session.get("sender_country_code")"/>'+
+                                                        '<input type="text" name="reason" value="app.session.get("reason")"/>'+
+                                                        '<input type="text" name="recipient_account_num" value="app.session.get("recipient_account_num")"/>'+
+
+                                                    '</form>');
+                                                    
+                                        $("#fileUploadForm").submit();
+                                        
+    							{% endif %}           
+            			        
             				}					  
             			})
             		})

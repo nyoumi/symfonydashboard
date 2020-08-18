@@ -1,5 +1,7 @@
 {% extends "base.html.twig" %}
 
+{% set _categories = app.session.get('services') %}
+
 {% block navbar %}
    {% include "body/navbar.html.twig" ignore missing %}
 {% endblock %}

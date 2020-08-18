@@ -2,6 +2,7 @@
 
 namespace App\Security\User;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -40,6 +41,7 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
      * @param HttpClientInterface $client
      * @param string $apikey
      * @param string $site_url
+     * @param Request $request
      */
     public function __construct(HttpClientInterface $client, string $apikey, string $site_url )
     {
@@ -47,9 +49,6 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
 
         $this->site_url = $site_url;
         $this->apikey = $apikey;
-
-
-
 
 
     }
@@ -64,9 +63,7 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
         $phone_number = $user->getPhoneNumber();
         $password = $user->getPassword();
 
-
         return $this->fetchUser($country_code, $phone_number, $password);
-
 
     }
 
@@ -136,11 +133,14 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
                 $webUser->setLastname($login["lastname"]);
                 $webUser->setCountryCode($country_code);
                 $webUser->setPhoneNumber($phone_number);
-                $webUser->setRoles($login["roles"]);
+                $webUser->setRoles($this->getRoles($login));
                 $webUser->setSalt("");
-                $webUser->setUsername($login["firstname"]);
-
-
+                $webUser->setUsername($login["username"]);
+                $webUser->setAvatar($login["avatar"]);
+                $webUser->setCurrencyCode($login["currency_code"]);
+                $webUser->setIsEmailActivated($login["is_email_activated"]);
+                $webUser->setIsPhoneActivated($login["is_phone_activated"]);
+                $webUser->setUserInfos($login);
 
 
 
@@ -151,19 +151,6 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
         throw new CustomUserMessageAuthenticationException(
             'Identifiant ou mot de passe incorrect!');
 
-
-
-
-
-
-        //var_dump($userData);
-        // pretend it returns an array on success, false if there is no user
-
-
-
-       /* throw new UsernameNotFoundException(
-            sprintf('Username "%s" does not exist.', $phone_number)
-        );*/
     }
 
     /**
@@ -239,5 +226,23 @@ class WebserviceUserProvider extends AbstractController implements UserProviderI
 
         }
         return null;
+    }
+
+    /*
+     * recupérer la liste des roles des comptes et la liste des roles de l'utilisateur lui meme
+     * et creer un tableau contcatenation des autres
+     */
+    private function getRoles($user)
+    {
+        $accounts=$user["accounts"];
+
+        $roles=[];
+        foreach ($accounts as $account) {
+            foreach ($account["roles"] as $role) {
+                if(!in_array($role,$roles)) array_push($roles,$role);
+            }
+        }
+        $user_roles=$user["roles"];
+        return array_merge($roles, $user_roles);
     }
 }
