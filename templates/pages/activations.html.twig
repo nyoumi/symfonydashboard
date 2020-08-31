@@ -308,7 +308,7 @@
                             				    //valeur possible: resend ok/bad, key= phone
                                                 left_time = data.waiting_time;
                                                 //var sender_phone = that.tampon_data.phone_number.replace(/\d{6}$/i, "******");
-                                                var phone_number = data.phone_number
+                                                var phone_number = data.phone
             								    //alert(sender_phone)     
             									clearInterval(_rebordCount);
                                                 
@@ -397,6 +397,67 @@
                             			  response.json().then(function(data) {
                             				console.log("api response after submit  = " + data);
                             				if(data.code === 200){//activation reussi
+                            				{% if app.session.get('requested_url') is defined %}
+                            				    var requested_url = "{{ app.session.get('requested_url') }}";
+                            				    var requested_url_method = "{{ app.session.get('requested_url_method') }}";
+                            				    var requested_url_data = "{{ app.session.get('requested_url_data') }}";
+                            				    var requested_url_string = "{{ app.session.get('requested_url_string') }}";
+                            				    console.log(requested_url);
+                            				    console.log(requested_url_method);
+                            				    console.log(requested_url_data);
+                            				    console.log(requested_url_string);
+                            				    
+                            				    if(requested_url_method=="POST"){
+                                                    // jquery extend function
+                                                    $.extend({
+                                                        redirectPost: function(location, args){
+                                                            var form = '';
+                                                            $.each( args, function( key, value ) {
+                                                                value = value.split('"').join('\"')
+                                                                form += '<input type="hidden" name="'+key+'" value="'+value+'">';
+                                                            });
+                                                            $('<form action="' + location + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
+                                                        }
+                                                    });
+                                                    
+                                                    $.redirectPost(requested_url_string, requested_url_data);
+                                                }
+                                                
+                            				    {#
+                                                    // jquery extend function
+                                                    $.extend({
+                                                        redirectPost: function(location, args){
+                                                            var form = '';
+                                                            $.each( args, function( key, value ) {
+                                                                value = value.split('"').join('\"')
+                                                                form += '<input type="hidden" name="'+key+'" value="'+value+'">';
+                                                            });
+                                                            switch(requested_url_method.toLowerCase()) {
+                                								case "post"://POST successfully
+                                                                    $('<form action="' + location + '" method="POST">' + form + '</form>').appendTo($(document.body)).submit();
+                                									break;
+                                									
+                                								case "get"://GET successfully
+                                								    $('<form action="' + location + '" method="GET">' + form + '</form>').appendTo($(document.body)).submit();
+                                									break;
+                                									
+                                								default:
+                                								    $('<form action="' + location + '" method="GET">' + form + '</form>').appendTo($(document.body)).submit();
+
+                                                            }
+                                                        }
+                                                    
+                                                    $.redirectPost(requested_url_string, requested_url_data);
+                                                
+                                                #}
+                            				
+                                				{# 
+                                				{% set url = app.session.get('requested_url') %}
+                                                {% do redirect(url) %}
+                                                #}
+                                                
+                            				{% endif %}
+                            				{#
                             				    {% if app.session.get('phone_number') is defined and app.session.get('phone_number')|length > 0 %}    
  				                                
                                                     $("body").append(
@@ -419,6 +480,7 @@
                                                         
             										
                     							{% endif %}
+                    						#}	
                             				}else{
                             				        
                 								    $('.login-feedback').html(show_alert('error', "Activation Failed. Check code and try again", 1));

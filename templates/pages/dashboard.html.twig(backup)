@@ -2,7 +2,6 @@
 {% set _withdraw_amount = withdraw_amount %}
 {% set _deposit_amount = deposit_amount %}
 {% set _currency = app.user.currency_code %}
-{% set _profile = app.user %}
 
  {% set _accounts = app.user.accounts %}    
 {#  {%
@@ -11,45 +10,13 @@
             'id': 12,
             'name': 'Default',
             'balance': '250000',
-            'description': "default account",
-            'is_default': true,
-            'currency': "XAF",
-            'roles": [
-                "ROLE_USER"
-              ]
-            },
-            {
-            'id': 13,
-            'name': 'Easy School',
-            'balance': '122000',
-            'description': 'My School application account.'
-            'is_default': true,
-            'currency': "XAF",
-            'roles": [
-                "ROLE_DEVELOPER"
-              ]
+            'description': 'The DatiCash Default Account'
             },
             {
             'id': 14,
-            'name': 'Gest Pro',
-            'balance': '25000',
-            'description': 'Mon super marche dans la poche.'
-            'is_default': true,
-            'currency': "XAF",
-            'roles": [
-                "ROLE_DEVELOPER"
-              ]
-            },
-            {
-            'id': 15,
-            'name': 'DatiTaxi',
-            'balance': '1200',
-            'description': 'My DatiTaxi application account.'
-            'is_default': true,
-            'currency': "XAF",
-            'roles": [
-                "ROLE_MERCHANT"
-              ]
+            'name': 'Easy School',
+            'balance': '122000',
+            'description': 'My School application account.'
             },
         ] 
     %}  #}
@@ -302,70 +269,44 @@
 %}#}
 	
  {% set _transactions = transactions %}
-{% set _transactions = [
-  {
-    "id": "TR9842",
-    "last_consulted_at": "2020-08-15T19:30:17.397Z",
-    "status": "COMPLETE",
-    "created_at": "2020-08-15T19:30:17.397Z",
-    "updated_at": "2020-08-15T19:30:17.397Z",
-    "currency": "XAF",
-    "reason": "receive money",
-    "amount_sent": "10000",
-    "recipient_phone": "676582410",
-    "recipient_country_code": "237",
-    "sender_phone": "691750821",
-    "sender_country_code": "237",
-    "account_ref": "default",
-    "amount_received": "10000",
-    "currency_received": "XAF",
-    "recipient_account_num": "",
-    "trans_fees": "0.0",
-    "type": "deposit"
-  },  
-  {
-    "id": "TR2513",
-    "last_consulted_at": "2020-08-15T19:30:17.397Z",
-    "status": "COMPLETE",
-    "created_at": "2020-08-15T19:30:17.397Z",
-    "updated_at": "2020-08-15T19:30:17.397Z",
-    "currency": "XAF",
-    "reason": "Electricity bill payment",
-    "amount_sent": "6755",
-    "recipient_phone": "",
-    "recipient_country_code": "",
-    "sender_phone": "691750821",
-    "sender_country_code": "237",
-    "account_ref": "default",
-    "amount_received": "6750",
-    "currency_received": "XAF",
-    "recipient_account_num": "D00TO54458d88fe58DFE8454S",
-    "trans_fees": "0.0",
-    "type": "Withdraw"
-  },
-  {
-    "id": "TR2253",
-    "last_consulted_at": "2020-08-15T19:30:17.397Z",
-    "status": "COMPLETE",
-    "created_at": "2020-08-15T19:30:17.397Z",
-    "updated_at": "2020-08-15T19:30:17.397Z",
-    "currency": "XAF",
-    "reason": "3G week internet ",
-    "amount_sent": "1500",
-    "recipient_phone": "691750821",
-    "recipient_country_code": "237",
-    "sender_phone": "691750821",
-    "sender_country_code": "237",
-    "account_ref": "default",
-    "amount_received": "1500",
-    "currency_received": "XAF",
-    "recipient_account_num": "",
-    "trans_fees": "0.0",
-    "type": "Withdraw"
-  }
-]
+{#    {%
+        set _transactions = [
+            {
+            'id': 'TR9842',
+            'type': 'Withdraw',
+            'amount_sent': '50000',
+            'status': 'Complete',
+            'account_ref': 'Default',
+            'recipient_account_num': 'Default',
+            'created_at': '20/06/2020 11:55',
+            'date': '03/06/2020',
+            'time': '11:55'
+            },
+            {
+            'id': 'TR2513',
+            'type': 'Withdraw',
+            'amount_sent': '150000',
+            'status': 'failed',
+            'account_ref': 'Easy School',
+            'recipient_account_num': 'Default',
+            'created_at': '20/06/2020 15:25',
+            'date': '20/06/2020',
+            'time': '15:25'
+            },
+            {
+            'id': 'TR2253',
+            'type': 'Deposit',
+            'amount_sent': '35000',
+            'status': 'Processing',
+            'account_ref': 'Default',
+            'created_at': '20/06/2020 22:03',
+            'recipient_account_num': 'Default',
+            'date': '30/06/2020',
+            'time': '22:03'
+            }
+        ]
+    %} #}
 
-%}
 {% extends "base.html.twig" %}
 
 {% block navbar %}
@@ -496,7 +437,7 @@
 					  <img src="{{ asset('adminLTE/dist/img/default-150x150.png') }}" alt="Product Image" class="img-size-50">
 					</div>
 					<div class="product-info">
-					  <a href="{{ path("profile") }}?item=account_settings&aid={{ account.id }}" class="product-title">{{ account.name }}
+					  <a id="{{ account.id }}" href="javascript:void(0)" class="product-title">{{ account.name }}
 						<span class="badge datibadge-primary float-right">{{ account.balance }}<sup style="font-size: 10px">{{ _currency }}</sup></span></a>
 					  <span class="product-description">
 						{{ account.description }}
@@ -508,7 +449,7 @@
 			  </div>
 			  <!-- /.card-body -->
               <div class="card-footer text-center">
-			    <a href="{{ path("profile") }}?item=account_settings&aid=0" class="btn btn-sm btn-info float-left" name="add_new_account" id="add_new_account">Add account</a>
+			    <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Add account</a>
               </div>
 			  <!-- /.card-footer -->
 			</div>
@@ -602,7 +543,7 @@
 						  <td>
 							<div class="sparkbar" data-color="#00a65a" data-height="20">{{ transaction.recipient_account_num }}</div>
 						  </td>
-						  <td>{{ transaction.created_at|date("d-m-Y h:m:s") }}</td>	
+						  <td>{{ transaction.created_at|date("d/m/Y h:m") }}</td>
                           {#<td>{{ transaction.date ~" " ~transaction.time }}</td>#}
 						</tr>
 					{% endfor %}
@@ -613,7 +554,7 @@
 			  </div>
 			  <!-- /.card-body -->
 			  <div class="card-footer clearfix">
-				<a href="{{ path("history")}}" class="btn btn-sm btn-secondary float-right">View All History</a>
+				<a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All History</a>
 			  </div>
 			  <!-- /.card-footer -->
 			</div>
@@ -660,23 +601,5 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{{ asset('adminLTE/dist/js/pages/dashboard.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script> 
-    
-    
-<script> 
-    $(document).ready(function(){
-		{% if app.session.get('requested_url') is defined %}
-		    var requested_url = "{{ app.session.get('requested_url') }}";
-		    var requested_url_method = "{{ app.session.get('requested_url_method') }}";
-		    var requested_url_data = "{{ app.session.get('requested_url_data') }}";
-		    var requested_url_string = "{{ app.session.get('requested_url_string') }}";
-		    console.log(requested_url);
-		    console.log(requested_url_method);
-		    console.log(requested_url_data);
-		    console.log(requested_url_string);
-		
-
-		{% endif %}        
-})
-</script>    
+    <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script>    
 {% endblock %}

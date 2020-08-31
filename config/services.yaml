@@ -5,7 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     app.apikey: 'sec_5ed93806dd2ca'
-    app.site_url: "https://api.daticash.com/api/"
+    app.site_url: "https://api.daticash.com/v1/api/"
     
 
 services:

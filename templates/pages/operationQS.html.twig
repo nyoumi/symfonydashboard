@@ -93,8 +93,9 @@
 			    let transaction_id = undefined;
 			    transaction_id = "{{ transaction.transaction_status.id  is defined ? transaction.transaction_status.id : ""}}" 
 			    
-                /************************************************************ end process transaction ***********************************/
                 if(undefined !== transaction_id){
+                /************************************************************ begin process transaction ******************************************/
+                    //let transaction_id = transaction_id
             		let status						
             		let timerInterval
             		let checkPath = "{{ path("transactions_view") }}";
@@ -103,7 +104,7 @@
             		  title: "Traitement en cour",
             		  html: "STATUS : <b class=\"status_js\">Mise à jour de l\'historique de la transaction.</b>.",
             		  icon: "info",
-            		  timer: 1000000,
+            		  timer: 10000,
             		  timerProgressBar: true,
             		  onBeforeOpen: () => {
 					    // afficher le satatu de la transaction
@@ -296,6 +297,7 @@
                 								default :
                 								
                 							}
+                						  //end success process transaction	
             						      }else{
             						         Swal.fire({
                                     			  title: "ERROR!",
@@ -308,7 +310,8 @@
                                     			}).then(function() {
                                     			    window.location = "{{ path("dashboard.index") }}";
                             					}) 
-            						      }                                  						      
+            						      }
+            						      //end error process transaction
             						      
             						  })
             					  }
@@ -368,7 +371,7 @@
     					})														
             		  }
             		})	
-                /**********************************begin process transaction*********************************************/
+                /*********************************************************** end process transaction *********************************************/
                 }else{
         			Swal.fire({
         			  title: "ERROR!",

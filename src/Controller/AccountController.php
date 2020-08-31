@@ -120,6 +120,8 @@ class AccountController extends AbstractController
         ]);
     }
 
+
+
     /**
      * generateConfirmCode to be used to buying account process as confirmation of the transaction
      * @param $id
@@ -140,8 +142,6 @@ class AccountController extends AbstractController
         $response=$this->make_get_request($params,$headers,$endpoint);
 
 
-
-
         return new Response(json_encode($response), Response::HTTP_OK,[
             "Content-Type"=>'application/json'
         ]);
@@ -154,7 +154,6 @@ class AccountController extends AbstractController
      */
     public function estimate($type)
     {
-
         $endpoint="account/".$type."/estimate";
         $headers=[
             'Accept' => 'application/json',
@@ -168,6 +167,8 @@ class AccountController extends AbstractController
             "Content-Type"=>'application/json'
         ]);
     }
+
+
 
 
 
@@ -283,6 +284,311 @@ class AccountController extends AbstractController
         ]);
 
     }
+
+
+    /**
+     * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     *
+     */
+    public function viewAffiliateAction($type,$id)
+    {
+
+
+
+        $endpoint=$type."/".$id."/view";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+
+        $params=[
+            'id' =>  $id,
+        ];
+        $response=$this->make_get_request($params,$headers,$endpoint);
+
+
+
+
+        return new Response(json_encode($response), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
+
+    }
+
+    public function listAffiliateAction($id, $type)
+    {
+
+        $endpoint=$type."/user/".$id."/list";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+
+        $params=[
+            'id' =>  $id,
+        ];
+        $response=$this->make_get_request($params,$headers,$endpoint);
+
+
+
+
+        return new Response(json_encode($response), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
+    }
+
+    public function estimateCreatioinAffiliateAction($type)
+    {
+
+        $endpoint=$type."/estimate-creation";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+
+        $params=[];
+        $response=$this->make_get_request($params,$headers,$endpoint);
+
+
+
+
+        return new Response(json_encode($response), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
+    }
+
+    public function estimateSubscriptionAffiliateAction($type)
+    {
+        $endpoint=$type."/estimate-subscription";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+
+        $params=[];
+        $response=$this->make_get_request($params,$headers,$endpoint);
+
+
+
+
+        return new Response(json_encode($response), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
+    }
+    public function subscribeAffiliateAction($id, $type,Request $request)
+    {
+
+
+        $this->apikey = $this->getParameter('app.apikey');
+        $this->site_url = $this->getParameter('app.site_url');
+
+        $data = $request->getContent();
+        $data=json_decode($data);
+
+
+        if(!is_object($data)){
+            parse_str($request->getContent(),$output);
+            $data=(object) $output;
+        }
+
+        if($this->emptyObj($data) ){
+            $data=$request->query->all();
+            $data=(object) $data;
+        }
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+        $endpoint=$type."/"."user/".$id."/subscribe";
+        $params=(array)$data;
+        $response=$this->make_post_request($params,$headers,$endpoint,$params);
+
+        return new Response(json_encode($response), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
+    }
+
+    public function viewAction()
+    {
+        $endpoint="accounts/types";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+
+        $params=[];
+        $account_types=[];
+        $response=$this->make_get_request($params,$headers,$endpoint);
+        if(isset($response['code'])){
+            $account_types["account_types"]=$response;
+        }
+
+
+        return $this->render('pages/accounts.html.twig',[
+                "account_types"=>$response
+            ]
+        );
+    }
+
+    public function newAffiliateAction($type,Request $request)
+    {
+
+
+        $this->apikey = $this->getParameter('app.apikey');
+        $this->site_url = $this->getParameter('app.site_url');
+
+        $data = $request->getContent();
+        $data=json_decode($data);
+
+
+        if(!is_object($data)){
+            parse_str($request->getContent(),$output);
+            $data=(object) $output;
+        }
+
+        if($this->emptyObj($data) ){
+            $data=$request->query->all();
+            $data=(object) $data;
+        }
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+        $endpoint=$type."/new";
+        $params=(array)$data;
+        $response=$this->make_post_request($params,$headers,$endpoint,$params);
+
+        return new Response(json_encode($response), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
+    }
+
+
+    public function editAffiliateAction($type,$id,Request $request)
+    {
+        /*
+         * lecture des données envoyées par post, submit ou dans la requête
+         */
+
+        $data = $request->getContent();
+        $data=json_decode($data);
+
+
+        if(!is_object($data)){
+            parse_str($request->getContent(),$output);
+            $data=(object) $output;
+        }
+
+        if($this->emptyObj($data) ){
+            $data=$request->query->all();
+            $data=(object) $data;
+        }
+        $endpoint=$type."/".$id."/edit";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+
+
+        $params=(array)$data;
+
+        $response=$this->make_put_request($params,$headers,$endpoint,(array)$data);
+        return new Response(json_encode($response), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
+
+    }
+
+
+
+    public function linkMerchantActivityAffiliateAction($type,$id,Request $request)
+    {
+        /*
+         * lecture des données envoyées par post, submit ou dans la requête
+         */
+
+        $data = $request->getContent();
+        $data=json_decode($data);
+
+
+        if(!is_object($data)){
+            parse_str($request->getContent(),$output);
+            $data=(object) $output;
+        }
+
+        if($this->emptyObj($data) ){
+            $data=$request->query->all();
+            $data=(object) $data;
+        }
+        $endpoint=$type."/".$id."/link-merchant-activity";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+
+
+        $params=(array)$data;
+
+        $response=$this->make_put_request($params,$headers,$endpoint,(array)$data);
+        return new Response(json_encode($response), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
+
+    }
+    public function setTrustedHostsListAffiliateAction($type,$id,Request $request)
+{
+    /*
+     * lecture des données envoyées par post, submit ou dans la requête
+     */
+
+    $data = $request->getContent();
+    $data=json_decode($data);
+
+
+    if(!is_object($data)){
+        parse_str($request->getContent(),$output);
+        $data=(object) $output;
+    }
+
+    if($this->emptyObj($data) ){
+        $data=$request->query->all();
+        $data=(object) $data;
+    }
+    $endpoint=$type."/".$id."/link-merchant-activity";
+    $headers=[
+        'Accept' => 'application/json',
+        "apikey"=> $this->apikey
+    ];
+
+
+    $params=(array)$data;
+
+    $response=$this->make_put_request($params,$headers,$endpoint,(array)$data);
+    return new Response(json_encode($response), Response::HTTP_OK,[
+        "Content-Type"=>'application/json'
+    ]);
+
+}
+
+
+    public function deleteAffiliateAction($type,$id)
+    {
+
+
+        $endpoint=$type."/".$id."/delete";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+        $params=['id'=>$id];
+
+
+        $response=$this->make_delete_request($params,$headers,$endpoint);
+        return new Response(json_encode($response), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
+    }
+
 
     public function renewSecurityToken(Request $request)
     {
@@ -411,6 +717,9 @@ class AccountController extends AbstractController
             "Content-Type"=>'application/json'
         ]);
     }
+
+
+
 
     /**
      * @param array $parameters

@@ -1,7 +1,95 @@
+{% set _profile = app.user %}
+{% set _transactions = transactions %}
+{% set _currency = app.user.currency_code %}
+
+{% set _accounts = app.user.accounts %}    
+ 
 {% extends "base.html.twig" %}
 
 {% set _categories = app.session.get('services') %}
 
+
+{% set _transactions = [
+  {
+    "id": "TR9842",
+    "last_consulted_at": "2020-08-15T19:30:17.397Z",
+    "status": "COMPLETE",
+    "created_at": "2020-08-15T19:30:17.397Z",
+    "updated_at": "2020-08-15T19:30:17.397Z",
+    "currency": "XAF",
+    "reason": "receive money",
+    "amount_sent": "10000",
+    "recipient_phone": "676582410",
+    "recipient_country_code": "237",
+    "sender_phone": "691750821",
+    "sender_country_code": "237",
+    "account_ref": "default",
+    "amount_received": "10000",
+    "currency_received": "XAF",
+    "recipient_account_num": "",
+    "trans_fees": "0.0",
+    "type": "deposit"
+  },  
+  {
+    "id": "TR2513",
+    "last_consulted_at": "2020-08-15T19:30:17.397Z",
+    "status": "COMPLETE",
+    "created_at": "2020-08-15T19:30:17.397Z",
+    "updated_at": "2020-08-15T19:30:17.397Z",
+    "currency": "XAF",
+    "reason": "Electricity bill payment",
+    "amount_sent": "6755",
+    "recipient_phone": "",
+    "recipient_country_code": "",
+    "sender_phone": "691750821",
+    "sender_country_code": "237",
+    "account_ref": "default",
+    "amount_received": "6750",
+    "currency_received": "XAF",
+    "recipient_account_num": "D00TO54458d88fe58DFE8454S",
+    "trans_fees": "0.0",
+    "type": "Withdraw"
+  },
+  {
+    "id": "TR2253",
+    "last_consulted_at": "2020-08-15T19:30:17.397Z",
+    "status": "COMPLETE",
+    "created_at": "2020-08-15T19:30:17.397Z",
+    "updated_at": "2020-08-15T19:30:17.397Z",
+    "currency": "XAF",
+    "reason": "3G week internet ",
+    "amount_sent": "1500",
+    "recipient_phone": "691750821",
+    "recipient_country_code": "237",
+    "sender_phone": "691750821",
+    "sender_country_code": "237",
+    "account_ref": "default",
+    "amount_received": "1500",
+    "currency_received": "XAF",
+    "recipient_account_num": "",
+    "trans_fees": "0.0",
+    "type": "Withdraw"
+  }
+]
+
+%}
+
+{% block stylesheets %}
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/daterangepicker/daterangepicker.css') }}">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">	
+{% endblock %}            
+            
 {% block navbar %}
    {% include "body/navbar.html.twig" ignore missing %}
 {% endblock %}
@@ -28,40 +116,241 @@
     </div>
 {% endblock %}
 
-{% block content_main %}
+{% block content_main %}    
+    {% for flashError in app.flashes('error') %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <i class="fa fa-exclamation-circle"></i>&nbsp{{ flashError }}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>    
+    {% endfor %}
+    {% for message in app.flashes('notice') %}
+        <div class="alert alert-warning alert-dismissible  flash-notice">
+            <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }}"</a>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    {% endfor %}
 
+    {# read and display several types of flash messages #}
+    {% for label, messages in app.flashes(['success']) %}
+        {% for message in messages %}                            
+            <div class="alert alert-success alert-dismissible">
+                <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }} }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+	<!-- Main content -->
+	<section class="content">
+        <!-- /.row -->
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Transactions history</h3>
+                  <div class="card-tools">
+
+                    <button type="button" class="btn btn-tool" id="daterange-btn" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                      <i class="far fa-calendar-alt mr-1" ></i><span id="reportrange"> Choose Date range </span>
+                      <i class="fas fa-caret-down ml-1"></i>
+                    </button> 
+                    
+                  </div>                
+             
+                
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+					  <th>ID</th>
+					  <th>Type</th>
+					  <th>Status</th>
+					  <th>Sender</th>
+					  <th>Receiver</th>
+					  <th>Date</th>
+					  <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+					    
+					{% for transaction in _transactions %}
+						<tr>
+						  <td><a href="{{ path("history") }} ">{{ transaction.id }}</a></td>
+						  <td>
+{% if (transaction.type)|lower == 'withdraw' %}
+                  <span class="badge datibadge-dark">Withdraw</span>
+                  <small class="datitext-dark mr-1">
+                    <i class="fas fa-arrow-up"></i>
+                  </small><br>
+                  {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                             
+      {% elseif (transaction.type)|lower == 'deposit' %}
+                  <span class="badge datibadge-primary">Deposit</span>
+                  <small class="datitext-primary mr-1">
+                      <i class="fas fa-arrow-down"></i>
+                  </small><br>
+                  {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                              
+      {% else %}
+                  <span class="badge badge-default">{{ transaction.type }}</span>
+                  <small class="text-default mr-1">
+                      <i class="far fa-dot-circle"></i>
+                  </small><br>
+                  {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>	
+{% endif %}
+
+						  </td>
+						  <td>{{ transaction.status }}</td>
+						  <td>
+							<div class="sparkbar" data-color="#00a65a" data-height="20">{{ transaction.account_ref }}</div>
+						  </td>
+						  <td>
+							<div class="sparkbar" data-color="#00a65a" data-height="20">{% if (transaction.recipient_account_num) is empty %} {{ "+"~ transaction.recipient_country_code ~ transaction.recipient_phone  }} {% else %} {{ transaction.recipient_account_num }}{% endif %}</div>
+						  </td>
+						  <td>{{ transaction.created_at|date("d-m-Y h:m:s") }}</td>
+					      <td class="project-actions text-right">
+                              <a class="btn btn-info btn-sm transaction_detail_btn" href="#" data-transaction_id = "{{ transaction.id }}" data-toggle="modal" data-target="#transaction_detal_modal">
+                                  <i class="fas fa-eye"></i>
+                              </a>
+                          </td>
+                          {#<td>{{ transaction.date ~" " ~transaction.time }}</td>#}
+						</tr>
+					{% endfor %}
+                  </tbody>
+                  <tfoot>
+                  <tr>
+					  <th>ID</th>
+					  <th>Type</th>
+					  <th>Status</th>
+					  <th>Sender</th>
+					  <th>Receiver</th>
+					  <th>Date</th>
+					  <th></th>
+                  </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+	</section>
+	<!-- /.content -->
+	
+      <div class="modal fade" id="transaction_detail_modal">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Verify your Phone Number</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="col-6" id="action_and_info_phone_status" name="action_and_info_phone_status" style="max-width: max-content;">
+    			<div class="row text-center" style="max-width: max-content;">
+    			 <div class="col-12" id="dati_check_whith_sms" >
+    			 </div>
+    			</div>
+    		   <p class="alert text-danger text-center"></p>
+    		</div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>                                                    			
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+    <!-- /.modal -->	
+	
+	
 {% endblock %}
 
 {% block javascripts %}
-    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-    <script>
-    $.widget.bridge('uibutton', $.ui.button)
-    </script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- ChartJS -->
-    <script src="{{ asset('adminLTE/plugins/chart.js/Chart.min.js') }}"></script>
-    <!-- Sparkline -->
-    <script src="{{ asset('adminLTE/plugins/sparklines/sparkline.js') }}"></script>
-    <!-- JQVMap -->
-    <script src="{{ asset('adminLTE/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
-    <script src="{{ asset('adminLTE/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
-    <!-- jQuery Knob Chart -->
-    <script src="{{ asset('adminLTE/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
-    <!-- daterangepicker -->
+    <!-- InputMask -->
     <script src="{{ asset('adminLTE/plugins/moment/moment.min.js') }}"></script>
+    <!-- date-range-picker -->
     <script src="{{ asset('adminLTE/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <!-- Tempusdominus Bootstrap 4 -->
     <script src="{{ asset('adminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-    <!-- Summernote -->
-    <script src="{{ asset('adminLTE/plugins/summernote/summernote-bs4.min.js') }}"></script>
-    <!-- overlayScrollbars -->
-    <script src="{{ asset('adminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+    <!-- DataTables -->
+    <script src="{{ asset('adminLTE/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('adminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('adminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="{{ asset('adminLTE/dist/js/pages/dashboard.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script>    
+    <script src="{{ asset('adminLTE/plugins/ion-rangeslider/js/ion.rangeSlider.js') }}"></script>
+            
+<!-- page script -->
+
+<script>
+  $(function () {
+    //Date range as a button
+    $('#daterange-btn').daterangepicker(
+      {
+        timePicker: true,
+        ranges   : {
+          'Today'       : [moment(), moment()],
+          'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+          'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        startDate: moment().subtract(29, 'days'),
+        endDate  : moment()
+      },
+      function (start, end) {
+        $('#reportrange').html(start.format('YYYY-M-D hh:mm:ss') + ' - ' + end.format('MMMM D, YYYY'));
+        
+        var order = "asc"
+        var user_id = "{{ _profile.id }}"
+        var start_at = start.format('YYYY-M-D hh:mm:ss')
+        var end_at = end.format('YYYY-M-D hh:mm:ss')
+        var limit = "100"
+
+        window.location = `{{ path("history") }}?order=${order}&user_id=${user_id}&account_id=&account_ref=&type=&sender_country_code=&recipient_country_code=&start_at=${start_at}&end_at=${end_at}&page=&limit=${limit}`;
+
+      }
+    )
+  })
+  
+  
+</script>  
+
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true,
+      "autoWidth": false,
+    });
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+    $(document).ready(function(){
+        /*Textbox Events*/
+        $("body")  
+          .on('click', '.transaction_detail_btn', function(f){
+            $("#transaction_detail_modal").modal("show");				
+        		f.stopImmediatePropagation();
+            })       
+            
+    })
+    
+</script>
 {% endblock %}
     

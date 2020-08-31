@@ -106,7 +106,6 @@
       <path value="$PROJECT_DIR$/vendor/symfony/security-core" />
       <path value="$PROJECT_DIR$/vendor/ocramius/proxy-manager" />
       <path value="$PROJECT_DIR$/vendor/doctrine/doctrine-bundle" />
-      <path value="$PROJECT_DIR$/vendor/ocramius/package-versions" />
       <path value="$PROJECT_DIR$/vendor/symfony/security-bundle" />
       <path value="$PROJECT_DIR$/vendor/jms/serializer" />
       <path value="$PROJECT_DIR$/vendor/jms/metadata" />

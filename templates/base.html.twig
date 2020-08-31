@@ -1,200 +1,1133 @@
 {% set _locale = 'fr' %}
+{% set _profile = app.user %}
+
+{% set _accountGroupAll = app.session.get('account_types') %}
+{% set _accountGroupForUser = _accountGroupAll %}
 
 <!DOCTYPE html>
 <html lang="{{ _locale }}">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <title>{% block title %}DatiCash - {% endblock %}</title>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <title>{% block title %}DatiCash - {% endblock %}</title>
 
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-     
-        {% block stylesheets %}
-            <!-- Font Awesome -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
-            <!-- Ionicons -->
-            <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-            <!-- Tempusdominus Bbootstrap 4 -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }} ">
-            <!-- iCheck -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-            <!-- JQVMap -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/jqvmap/jqvmap.min.css') }}">
-            <!-- Theme style -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
-            <!-- overlayScrollbars -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
-            <!-- Daterange picker -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/daterangepicker/daterangepicker.css') }}">
-            <!-- summernote -->
-            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/summernote/summernote-bs4.css') }}">
-            <!-- Google Font: Source Sans Pro -->
-            <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">		
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    {#
+            <!-- Select2 -->
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/select2/css/select2.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('adminLTE/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    #}
+    <!-- waitMe -->
+    <link rel="stylesheet" href="{{ asset('assets/js/waitMe-gh-pages/waitMe.min.css') }}">
 
-        {% endblock %}
-        <style>
-            .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
-                background-color: #84A8AC;
-                color: #fff;
-            }
+    {% block stylesheets %}
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Tempusdominus Bbootstrap 4 -->
+        <link rel="stylesheet" href="{{ asset('adminLTE/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }} ">
+        <!-- iCheck -->
+        <link rel="stylesheet" href="{{ asset('adminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+        <!-- JQVMap -->
+        <link rel="stylesheet" href="{{ asset('adminLTE/plugins/jqvmap/jqvmap.min.css') }}">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
+        <!-- overlayScrollbars -->
+        <link rel="stylesheet" href="{{ asset('adminLTE/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+        <!-- Daterange picker -->
+        <link rel="stylesheet" href="{{ asset('adminLTE/plugins/daterangepicker/daterangepicker.css') }}">
+        <!-- summernote -->
+        <link rel="stylesheet" href="{{ asset('adminLTE/plugins/summernote/summernote-bs4.css') }}">
+        <!-- Google Font: Source Sans Pro -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
-            [class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active, [class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active:focus, [class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active:hover {
-                background-color: rgba(132, 168, 168, 0.4);
-                color: #fefeff;
-            }
+    {% endblock %}
 
-            [class*=sidebar-dark-] {
-                background-color: #1F4051;
-            }
+    <!-- Sweet alert scripts-->
+    <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
+    {% block head_javascripts %}{% endblock %}
+    <style>
+        body {
+            min-width: 350px;
+        }
 
-            .datibox-bg-light {
-                background-color: #84A8AC!important;
-            }
-            .datibox-bg-light, .datibox-bg-light>a {
-                color: #fff!important;
-            }
-            
-            .datibox-bg-dark {
-                background-color: #84A8AC!important;
-            }
-            .datibox-bg-dark, .datibox-bg-dark>a {
-                color: #fff!important;
-            }
-            
-            .datibox-bg-primary {
-                background-color: #2C6FB7!important;
-            }
-            .datibox-bg-primary, .datibox-bg-primary>a {
-                color: #fff!important;
-            }
+        .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+            background-color: #84A8AC;
+            color: #fff;
+        }
 
-            a {
-                color: #1f4051;
-                text-decoration: none;
-                background-color: transparent;
-            }
+        [class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active, [class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active:focus, [class*=sidebar-dark-] .nav-treeview>.nav-item>.nav-link.active:hover {
+            background-color: rgba(132, 168, 168, 0.4);
+            color: #fefeff;
+        }
 
-            a:hover {
-                color: #2C6FB7;
-                text-decoration: none;
-            }
+        [class*=sidebar-dark-] {
+            background-color: #1F4051;
+        }
 
-            .datibadge-primary {
-                color: #fff;
-                background-color: #2C6FB7;
-            }
+        .datibox-bg-light {
+            background-color: #84A8AC!important;
+        }
+        .datibox-bg-light, .datibox-bg-light>a {
+            color: #fff!important;
+        }
 
-            .datibadge-dark {
-                color: #fff;
-                background-color: #1F4051;
-            }
-            .datitext-primary {
-                color: #2C6FB7!important;
-            }
-            .datitext-dark {
-                color: #1F4051!important;
-            }
-            .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
-                color: #343a40;
-                background-color: #f4f6f9;
-            }
-            .card-primary:not(.card-outline)>.card-header, .card-primary:not(.card-outline)>.card-header a {
-                color: #343a40;
-            }
-            .card-primary:not(.card-outline)>.card-header {
-                background-color: #f4f6f9;
-            }
-            .card-primary.card-outline {
-                border-top: 3px solid #1f4051;
-            }
-            .pin-block .pincode_label {
-                font-size: 16px;
-                font-weight: 600;
-                margin-top: -1px;
-                display: block;
-            }
-            .pin-block .description {
-                color: #6c757d;
-                font-size: 13px;
-                margin-top: -3px;
-                display: block;
-            } 
-            .profile-user-label {
-                color: #1f4051;
-                text-decoration: none;
-                background-color: transparent;
-                cursor: pointer;
-            }
-            .profile-user-label:hover {
-                color: #2C6FB7;
-            }
-            
-            /*upload profile*/
-            .profile input[type='file']{
-                position: absolute;
-                margin-top: 3px;
-                margin-left: 3px;
-                height: 1px;
-                width: 1px;
-                z-index: -5;
-            }
-            .products-list .account-name {
-                font-weight: 600;
-            }
-            
-            .swal2-container {
-                z-index: 9999999;
-            }
-        </style>
-        {% block head_javascripts %}{% endblock %}
-    </head>
-    <body class="hold-transition sidebar-mini layout-fixed">
-    {% block body %}
-        <div class="wrapper">
-            <!-- Navbar -->
-            {% block navbar %}{% endblock %}
-            <!-- /.navbar --> 
+        .datibox-bg-dark {
+            background-color: #84A8AC!important;
+        }
+        .datibox-bg-dark, .datibox-bg-dark>a {
+            color: #fff!important;
+        }
 
-            <!-- Main Sidebar Container -->
-            {% block sidebar %}{% endblock %}
-            <!-- /.sidebar --> 
-        
-            <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
+        .datibox-bg-primary {
+            background-color: #2C6FB7!important;
+        }
+        .datibox-bg-primary, .datibox-bg-primary>a {
+            color: #fff!important;
+        }
 
-                <!-- Content Header (Page header) -->
-                {% block content_header %}{% endblock %}
-                <!-- /.content-header -->
+        a {
+            color: #1f4051;
+            text-decoration: none;
+            background-color: transparent;
+        }
 
-                <!-- Main content -->
-                {% block content_main %}{% endblock %}
-                <!-- /.content -->	
+        a:hover {
+            color: #2C6FB7;
+            text-decoration: none;
+        }
 
-            </div>
-            <!-- /.content-wrapper -->
-            <footer class="main-footer">
-                <strong>Copyright &copy; 2019-2020 <a href="https://daticash.com">DatiCash System</a>.</strong>
-                All rights reserved.
-                <div class="float-right d-none d-sm-inline-block">
-                    <b>Version</b> 1.0.0
-                </div>
-            </footer>	
+        .datibadge-primary {
+            color: #fff;
+            background-color: #2C6FB7;
+        }
+
+        .datibadge-dark {
+            color: #fff;
+            background-color: #1F4051;
+        }
+        .datitext-primary {
+            color: #2C6FB7!important;
+        }
+        .datitext-dark {
+            color: #1F4051!important;
+        }
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+            color: #343a40;
+            background-color: #f4f6f9;
+        }
+        .card-primary:not(.card-outline)>.card-header, .card-primary:not(.card-outline)>.card-header a {
+            color: #343a40;
+        }
+        .card-primary:not(.card-outline)>.card-header {
+            background-color: #f4f6f9;
+        }
+        .card-primary.card-outline {
+            border-top: 3px solid #1f4051;
+        }
+        .pin-block .pincode_label {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: -1px;
+            display: block;
+        }
+        .pin-block .description {
+            color: #6c757d;
+            font-size: 13px;
+            margin-top: -3px;
+            display: block;
+        }
+        .profile-user-label {
+            color: #1f4051;
+            text-decoration: none;
+            background-color: transparent;
+            cursor: pointer;
+        }
+        .profile-user-label:hover {
+            color: #2C6FB7;
+        }
+
+        /*upload profile*/
+        .profile input[type='file']{
+            position: absolute;
+            margin-top: 3px;
+            margin-left: 3px;
+            height: 1px;
+            width: 1px;
+            z-index: -5;
+        }
+        .products-list .account-name {
+            font-weight: 600;
+        }
+
+        .swal2-container {
+            z-index: 9999999;
+        }
+
+        .input-error {
+            color: red!important;
+            border-color:red;
+        }
+
+        .swal2-btn {
+            margin: .3125em;
+            padding: .625em 2em;
+            box-shadow: none;
+            font-weight: 500;
+        }
+
+        .blink_text {
+
+            animation:2s blinker linear infinite;
+            -webkit-animation:2s blinker linear infinite;
+            -moz-animation:2s blinker linear infinite;
+
+            color: #fff;
+        }
+
+        @-moz-keyframes blinker {
+            0% { opacity: 1.0; }
+            50% { opacity: 0.0; }
+            100% { opacity: 1.0; }
+        }
+
+        @-webkit-keyframes blinker {
+            0% { opacity: 1.0; }
+            50% { opacity: 0.0; }
+            100% { opacity: 1.0; }
+        }
+
+        @keyframes blinker {
+            0% { opacity: 1.0; }
+            50% { opacity: 0.0; }
+            100% { opacity: 1.0; }
+        }
+
+        .text-ellipsied{
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        /* Thumbnails ================================== */
+        .thumbnail {
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            -ms-border-radius: 0;
+            border-radius: 0; }
+        .thumbnail p:not(button) {
+            color: #999999;
+            font-size: 14px; }
+        .thumbnail h3 {
+            font-weight: bold;
+            font-size: 17px; }
+
+        .thumbnail > img, .thumbnail a > img {
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+
+        .img-responsive, .thumbnail > img, .thumbnail a > img, .carousel-inner > .item > img, .carousel-inner > .item > a > img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .thumbnail {
+            display: block;
+            padding: 4px;
+            margin-bottom: 20px;
+            line-height: 1.42857143;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            -webkit-transition: border .2s ease-in-out;
+            -o-transition: border .2s ease-in-out;
+            transition: border .2s ease-in-out;
+        }
+        .thumbnail .caption {
+            padding: 9px;
+            color: #333;
+        }
+
+    </style>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+{% block body %}
+    <div class="wrapper">
+        <!-- Navbar -->
+        {% block navbar %}{% endblock %}
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        {% block sidebar %}{% endblock %}
+        <!-- /.sidebar -->
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+
+            <!-- Content Header (Page header) -->
+            {% block content_header %}{% endblock %}
+            <!-- /.content-header -->
+
+            <!-- Main content -->
+            {% block content_main %}{% endblock %}
+            <!-- /.content -->
+
         </div>
-        <!-- ./wrapper -->
-    {% endblock body %}
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2019-2020 <a href="https://daticash.com">DatiCash System</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 1.0.0
+            </div>
+        </footer>
+    </div>
+    <!-- ./wrapper -->
 
-        <!-- jQuery -->
-        <script src="{{ asset('adminLTE/plugins/jquery/jquery.min.js') }}"></script>
-        <!-- jQuery UI 1.11.4 -->
-        <script src="{{ asset('adminLTE/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
-            
-        {% block javascripts %}{% endblock %}
-            
-        {% block topup_and_sweetalert %}
+{% endblock body %}
 
-        {% endblock %}
+<!-- jQuery -->
+<script src="{{ asset('adminLTE/plugins/jquery/jquery.min.js') }}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{{ asset('adminLTE/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+<!-- Select2 -->
+<script src="{{ asset('adminLTE/plugins/select2/js/select2.full.min.js') }}"></script>
+<!-- waitMe -->
+<script src="{{ asset('assets/js/waitMe-gh-pages/waitMe.min.js') }}"></script>
 
-    </body>
+{% block javascripts %}{% endblock %}
+
+<script type="text/javascript"><!--
+    {#
+            $("select").select2();
+
+            $(document).on('click', '.topup_btn', function(){
+                            alert("topup activated")
+            })
+    #}
+    {% if _profile.id is defined and _profile.id is not empty %}
+    {% for account in _profile.accounts %}
+    {% for role in account.roles %}
+
+    {% if role == "ROLE_USER" and account.is_default == 1 %}
+    var defaultBasicAccount_id = "{{ account.id }}" ;
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+
+    $(document).ready(function(){
+        /*Textbox Events*/
+        $("body")
+            .on('click', '#btn_subscribe_to_afiliate_program' , function(e) {
+                e.preventDefault();
+                var $btn = $(this);
+                var pid = $btn.attr("data-value");
+
+                var apiResource;
+
+                var hrefCondition;
+                var confirmButtonText;
+                var successMessage;
+                var alreadyMessage;
+                var failedMessage;
+                var confirmHref;
+
+                switch(pid.toLowerCase()) {
+                    case "developer":
+                        apiResource = "application";//application/
+                        hrefCondition ="#";
+                        successMessage = 'Welcome to Daticash Program.' +
+                            '<br>You are now a affiliated Developer.To take full advantage of your privilege, Create your <a href="settings?item=point_of_sale_setting&aid=0&create=ROLE_DEVELOPER" class="topup_btn"><b>First Application</b></a>';
+                        confirmButtonText = '<i class="fa fa-thumbs-up"></i> Create New APPLICATION!';
+                        alreadyMessage = "You are already Developer no need to subscribe again";
+                        confirmHref = "{{ path('accounts') }}?item=application_setting&aid=0&create=ROLE_DEVELOPER";
+                        break;
+
+                    case "merchant":
+                        apiResource = "merchant-activity";//merchant-activity/
+                        hrefCondition ="#";
+                        successMessage = 'Welcome to Daticash Program.' +
+                            '<br>You are now a affiliated Merchant.To take full advantage of your privilege, Create your <a href="settings?item=point_of_sale_setting&aid=0&create=ROLE_MERCHANT" class="topup_btn"><b>First Merchant Activity</b></a>';
+                        confirmButtonText = '<i class="fa fa-thumbs-up"></i> Create New ACTIVITY!'
+                        alreadyMessage = "You are already Merchant no need to subscribe again";
+                        confirmHref = "{{ path('accounts') }}?item=activity_setting&aid=0&create=ROLE_MERCHANT";
+                        break;
+
+                    case "business":
+                        apiResource = "point-of-sale";//point-of-sale/
+                        hrefCondition ="#";
+                        successMessage = 'Welcome to Daticash Program.' +
+                            '<br>You are now a Daticash Agent.To take full advantage of your privilege, Create your <a href="settings?item=point_of_sale_setting&aid=0&create=ROLE_BUSINESS" class="topup_btn"><b>First Point of Sale</b></a>';
+                        confirmButtonText = '<i class="fa fa-thumbs-up"></i> Create New POINT OF SALE!';
+                        alreadyMessage = "You are already DatiCash Agent no need to subscribe again";
+                        confirmHref = "{{ path('accounts') }}?item=point_of_sale_setting&aid=0&create=ROLE_BUSINESS";
+                        break;
+
+                    default :
+
+                }
+
+
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn swal2-btn btn-info',
+                        cancelButton: 'btn swal2-btn btn-default'
+                    },
+                    buttonsStyling: false
+                });
+
+
+                $btn.text("Processing...").prop("disabled", true);
+                //estimate subscription affiliate account
+                var estimate_subscription_affiliate_account = '{{ path("estimate_subscription_affiliate_account", {'type':'type'}) }}';
+                estimate_subscription_affiliate_account = estimate_subscription_affiliate_account.replace("type", apiResource);
+
+                fetch(estimate_subscription_affiliate_account, {"method": "GET", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                //fetch(`https://api.daticash.com/v1/api/${apiResource}/estimate-subscription`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "GET"})//for test
+                    .then(
+                        function(response) {
+                            if (!response.ok) {
+                                throw new Error(response.statusText)
+                                response.json().then(function(data) {
+                                    console.log(data);
+                                })
+                            }else{
+                                //Action successfully
+                                response.json().then(function(data) {
+                                    console.log(data);
+                                    if(data.subscription_fees){
+                                        var user_id="{{ _profile.id }}";
+                                        var confirm_code = "";
+                                        //data.subscription_fees = 18; //for test
+                                        if(data.subscription_fees > 0){
+                                            swalWithBootstrapButtons.fire({
+                                                title: 'Alert!',
+                                                html: 'Becoming a DatiCash partner, will cost you '+ data.subscription_fees + data.currency +
+                                                '<br>A code will sent to your by phone number to confirm your join if you <a href="'+ hrefCondition +'" target="_blank" class="topup_btn"><b>accept the conditions</b></a>',
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                confirmButtonText: 'Yes, join program!',
+                                                showLoaderOnConfirm: true,
+                                                preConfirm: () => {
+                                                //generate_confirm_code
+                                                var generate_confirm_code = '{{ path("generate_confirm_code", {'id':'defaultBasicAccount_id'}) }}';
+                                            generate_confirm_code = generate_confirm_code.replace("defaultBasicAccount_id", defaultBasicAccount_id);
+
+                                            return fetch(generate_confirm_code+"?by=MAIL", {"method": "GET", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                                            //return fetch(`https://api.daticash.com/v1/api/account/${user_id}/generate-confirm-code?by=MAIL`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "GET"} )//confirm-password url //for test
+                                                .then(response => {
+                                                if (!response.ok) {
+                                                throw new Error(response.statusText)
+                                            }
+                                            return response.json()
+                                        })
+                                        .catch(error => {
+                                                swalWithBootstrapButtons.showValidationMessage(
+                                                `Request error: ${error}`
+                                            )
+                                        })
+                                        },
+                                        }).then((result) => {
+                                                if (result.value) {
+                                                console.log(result)
+                                                $btn.prop("disabled", false);
+                                                swalWithBootstrapButtons.fire({
+                                                    title: "Confirm!",
+                                                    html: 'Enter the receive SMS code to confirm your subscription:'+
+                                                    '<br><h6>If your not receive the code by sms, check your whatapp account or email or <a href="#" id="generate-confirm-code" class=""><b>click here</b></a> to request a new code.</h6>',
+                                                    input: "text",
+                                                    //closeOnConfirm: true,
+                                                    inputPlaceholder: "SMS Code",
+                                                    inputAttributes: {
+                                                        autocapitalize: "off"
+                                                    },
+                                                    showCancelButton: false,
+                                                    showLoaderOnConfirm: true,
+                                                    focusConfirm: false,
+                                                    confirmButtonText:'<i class="fa fa-thumbs-up"></i> Confirm',
+                                                    confirmButtonAriaLabel: "Thumbs up, great!",
+                                                    cancelButtonText:'<i class="fa fa-thumbs-down"></i>',
+                                                    cancelButtonAriaLabel: "Thumbs down",
+                                                    preConfirm: (confirm_code) => {
+                                                    //subscribe_affiliate_account
+                                                    var subscribe_affiliate_account = '{{ path("subscribe_affiliate_account", {'id':'user_id','type':'apiResource' }) }}';
+                                                subscribe_affiliate_account = subscribe_affiliate_account.replace("apiResource", apiResource);
+                                                subscribe_affiliate_account = subscribe_affiliate_account.replace("user_id", user_id);
+
+                                                return fetch(`${subscribe_affiliate_account}?confirm_code=${confirm_code}`, {"method": "POST", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                                                //return fetch(`https://api.daticash.com/v1/api/${apiResource}/user/${id}/subscribe?user_id=${user_id}confirm_code=${confirm_code}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "POST"} )//confirm-password url //for test
+                                                    .then(response => {
+                                                    if (!response.ok) {
+                                                    throw new Error(response.statusText)
+                                                }
+                                                return response.json()
+                                            })
+                                            .catch(error => {
+                                                    swalWithBootstrapButtons.showValidationMessage(
+                                                    `The confirm code given is wrong.`
+                                                )
+                                            })
+                                            },
+                                                allowOutsideClick: () => !swalWithBootstrapButtons.isLoading()
+                                            }).then((data) => {
+                                                    console.log(data)
+                                                if (data.value.message) { // for test
+                                                    swalWithBootstrapButtons.fire({
+                                                        title: 'Great!',
+                                                        html: successMessage,
+                                                        icon: 'success',
+                                                        showCancelButton: true,
+                                                        focusConfirm: true,
+                                                        confirmButtonText: confirmButtonText,
+                                                        confirmButtonAriaLabel: 'Yes, Create!',
+                                                    }).then((result) => {
+                                                        if (result.value) {
+                                                        window.location = confirmHref;
+                                                    }
+                                                })
+                                                }else{
+                                                    dQS_submitSubscriptionToAprogram(data.value.code, confirmHref, confirmButtonText, successMessage, failedMessage, alreadyMessage);
+                                                }
+
+                                            })
+
+                                            }else{
+                                                $btn.prop("disabled", false);
+                                            }
+
+                                        })
+
+                                        }else{
+                                            if(data.subscription_fees == 0){
+                                                //create_account
+                                                //subscribe_affiliate_account
+                                                var subscribe_affiliate_account = '{{ path("subscribe_affiliate_account", {'id':'user_id','type':'apiResource' }) }}';
+                                                subscribe_affiliate_account = subscribe_affiliate_account.replace("apiResource", apiResource);
+                                                subscribe_affiliate_account = subscribe_affiliate_account.replace("user_id", user_id);
+
+                                                return fetch(subscribe_affiliate_account, {"method": "POST", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                                                //return fetch(`https://api.daticash.com/v1/api/${apiResource}/user/${user_id}/subscribe`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "POST"} )//confirm-password url //for test
+                                                    .then(response => {
+                                                    if (!response.ok) {
+                                                    response.json().then(function(data) {
+                                                        console.log(data);
+                                                        throw new Error(response.statusText)
+                                                    })
+                                                }else{
+                                                    response.json().then(function(data) {
+                                                        console.log(data);
+                                                        //code=200; //for test
+                                                        if (data.message) { // for test
+                                                            swalWithBootstrapButtons.fire({
+                                                                title: 'Great!',
+                                                                html: successMessage,
+                                                                icon: 'success',
+                                                                showCancelButton: true,
+                                                                focusConfirm: true,
+                                                                confirmButtonText: confirmButtonText,
+                                                                confirmButtonAriaLabel: 'Yes, Create!',
+                                                            }).then((result) => {
+                                                                if (result.value) {
+                                                                window.location = confirmHref;
+                                                            }
+                                                        })
+                                                        }else{
+                                                            dQS_submitSubscriptionToAprogram(data.code, confirmHref, confirmButtonText, successMessage, failedMessage, alreadyMessage);
+                                                        }
+                                                    })
+                                                }
+                                            })
+                                            .catch(error => {
+                                                    swalWithBootstrapButtons.showValidationMessage(
+                                                    `Request failed: ${error}`
+                                                )
+                                            })
+                                                $btn.text("Create").prop("disabled", false);
+                                            }else{
+                                                $btn.text("Create").prop("disabled", false);
+                                                swalWithBootstrapButtons.fire(
+                                                    "ERROR!",
+                                                    "Ressource not found.",
+                                                    "error"
+                                                )
+                                            }
+                                        }
+                                    }else{
+                                        $btn.text("Create").prop("disabled", false);
+                                        console.log()
+                                        switch(data.code) {
+                                            case 400:
+                                                swalWithBootstrapButtons.fire(
+                                                    "ERROR!",
+                                                    "Something is wrong with the request, possibly missing or improperly formatted parameter.",
+                                                    "error"
+                                                )
+
+                                                break;
+                                            default :
+                                                $btn.text("Create").prop("disabled", false);
+                                                swalWithBootstrapButtons.fire(
+                                                    "ERROR REQUEST!",
+                                                    "Request computed failed",
+                                                    "error"
+                                                )
+                                        }
+                                    }
+
+                                })
+
+                            }
+                        }).catch(error => {console.log(`${error}`)});
+            })
+
+    })
+    {% endif %}
+
+    function dQS_submitSubscriptionToAprogram(code, confirmHref, confirmButtonText, successMessage, failedMessage, alreadyMessage){
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn swal2-btn btn-info',
+                cancelButton: 'btn swal2-btn btn-default'
+            },
+            buttonsStyling: false
+        });
+
+        switch(code) {
+            case 400://Action error
+                console.log("Something is wrong with the request, possibly missing or improperly formatted parameter.");
+                swalWithBootstrapButtons.fire(
+                    "ERROR!",
+                    "Failed, innapropriate request. Contact the integer administrator",
+                    "error"
+                )
+
+                break;
+            case 403://Action error
+                console.log("used ApiKey owner does not have permission to access this resource.");
+                swalWithBootstrapButtons.fire(
+                    "ERROR!",
+                    "Forbidden, you have not permission to do this action.",
+                    "error"
+                )
+
+                break;
+            case 409://Action error
+                swalWithBootstrapButtons.fire(
+                    "ALERT!",
+                    alreadyMessage,
+                    "warning"
+                )
+
+                break;
+            case 412://Action error
+                swalWithBootstrapButtons.fire({
+                    title: 'WARNNING!',
+                    html:
+                    'Your <a href="https://support.daticash.com/docs/daticash-api/daticash-users-guide/accounts-2/current-account/" target="_blank" class="topup_btn"><b>Default Basic account does not have sufficient balance.</b></a>' +
+                    '<br><a href="operation?cid=1&sid=2" class="topup_btn"><b>TopUp Now</b></a>' +
+                    ' or change your default Basic account and try again.',
+                    icon: 'info',
+                    showCancelButton: false,
+                    focusConfirm: false,
+                    confirmButtonText:
+                        '<i class="fa fa-thumbs-up"></i> Great!',
+                    confirmButtonAriaLabel: 'Thumbs up, great!',
+                })
+
+                break;
+            default:
+                swalWithBootstrapButtons.fire(
+                    "ERROR REQUEST!",
+                    "Request computed failed!",
+                    "error"
+                )
+        }
+
+    }
+
+    function dQS_submitTransaction($btn, success_href, failed_href) {
+        //Submit the informations to valide and proceed the transaction (complete version)
+        if (json.id) {
+            /************************************************************ begin process transaction ******************************************/
+            let transaction_id = json.id
+            let status
+            let timerInterval
+            let checkPath = "{{ path("transactions_view") }}";
+
+            Swal.fire({
+                title: "Traitement en cour",
+                html: "STATUS : <b class=\"status_js\">Mise à jour de l\'historique de la transaction.</b>.",
+                icon: "info",
+                timer: 10000,
+                timerProgressBar: true,
+                onBeforeOpen: () => {
+                // afficher le satatu de la transaction
+                $('#daticash_display_transaction_status_topUp').remove();
+            $('.swal2-container').append(daticash_display_transaction_status_topUp());
+            $('#daticash_display_transaction_status_topUp').css(
+                {
+                    "position" : "fixed",
+                    "top" : "inherit",
+                    "padding-top" : "12px"
+                });
+
+            daticash_select_transaction_status_position(3);
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+                //return fetch(`https://api.daticash.com/v1/api/mobilemoney/${transaction_id}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}})//confirm-password url
+                return fetch(checkPath + "/" + transaction_id , {"method": "GET"})//check status url
+                    .then(
+                        function(response) {
+                            console.log("application response = " + response);
+                            if (!response.ok) {
+                                // Examine the text in the response
+                                response.json().then(function(data) {
+                                    status = data.step_description
+                                    console.log(data.step_description);
+                                })
+                            }else{
+                                // Examine the text in the response
+                                response.json().then(function(data) {
+
+                                    if(data.code === undefined){
+                                        status = data.step_description
+                                        console.log("api response = " +data.step_description);
+
+                                        switch(data.status.toLowerCase()) {
+                                            case "completed"://Action successfully
+                                                Swal.fire(
+                                                    "Complete!",
+                                                    "Your transaction Successfully Completed.",
+                                                    "success"
+                                                )
+                                                break;
+
+                                            case "failed"://BAD_REQUEST
+                                                Swal.fire(
+                                                    "ERROR!",
+                                                    "Something is wrong with the request, possibly missing or improperly formatted parameters",
+                                                    "error"
+                                                )
+                                                break;
+
+                                            case "confirm_requested"://CONFIRM-PIN-CODE
+                                                clearInterval(timerInterval)
+                                                Swal.stopTimer()//Stops the timer in case when timer parameter is set. Returns the time left
+                                                Swal.isTimerRunning()//Returns the status of a timer: true if is running, false if it's paused
+                                                //let currency_sent = data.currency_sent;
+                                                //let amount_sent = data.amount_sent;
+                                                //let recipient_phone = data.recipient_phone;
+                                                let recipient_username = data.recipient_username;
+                                                let confirmPath = "{{ path("transactions_update") }}";
+
+                                                Swal.fire({
+                                                    title: "Confirm Transaction!",
+                                                    text: "Vous etes sur le point d\'effectuer une transaction de "+amount_sent+" "+currency_sent+" vers le "+recipient_phone+"("+recipient_username+"). entrer votre PIN pour confirmer la transaction:",
+                                                    input: "password",
+                                                    //closeOnConfirm: true,
+                                                    inputPlaceholder: "Your PIN Code",
+                                                    inputAttributes: {
+                                                        autocapitalize: "off"
+                                                    },
+                                                    showCancelButton: false,
+                                                    showLoaderOnConfirm: true,
+                                                    focusConfirm: false,
+                                                    confirmButtonText:'<i class="fa fa-thumbs-up"></i> Confirm',
+                                                    confirmButtonAriaLabel: "Thumbs up, great!",
+                                                    cancelButtonText:'<i class="fa fa-thumbs-down"></i>',
+                                                    cancelButtonAriaLabel: "Thumbs down",
+                                                    preConfirm: (password) => {
+                                                    //return fetch(`//api.github.com/users/${password}`)//confirm-password url
+                                                    return fetch(confirmPath + "/" + transaction_id  + "?password=" +`${password}`, {"method": "PUT"})//confirm-password url
+                                                        .then(response => {
+                                                        if (!response.ok) {
+                                                throw new Error(response.statusText)
+                                            }
+                                                return response.json()
+                                        })
+                                    .catch(error => {
+                                            Swal.showValidationMessage(
+                                            `Request failed: ${error}`
+                                        )
+                                    })
+                                    },
+                                        allowOutsideClick: () => !Swal.isLoading()
+                                    }).then((result) => {
+                                            if (result.code == 201) {
+                                            let status
+                                            let timerInterval
+                                            Swal.fire({
+                                                title: "Traitement en cour",
+                                                html: "STATUS : <b class=\"status_js\">Mise à jour de l\'historique de la transaction.</b>.",
+                                                icon: "info",
+                                                timer: 10000,
+                                                timerProgressBar: true,
+                                                onBeforeOpen: () => {
+                                                Swal.showLoading()
+                                            timerInterval = setInterval(() => {
+                                                //return fetch(`https://api.daticash.com/v1/api/mobilemoney/${transaction_id}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}})//confirm-password url
+                                                return fetch(checkPath + "/" + transaction_id , {"method": "GET"})//check status url
+                                                    .then(
+                                                        function(response) {
+                                                            console.log("application response after confirm = " + response);
+                                                            if (!response.ok) {
+                                                                // Examine the text in the response
+                                                                response.json().then(function(data) {
+                                                                    status = data.step_description
+                                                                    console.log(data.step_description);
+                                                                })
+                                                            }else{
+                                                                // Examine the text in the response
+                                                                response.json().then(function(data) {
+                                                                    status = data.step_description
+                                                                    console.log("api response after confirm = " +data.step_description);
+
+                                                                    switch(data.status.toLowerCase()) {
+                                                                        case "completed"://Action successfully
+                                                                            Swal.fire(
+                                                                                "Complete!",
+                                                                                "Your transaction Successfully Completed.",
+                                                                                "success"
+                                                                            )
+                                                                            break;
+
+                                                                        case "failed"://BAD_REQUEST
+                                                                            Swal.fire(
+                                                                                "ERROR!",
+                                                                                "Something is wrong with the request, possibly missing or improperly formatted parameters",
+                                                                                "error"
+                                                                            )
+                                                                            break;
+                                                                    }
+
+                                                                    const content = Swal.getContent()
+                                                                    if (content) {
+                                                                        const b = content.querySelector(".status_js")
+                                                                        if (b) {
+                                                                            b.textContent = status
+                                                                        }
+                                                                    }
+                                                                })
+                                                            }
+                                                        })
+                                                    .catch(function(err) {
+                                                        console.log("Fetch Error :-S", err);
+                                                    });
+
+                                        }, 1000);
+                                        },
+                                            showLoaderOnConfirm: true,
+                                                onClose: () => {
+                                                clearInterval(timerInterval)
+                                                Swal.fire(
+                                                    "Aborded!",
+                                                    "Your session has been closed. But your transaction take too time...",
+                                                    "info"
+                                                )
+                                            }
+                                        }).then((result) => {
+                                                // Read more about handling dismissals below
+                                                if (result.dismiss === Swal.DismissReason.timer) {
+                                                console.log("I was closed by the timer")
+                                                Swal.fire({
+                                                    title: "<strong>STATUS TRANSACTION</strong>",
+                                                    icon: "info",
+                                                    html:
+                                                    "Was closed by the timer. Your transaction <b>take too time</b>, go to your " +
+                                                    "<a href=\"//daticash.com/dashborad\" target=\"_blank\">dashborad</a> " +
+                                                    "to check manually this transaction status",
+                                                    showCloseButton: true,
+                                                    showCancelButton: false,
+                                                    focusConfirm: false,
+                                                    confirmButtonText:"OK",
+                                                })
+                                            }
+                                        })
+
+                                        }
+                                    })
+                                        break;
+
+                                    default :
+
+                                    }
+                                        //end success process transaction
+                                    }else{
+                                        Swal.fire({
+                                            title: "ERROR!",
+                                            icon: "error",
+                                            text: "Bad Request thrown(Something is wrong with the request, possibly missing or improperly formatted parameter) or Resource Not Found(The given id may be wrong...) ",
+                                            showCloseButton: true,
+                                            showCancelButton: false,
+                                            focusConfirm: false,
+                                            confirmButtonText:"OK",
+                                        })//.then(function() {
+                                        //window.location = success_href;
+                                        //})
+                                        $btn.text("Send").prop("disabled", false);
+                                    }
+                                    //end error process transaction
+
+                                })
+                            }
+
+                            const content = Swal.getContent()
+                            if (content) {
+                                const b = content.querySelector(".status_js")
+                                if (b) {
+                                    b.textContent = status
+                                }
+                            }
+                        }
+                    )
+                    .catch(function(err) {
+                        console.log("Fetch Error :-S", err);
+                        Swal.fire({
+                            title: "ERROR!",
+                            icon: "error",
+                            text: "Connection failed",
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            focusConfirm: false,
+                            confirmButtonText:"OK",
+                        })//.then(function() {
+                        //window.location = success_href;
+                        //})
+                        $btn.text("Send").prop("disabled", false);
+                    });
+
+        }, 1000);
+        },
+            showLoaderOnConfirm: true,
+                onClose: () => {
+                clearInterval(timerInterval)
+                Swal.fire(
+                    "ABORDED!",
+                    "Your session has been closed. But your transaction take too time...",
+                    "info"
+                )
+            }
+        }).then((result) => {
+                // Read more about handling dismissals below
+                if (result.dismiss === Swal.DismissReason.timer) {
+                console.log("I was closed by the timer")
+                Swal.fire({
+                    title: "<strong>STATUS TRANSACTION</strong>",
+                    icon: "info",
+                    html:
+                    "Was closed by the timer. Your transaction <b>take too time</b>, go to your " +
+                    "<a href=\"//daticash.com/dashborad\" target=\"_blank\">dashborad</a> " +
+                    "to check manually this transaction status",
+                    showCloseButton: true,
+                    showCancelButton: false,
+                    focusConfirm: false,
+                    confirmButtonText:"OK",
+                })//.then(function() {
+                //window.location = success_href;
+                //})
+                $btn.text("Send").prop("disabled", false);
+            }
+        })
+            /*********************************************************** end process transaction *********************************************/
+        }else{
+            Swal.fire({
+                title: "ERROR!",
+                icon: "error",
+                text: "Unknow transaction Identifier.(Your transaction initiation have been maiby initiated, but processing failed...); Check your history to see more details).",
+                showCloseButton: true,
+                showCancelButton: false,
+                focusConfirm: false,
+                confirmButtonText:"OK",
+            })//.then(function() {
+            //window.location = success_href;
+            //})
+        }
+    }
+
+    //--></script>
+
+{% if _profile.id is defined and _profile.id is not empty %}
+    <!-- /.modal -->
+    <div class="modal fade" id="modal_subscribe_to_afiliate_program">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header mb-2">
+                    <h4 class="modal-title">
+                        SUBSCRIBE&nbsp
+                        <small>(By joining a program, you are empowered to create and manage many activities and applications.)</small>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    <div class="row">
+
+                        <div class="col-sm-4 col-md-4">
+                            <div class="thumbnail">
+                                <img src="{{ asset('assets/img/illustrations/merchant_account-illu.jpg') }}">
+                                <div class="caption">
+                                    {% set var = 0 %}
+                                    {% for userRight in _profile.roles %}
+                                        {% if 'ROLE_MERCHANT' in userRight %}
+                                            {% set var = var + 1 %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if var == 0 %}
+                                        <h3 class="text-ellipsied">Become Merchant</h3>
+                                        <p>
+                                            Gives a way to merchant to get paid online...
+                                            <span class="pincode_label" style="float:right">
+                                        <a href="https://support.daticash.com/docs/daticash-api/daticash-users-guide/accounts-2/merchant-account/" title="Learn more about Merchant Account" target="_blank"><i class="fa fa-question-circle datibox-bg-light"></i>&nbsp;Learn more</a>
+                                    </span>
+                                        </p>
+
+                                        <p class="pt-4 mb-1">
+                                            <a href="javascript:void(0)" class="btn btn-info waves-effect" role="button" id="btn_subscribe_to_afiliate_program" data-value="MERCHANT" title="Click here to join a marchant program group">SUBSCRIBE</a>
+                                        </p>
+                                    {% else %}
+                                        <h3 class="text-ellipsied">You are now a Merchant</h3>
+                                        <p>
+                                            Gives a way to merchant to get paid online...
+                                            <span class="pincode_label" style="float:right">
+                                        <a href="https://support.daticash.com/docs/daticash-api/daticash-users-guide/accounts-2/merchant-account/" title="Learn more about Merchant Account" target="_blank"><i class="fa fa-question-circle datibox-bg-light"></i>&nbsp;Learn more</a>
+                                    </span>
+                                        </p>
+
+                                        <p class="pt-4 mb-1">
+                                            <a href="{{ path('accounts') }}?item=activity_settings&aid=0&create=ROLE_MERCHANT" class="btn btn-info waves-effect" role="button" title="Add new Merchant Activity">ADD NEW ACTIVITY</a>
+                                        </p>
+
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-4 col-md-4">
+                            <div class="thumbnail">
+                                <img src="{{ asset('assets/img/illustrations/developer_account-illu.jpg') }}">
+                                <div class="caption">
+                                    {% set var = 0 %}
+                                    {% for userRight in _profile.roles %}
+                                        {% if 'ROLE_DEVELOPER' in userRight %}
+                                            {% set var = var + 1 %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if var == 0 %}
+                                        <h3 class="text-ellipsied">Become Developer</h3>
+                                        <p>
+                                            Extend daticash and receive commissions...
+                                            <span class="pincode_label" style="float:right">
+                                        <a href="https://support.daticash.com/docs/daticash-api/daticash-users-guide/accounts-2/developer-account/" title="Learn more about Developer Account" target="_blank"><i class="fa fa-question-circle datibox-bg-light"></i>&nbsp;Learn more</a>
+                                    </span>
+                                        </p>
+
+                                        <p class="pt-4 mb-1">
+                                            <a href="javascript:void(0)" class="btn btn-info waves-effect" role="button" id="btn_subscribe_to_afiliate_program" data-value="DEVELOPER" title="Click here to join a Developer program group">SUBSCRIBE</a>
+                                        </p>
+                                    {% else %}
+                                        <h3 class="text-ellipsied">You are now Developer</h3>
+                                        <p>
+                                            Extend daticash and receive commissions...
+                                            <span class="pincode_label" style="float:right">
+                                        <a href="https://support.daticash.com/docs/daticash-api/daticash-users-guide/accounts-2/developer-account/" title="Learn more about Developer Account" target="_blank"><i class="fa fa-question-circle datibox-bg-light"></i>&nbsp;Learn more</a>
+                                    </span>
+                                        </p>
+
+                                        <p class="pt-4 mb-1">
+                                            <a href="{{ path('accounts') }}?item=application_settings&aid=0&create=ROLE_DEVELOPER" class="btn btn-info waves-effect" role="button" title="Add new Application">ADD NEW APPLICATION</a>
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 col-md-4">
+                            <div class="thumbnail">
+                                <img src="{{ asset('assets/img/illustrations/business_account-illu.jpg') }}">
+                                <div class="caption">
+                                    {% set var = 0 %}
+                                    {% for userRight in _profile.roles %}
+                                        {% if 'ROLE_BUSINESS' in userRight %}
+                                            {% set var = var + 1 %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if var == 0 %}
+                                        <h3 class="text-ellipsied">Become Daticash Agent</h3>
+                                        <p>
+                                            Send money to others and receive commissions...
+                                            <span class="pincode_label" style="float:right">
+                                        <a href="https://support.daticash.com/docs/daticash-api/daticash-users-guide/accounts-2/business-account/" title="Learn more about Daticash Agent Account" target="_blank"><i class="fa fa-question-circle datibox-bg-light"></i>&nbsp;Learn more</a>
+                                    </span>
+                                        </p>
+
+                                        <p class="pt-4 mb-1">
+                                            <a href="javascript:void(0)" class="btn btn-info waves-effect" role="button" id="btn_subscribe_to_afiliate_program" data-value="BUSINESS" title="Click here to join a Daticash Agent program group">SUBSCRIBE</a>
+                                        </p>
+                                    {% else %}
+                                        <h3 class="text-ellipsied">Your are now Daticash Agent</h3>
+                                        <p>
+                                            Send money to others and receive commissions...
+                                            <span class="pincode_label" style="float:right">
+                                        <a href="https://support.daticash.com/docs/daticash-api/daticash-users-guide/accounts-2/business-account/" title="Learn more about Daticash Agent Account" target="_blank"><i class="fa fa-question-circle datibox-bg-light"></i>&nbsp;Learn more</a>
+                                    </span>
+                                        </p>
+                                        {% set _accountGroupForUser = _accountGroupAll %}
+                                        {% set var1 = 0 %}
+                                        {% for key1, accountGroupAll in _accountGroupAll %}
+                                            {% if accountGroupAll.name == "ROLE_MERCHANT"%}
+                                                {% for key2, accountGroupForUser in _accountGroupForUser %}
+                                                    {% if key2 == key1 %}
+                                                        {% for key2, account in _accounts %}
+                                                            {% if accountGroupAll.name in account.roles and accountGroupAll.name == "ROLE_BUSINESS"%}
+                                                                {% set var1 = var1 + 1 %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if var1 == 0 %}
+                                            <p class="pt-4 mb-1">
+                                                <a href="{{ path('accounts') }}?item=point_of_sale_settings&aid=0&create=ROLE_BUSINESS" class="btn btn-info waves-effect" role="button" title="Create your first point of sale">FIRST BUSINESS</a>
+                                            </p>
+                                        {% elseif var1 > 0 %}
+                                            <p class="pt-4 mb-1">
+                                                <a href="{{ path('accounts') }}?item=point_of_sale_settings&aid=0&create=ROLE_BUSINESS" class="btn btn-info waves-effect" role="button" title="Add new point of sale" >ADD POINT</a>
+                                            </p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+{% endif %}
+
+{% block topup_and_sweetalert %}
+
+{% endblock %}
+
+</body>
 </html>

@@ -1,78 +1,112 @@
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link text-center">
-       <img src={{ asset('assets/img/Daticash-white.png') }} alt="Daticash Logo" class="brand-image elevation-3"
-           style="opacity: .8; float: none; margin: 0;max-height: 83px;">
+        <img src={{ asset('assets/img/Daticash-white.png') }} alt="Daticash Logo" class="brand-image elevation-3"
+        style="opacity: .8; float: none; margin: 0;max-height: 83px;">
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-		  <li class="nav-item">
-			<a href="{{ path('dashboard.index') }}" class="nav-link {% if 'dashboard' in app.request.pathinfo  %} active {% endif %}">
-			  <i class="fas fa-tachometer-alt nav-icon"></i>
-			  
-			  <p> Dashboard</p>
-			</a>
-		  </li>	
-          <li class="nav-item">
-            <a href="{{ path('history') }}" class="nav-link {% if 'history' in app.request.pathinfo %} active {% endif %}">
-              <i class="nav-icon fas fa-th"></i>
-              <p> History</p>
-            </a>
-          </li>	
-          <li class="nav-item has-treeview {% if 'operation' in app.request.pathinfo %}menu-open{% endif %}">
-            <a href="#" class="nav-link {% if 'operation' in app.request.pathinfo %} active {% endif %}">
-              <i class="nav-icon fas fa-circle"></i>
-              <p>
-                Operations
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-            {% for categorie in _categories %}		
-              <li class="nav-item has-treeview {% if app.request.get('cid') is defined and app.request.get('cid') == categorie.id %} menu-open {% endif %}">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>
-                    {{ categorie.label }} 
-                    <i class="right fas fa-angle-left"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                {% for service in categorie.services %}
-                  <li class="nav-item">
-                    <a href="{{ path('operation.index', {'cid': categorie.id, 'sid': service.id}) }}" class="nav-link {% if app.request.get('sid') is defined and app.request.get('sid') == service.id %} active {% endif %}">
-                      <i class="far fa-dot-circle nav-icon"></i>
-                      <p>{{ service.label }}</p>
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                     with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <a href="{{ path('dashboard.index') }}" class="nav-link {% if 'dashboard' in app.request.pathinfo  %} active {% endif %}">
+                        <i class="fas fa-tachometer-alt nav-icon"></i>
+
+                        <p> Dashboard</p>
                     </a>
-                  </li>
-                {% endfor %}
-                </ul>
-              </li>
-            {% endfor %}  
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('history') }}" class="nav-link {% if 'history' in app.request.pathinfo %} active {% endif %}">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p> History</p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview {% if 'operation' in app.request.pathinfo %}menu-open{% endif %}">
+                    <a href="#" class="nav-link {% if 'operation' in app.request.pathinfo %} active {% endif %}">
+                        <i class="nav-icon fas fa-circle"></i>
+                        <p>
+                            Operations
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        {% for categorie in _categories %}
+                            <li class="nav-item has-treeview {% if app.request.get('cid') is defined and app.request.get('cid') == categorie.id %} menu-open {% endif %}">
+                                <a href="#" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>
+                                        {{ categorie.label }}
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    {% for service in categorie.services %}
+                                        <li class="nav-item">
+                                            <a href="{{ path('operation.index', {'cid': categorie.id, 'sid': service.id}) }}" class="nav-link {% if app.request.get('sid') is defined and app.request.get('sid') == service.id %} active {% endif %}">
+                                                <i class="far fa-dot-circle nav-icon"></i>
+                                                <p>{{ service.label }}</p>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% set var = 0 %}{% for userRight in _profile.roles %}{% if 'ROLE_DEVELOPER' in userRight or 'ROLE_BUSINESS' in userRight or 'ROLE_MERCHANT' in userRight %}{% set var = var + 1 %}{% endif %}{% endfor %}{% if var > 0 %}
+                    <li class="nav-item">
+                        <a href="{{ path('accounts') }}" class="nav-link {% if 'accounts' in app.request.pathinfo %} active {% endif %}">
+                            <i class="nav-icon fas fa-user"></i>
+                            <p> Accounts</p>
+                        </a>
+                    </li>
+                {% endif %}
+                {#
+                <li class="nav-item">
+                  <a href="{{ path('accounts') }}" class="nav-link {% if 'webhook' in app.request.pathinfo %} active {% endif %}">
+                    <i class="nav-icon fas fa-reply-all"></i>
+                    <p> Webhook</p>
+                  </a>
+                </li>
+                #}
+                <li class="nav-item">
+                    <a href="{{ path('main_settings') }}" class="nav-link {% if 'main_settings' in app.request.pathinfo %} active {% endif %}">
+                        <i class="nav-icon fas fa-cog"></i>
+                        <p> Settings</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('main_settings') }}" class="nav-link {% if 'support' in app.request.pathinfo %} active {% endif %}">
+                        <i class="nav-icon fas fa-headset"></i>
+                        <p> Support</p>
+                    </a>
+                </li>
+
             </ul>
-          </li>
-          <li class="nav-item">
-            <a href="{{ path('profile') }}" class="nav-link {% if 'profile' in app.request.pathinfo %} active {% endif %}">
-              <i class="nav-icon fas fa-user"></i>
-              <p> Profile</p>
-            </a>
-          </li>	
-          <li class="nav-item">
-            <a href="{{ path('profile') }}" class="nav-link {% if 'profile' in app.request.pathinfo %} active {% endif %}">
-              <i class="nav-icon fas fa-cog"></i>
-              <p> Settings</p>
-            </a>
-          </li>	
-		</ul>
-      </nav>
-      <!-- /.sidebar-menu -->
+        </nav>
+        <!-- /.sidebar-menu -->
+
+        <div class="card-footer text-center">
+            <div class="row">
+                <div class="col-sm-12 mb-2" style="display: inline-grid;">
+                    <a href="#" data-toggle="modal" data-target="#modal_subscribe_to_afiliate_program" class="btn btn-sm" style="border:solid; border-radius: 30px;" name="become_CD_account" id="become_CD_account"><span class="blink_text">Subscribe to afiliate program</span></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer text-center">
+            <div class="row">
+                <div class="col-sm-12 mb-2" style="display: inline-grid;">
+                    <a href="#" data-toggle="modal" data-target="#dati_create_account_modal" class="btn btn-sm" style="border:solid; border-radius: 30px;" name="become_CD_account" id="become_CD_account"><span class="blink_text">Subscribe to afiliate program</span></a>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- /.sidebar -->
-  </aside>
+
+</aside>

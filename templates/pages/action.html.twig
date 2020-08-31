@@ -84,7 +84,46 @@
     				'</div>'
     				);
     }
-    
+
+    function daticash_confirmed_subscribe_businessman_mail_popUp(){
+    		return	(		
+    		        '<div class="chat-popup" id="daticash_confirmed_subscription_mail_popUp">'+
+    					'<div id="ib-center" class="dati_popup">'+
+    						'<div class="dati_user_status_login"></div>'+
+    						
+    						'<div class="container">'+
+    							'<div class="row d-flex justify-content-center">'+
+    								'<div class="login-box" style="min-width: 285px; position: absolute;left: 5%;top: 5%;">'+
+    								
+    								  '<div class="login-logo">'+
+    									'<a href="http://daticash.com/" style="color: #fff;">'+
+    										'<img src="{{ absolute_url(asset("assets/img/Daticash5.png")) }}" style="width:100%;"/>'+
+    									'</a>'+
+    								  '</div>'+
+    								  
+    								  '<div class="login-feedback"></div>'+	
+    								  
+    								  '<div class="card body_card_daticash_login">'+
+    									'<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+	
+    									 '<div class="text-center mb-4">You are now a daticash business partner.</div>'+
+    										'<div class="row">'+
+    											'<div class="col-6"></div>'+
+    											'<div class="col-6" style="text-align: center;float: right;color: #8285889c;border-radius: 120px;border: solid 1px #9a98a24f;"><p class="text-right" style="display: inline;color: #777777;font-weight: 100;"></p><p style="cursor:pointer;display:inline;" id="subscribe_businessman_exit_btn" name="subscribe_businessman_exit_btn">Continue</p></div>'+
+    										'</div>'+
+    									 '</div>'+
+    									'</div>'+
+    								  '</div>'+
+    								  
+    								'</div>'+
+    							'</div>'+
+    						'</div>'+
+    						
+    						
+    					'</div>'+
+    				'</div>'
+    				);
+    }
+        
     function daticash_inappropriate_mail_popUp(){
     		return	(
                     '<div class="chat-popup" id="daticash_email_activated_popUp">'+
@@ -139,14 +178,24 @@
 	        $('.login-feedback').append('<div class="alert alert-success text-center">Great !!!</div>');        
        
         {% endfor %}
+        {% for message in app.flashes('subscribe_businessman') %}
+			$(".chat-popup").remove();
+				
+			$('#body_mask').after(daticash_confirmed_subscribe_businessman_mail_popUp());
+	        $('.login-feedback').append('<div class="alert alert-success text-center">Great !!!</div>');        
+       
+        {% endfor %}
     
          /*Textbox Events*/
         $("body")
             .on('click', '#exit_btn' , function() {
-                    var href = '{{ path("dashboard.index") }}';
+                var href = '{{ path("dashboard.index") }}';
                     window.location = href;
 				})
-        
+            .on('click', '#subscribe_businessman_exit_btn' , function() {
+                var href = '{{ path('profile') }}?item=account_settings&aid=0&create=ROLE_BUSINESS';
+                    window.location = href;
+				})
     });
 
 //--></script>

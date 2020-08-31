@@ -21,7 +21,7 @@
         "symfony/intl": "4.4.*",
         "symfony/mailer": "4.4.*",
         "symfony/monolog-bundle": "^3.1",
-        "symfony/orm-pack": "*",
+        "symfony/orm-pack": "^2.0",
         "symfony/process": "4.4.*",
         "symfony/security-bundle": "4.4.*",
         "symfony/serializer-pack": "*",
@@ -34,7 +34,7 @@
     },
     "require-dev": {
         "symfony/debug-pack": "*",
-        "symfony/maker-bundle": "^1.19",
+        "symfony/maker-bundle": "^1.20",
         "symfony/profiler-pack": "*",
         "symfony/test-pack": "*"
     },

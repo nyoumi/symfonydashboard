@@ -162,7 +162,7 @@
             <!-- International Telephone Input-->	
             <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
 <script type="text/javascript"><!--
-
+'use strict';
 var daticash_current_phone_number;  
 function configure_intlTelInput(){
 	var phone_number = document.querySelector("#phone_number");
@@ -300,7 +300,7 @@ function emailIsValid (email) {
 	return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
-function show_alert(type = "error", message, dismissible = 1){
+function show_alert(type, message, dismissible){
 	switch(type.toLowerCase()) {
     		case "error":
 				if (dismissible === 1){

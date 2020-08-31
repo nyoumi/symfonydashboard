@@ -5,192 +5,6 @@
 {% set _categories = app.session.get('services') %}
 {% set _accountGroupAll = app.session.get('account_types') %}
 
-{#{% set _accountGroupAll = [
-            {
-                'name': 'ROLE_BUSINESS',
-                'description':'Business accounts role'
-            },
-            {
-                'name': 'ROLE_MERCHANT',
-                'description':'merchant accounts role'
-            },
-            {
-                'name': 'ROLE_CURRENT',
-                'description':'ordinary current accounts role'
-            },
-            {
-                'name': 'ROLE_DEVELOPER',
-                'description':'Developer accounts role'
-            },
-]
-
-%}#}
-{% set _accountGroupAvailableForUser = [
-    {
-        'name': 'ROLE_TEST',
-        'description': 'TEST ROLE',
-        'accounts': [
-
-        {
-            "id": 49,
-            "name": "Mon Compte Business 1",
-            "balance": "0.0",
-            "description": "Mon Compte Business",
-            "is_default": false,
-            "currency": "XAF",
-            "roles": [
-            "ROLE_BUSINESS"
-        ],
-            "is_soft_deleted": null
-        },
-        {
-            "id": 50,
-            "name": "Mon Compte Developpeur 1",
-            "balance": "0.0",
-            "description": "Mon Compte Developpeur",
-            "is_default": false,
-            "currency": "XAF",
-            "roles": [
-            "ROLE_DEVELOPER"
-        ],
-            "is_soft_deleted": null
-        }
-    ],
-    },
-    {
-        'name': 'ROLE_CURRENT',
-        'description': 'ordinary current accounts role',
-        'accounts': [
-        {
-            'id': '12',
-            'name': 'Default',
-            'balance': '250000',
-            'description': "default account",
-            'is_default': true,
-            'currency': "XAF",
-            'roles': [
-            "ROLE_USER"
-        ]
-        },
-
-    ],
-    },
-    {
-        'name': 'ROLE_DEVELOPER',
-        'description': 'Developer accounts role',
-        'accounts': [
-        {
-            'id': '21',
-            'name': 'Easy School',
-            'balance': '122000',
-            'description': 'My School application account.',
-            'is_default': true,
-            'currency': "XAF",
-            'roles': [
-            "ROLE_DEVELOPER"
-        ]
-        },
-        {
-            'id': '14',
-            'name': 'SUIVI LS',
-            'balance': '2500000',
-            'description': 'Suivi des Liaisons Spécialisées',
-            'is_default': false,
-            'currency': "XAF",
-            'roles': [
-            "ROLE_DEVELOPER"
-        ]
-        },
-        {
-            'id': '15',
-            'name': 'IComerce',
-            'balance': '200',
-            'description': 'Plate forme de e-commerce.',
-            'is_default': false,
-            'currency': "XAF",
-            'roles': [
-            "ROLE_DEVELOPER"
-        ]
-        },
-        {
-            'id': '16',
-            'name': 'Gest Pro',
-            'balance': '25000',
-            'description': '',
-            'is_default': false,
-            'currency': "XAF",
-            'roles': [
-            "ROLE_DEVELOPER"
-        ]
-        },
-    ],
-    },
-    {
-        'name': 'ROLE_MERCHANT',
-        'description': 'merchant accounts role',
-        'accounts': [
-        {
-            'id': '17',
-            'name': 'Taxi express',
-            'balance': '1200',
-            'description': 'Taxi express.',
-            'is_default': true,
-            'currency': "XAF",
-            'roles': [
-            "ROLE_MERCHANT"
-        ]
-        },
-        {
-            'id': '18',
-            'name': 'ETS Dressing',
-            'balance': '0',
-            'description': 'Mon super marché de Dressing',
-            'is_default': false,
-            'currency': "XAF",
-            'roles': [
-            "ROLE_MERCHANT"
-        ]
-        },
-    ],
-    },
-    {
-        'name': 'ROLE_BUSINESS',
-        'description': 'Business accounts role',
-        'accounts': [
-        {
-            'id': '19',
-            'name': 'Super CallBox',
-            'balance': '100000',
-            'description': "Transfert d\'argent",
-            'is_default': true,
-            'currency': "XAF",
-            'roles': [
-            "ROLE_BUSINESS"
-        ]
-        }
-    ],
-    },
-]
-%}
-
-{#{%
-        set _accounts = [
-                      {
-                        "id": 21,
-                        "name": "default",
-                        "balance": "0.0",
-                        "description": "default account",
-                        "is_default": true,
-                        "currency": "XAF",
-                        "roles": [
-                          "ROLE_USER"
-                        ],
-                        "is_soft_deleted": null
-                      }
-                    ]
-
-%}#}
-
 {% extends "base.html.twig" %}
 
 {% block stylesheets %}
@@ -211,9 +25,7 @@
 {% endblock %}
 
 {% block head_javascripts %}
-    <!-- Sweet alert scripts-->
-    <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>
-    <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
+
 {% endblock %}
 
 {% block navbar %}
@@ -229,7 +41,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">Profile settings</h1>
+                    <h1 class="m-0 text-dark">Settings</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -292,7 +104,7 @@
                     <!-- About Me Box -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">My Accounts</h3>
+                            <h3 class="card-title">Applications and Activities</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -330,15 +142,46 @@
                     <div class="card">
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
-                                <li class="nav-item"><a class="nav-link active " href="#profile_settings" data-toggle="tab">Profile</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#account_settings" data-toggle="tab">Accounts</a></li>
+                                <li class="nav-item"><a class="nav-link active " href="#general_settings" data-toggle="tab">General</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#profile_settings" data-toggle="tab">Profile</a></li>
+                                {% set var = 0 %}{% for userRight in _profile.roles %}
+                                    {% if 'ROLE_MERCHANT' in userRight %}
+                                        {% set var = var + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if var > 0 %}<li class="nav-item"><a class="nav-link" href="#activity_settings" data-toggle="tab">Activities</a></li>{% endif %}
+                                {% set var = 0 %}{% for userRight in _profile.roles %}{% if 'ROLE_DEVELOPER' in userRight %}{% set var = var + 1 %}{% endif %}{% endfor %}{% if var > 0 %}<li class="nav-item"><a class="nav-link" href="#application_settings" data-toggle="tab">Applications</a></li>{% endif %}
+                                {% set var = 0 %}{% for userRight in _profile.roles %}{% if 'ROLE_BUSINESS' in userRight %}{% set var = var + 1 %}{% endif %}{% endfor %}{% if var > 0 %}<li class="nav-item"><a class="nav-link" href="#point_of_sale_settings" data-toggle="tab">Point of sale</a></li>{% endif %}
+                                {% set var = 0 %}{% for userRight in _profile.roles %}{% if 'ROLE_DEVELOPER' in userRight %}{% set var = var + 1 %}{% endif %}{% endfor %}{% if var > 0 %}<li class="nav-item"><a class="nav-link" href="#webhook_settings" data-toggle="tab">Webhook</a></li>{% endif %}
+
                                 <li class="nav-item"><a class="nav-link" href="#security_settings" data-toggle="tab">Security</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#account_settings" data-toggle="tab">Accounts</a></li>
+
                             </ul>
                         </div><!-- /.card-header -->
                         <div class="card-body">
                             <div class="tab-content">
 
-                                <div class="active tab-pane" id="profile_settings">
+                                <div class="active tab-pane" id="general_settings">
+                                    <form class="form-horizontal">
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">Language</label>
+                                            <select class="swal2-select" style="display: flex; margin: 0;" name="account_language" id="account_language">
+                                                <option value="" disabled="">Select your default language</option>
+                                                <option data-account_name = "English" data-account_description = "EN"  data-account_id = "english" value="english" class="nav-link {% if  "true" %} selected {% endif %}">English</option>
+                                                {#<option data-account_name = "Français" data-account_description = "FR"  data-account_id = "Français" value="Français" class="nav-link {% if  false %} selected {% endif %}">Français</option>#}
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="offset-sm-2 col-sm-10">
+                                                <button type="submit" id="save_profile_change_btn" class="btn btn-info float-right">Save Changes</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="tab-pane" id="profile_settings">
                                     <form class="form-horizontal">
                                         <div class="input-group mb-3 form-daticash_phone">
                                             <input type="hidden" class="form-control" id="country_code" name="country_code" value="{{ _profile.countryCode }}" >
@@ -426,77 +269,364 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="tab-pane" id="account_settings">
-                                    <form class="form-horizontal">
-                                        <div class="input-group mb-3 form-daticash_account">
-                                            <div class="col-sm-10" style="width:80%;">
-                                                <select class="swal2-select" style="display: flex; margin: 0; width: 100%;" name="daticash__account-listbox" id="daticash__account-listbox">
-                                                    <option style="color:#17a2b8;" data-account_name="" data-account_description =""  data-account_id ="0" value="0" class="nav-link" selected>Add New </option>
 
-                                                    {% set _accountGroupForUser = _accountGroupAll %}
+                                {% set var = 0 %}{% for userRight in _profile.roles %}
+                                    {% if 'ROLE_MERCHANT' in userRight %}
+                                        {% set var = var + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if var > 0 %}
+                                    <div class="tab-pane" id="activity_settings"></div>
+                                {% endif %}
 
-                                                    {% for key1, accountGroupAll in _accountGroupAll %}
-                                                    <optgroup style="color:gray;" label="My {{ accountGroupAll.description }}">
-                                                        {% set var = 0 %}
-                                                        {% for key2, accountGroupForUser in _accountGroupForUser %}
-                                                            {% if key2 == key1 %}
-                                                                {% for key2, account in _accounts %}
-                                                                    {% if accountGroupAll.name in account.roles %}
-                                                                        {% set var = var + 1 %}
-                                                                        <option style="color:#17a2b8;" data-account_name="{{ account.name }}" data-account_description="{{ account.description }}"  data-account_id="{{ account.id }}" value="{{ account.id }}" class="nav-link">{{ account.name }}</option>
+                                {% set var = 0 %}{% for userRight in _profile.roles %}
+                                    {% if 'ROLE_DEVELOPER' in userRight %}
+                                        {% set var = var + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if var > 0 %}
+                                    <div class="tab-pane" id="application_settings">
+                                        <div class="col-sm-12 col-md-12">
+                                            <div class="row mb-2" style="flex-flow: nowrap;">
+
+                                                <div class="col-sm-6 col-md-6">
+                                                    <select class="daticash__account-listbox" style="display: flex; margin: 0; width: 100%;" name="app_daticash__account-listbox" id="app_daticash__account-listbox">
+                                                        {% set _accountGroupForUser = _accountGroupAll %}
+
+                                                        {% for key1, accountGroupAll in _accountGroupAll %}
+                                                            {% if accountGroupAll.name == "ROLE_DEVELOPER"%}
+                                                                <optgroup style="color:gray;" label="My {{ accountGroupAll.description }}">
+                                                                {% set var = 0 %}
+                                                                {% for key2, accountGroupForUser in _accountGroupForUser %}
+                                                                    {% if key2 == key1 %}
+                                                                        {% for key2, account in _accounts %}
+                                                                            {% if accountGroupAll.name in account.roles and accountGroupAll.name == "ROLE_DEVELOPER"%}
+                                                                                {% set var = var + 1 %}
+                                                                                <option style="color:#17a2b8;" data-account_name="{{ account.name }}" data-account_description="{{ account.description }}"  data-account_id="{{ account.id }}" value="{{ account.id }}" class="nav-link">{{ account.name }}</option>
+                                                                            {% endif %}
+                                                                        {% endfor %}
                                                                     {% endif %}
                                                                 {% endfor %}
+                                                                {% if var == 0 %}
+                                                                    <option data-account_id="" value="" disabled="" selected >Please Select</option>
+                                                                {% endif %}
                                                             {% endif %}
-                                                        {% endfor %}
-                                                        {% if var == 0 %}
-                                                            <option data-account_id="" value="" disabled="" >Empty</option>
-                                                        {% endif %}
+                                                            </optgroup>
                                                         {% endfor %}
 
-                                                        {#
-                                                          {% for accountGroup in _accountGroupAvailableForUser %}
-                                                              <optgroup label="{{ accountGroup.description }}">
-                                                                {% for account in accountGroup.accounts %}
-                                                                    <option data-account_name="{{ account.name }}" data-account_description="{{ account.description }}"  data-account_id="{{ account.id }}" value="{{ account.id }}" class="nav-link">{{ account.name }}</option>
-                                                                {% endfor %}
-                                                              </optgroup>
-                                                          {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <span style="align-self: center;"><i class="fas fa-link"></i></span>
+                                                <div class="col-sm-6 col-md-6">
+                                                    <div class="input-group">
+                                                        <input id="new-event" type="text" class="form-control" placeholder="Merchant activity identifier">
+                                                        <div class="input-group-append">
+                                                            <button id="btn_add_new_merchant_activity_to_application" type="button" class="btn btn-primary">Link</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                                                {% for account in _accounts %}
-                                                                    <option data-account_name="{{ account.name }}" data-account_description="{{ account.description }}"  data-account_id="{{ account.id }}" value="{{ account.id }}" class="nav-link">{{ account.name }}</option>
-                                                                {% endfor %}
-                                                            #}
-                                                </select>
-                                            </div>
-                                            <div class="col-sm-2" style="width:20%;">
-                                                <a class="btn btn-default btn-sm change_phone_number_btn" href="#" data-user_id = "{{ _profile.id }}" data-toggle="modal" data-target="#change_phone_number_modal">
-                                                    <i class="fas fa-edit">
-                                                    </i>
-                                                    Change
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="name" class="col-sm-2 col-form-label">Name</label>
-                                            <div class="col-sm-10">
-                                                <small id="account_name-feedback"></small>
-                                                <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="description" class="col-sm-2 col-form-label">Description</label>
-                                            <div class="col-sm-10">
-                                                <small id="account_description-feedback"></small>
-                                                <textarea class="form-control" id="description" name="description" placeholder="Description" value=""></textarea>
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
-                                            <div class="offset-sm-2 col-sm-10 account_action_div_btn">
-                                            </div>
+                                        <div class="col-sm-12 col-md-12">
+                                            <form class="form-horizontal">
+
+                                                <div class="form-group row">
+                                                    <label for="name" class="col-sm-2 col-form-label">API Key</label>
+                                                    <div class="col-sm-10">
+                                                        <small id="account_name-feedback"></small>
+                                                        <input type="text" class="form-control" id="input_id_application_apikey" name="apikey" placeholder="API Key" value="" disabled>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12">
+                                                        <div class="row">
+                                                            <div class="col-12">
+
+                                                                <div class="card">
+                                                                    <div class="card-header">
+                                                                        <h4 class="card-title">Linked Activities</h4>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <!-- the events -->
+                                                                        <div id="external-events">
+                                                                            <div id="external-events">
+                                                                                <div class="card card-outline card-info collapsed-card">
+                                                                                    <div class="card-header">
+                                                                                        <h3 class="card-title">
+                                                                                            My MERCHANT ACCOUNT 4
+                                                                                            <small>Description My MERCHANT ACCOUNT 4</small>
+                                                                                        </h3>
+                                                                                        <!-- tools box -->
+                                                                                        <div class="card-tools">
+                                                                                            <button type="button" class="btn btn-tool btn-sm" title="Earnings made by this account">
+                                                                                                <span class="badge badge-info float-right">500<sup style="font-size: 10px">XAF</sup></span></button>
+                                                                                            <button type="button" class="btn btn-tool btn-sm" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                                                                                <i class="fas fa-plus"></i></button>
+                                                                                            <button type="button" class="btn btn-tool btn-sm" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                                                                                                <i class="fas fa-times"></i></button>
+                                                                                        </div>
+                                                                                        <!-- /. tools -->
+                                                                                    </div>
+                                                                                    <!-- /.card-header -->
+                                                                                    <div class="card-body pad" style="display: none;">
+
+
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="card card-outline card-info collapsed-card">
+                                                                                    <div class="card-header">
+                                                                                        <h3 class="card-title">
+                                                                                            My MERCHANT ACCOUNT 2
+                                                                                            <small>Description My MERCHANT ACCOUNT 2</small>
+                                                                                        </h3>
+                                                                                        <!-- tools box -->
+                                                                                        <div class="card-tools">
+                                                                                            <button type="button" class="btn btn-tool btn-sm" title="Earnings made by this account">
+                                                                                                <span class="badge badge-info float-right">500<sup style="font-size: 10px">XAF</sup></span></button>
+                                                                                            <button type="button" class="btn btn-tool btn-sm" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                                                                                <i class="fas fa-plus"></i></button>
+                                                                                            <button type="button" class="btn btn-tool btn-sm" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                                                                                                <i class="fas fa-times"></i></button>
+                                                                                        </div>
+                                                                                        <!-- /. tools -->
+                                                                                    </div>
+                                                                                    <!-- /.card-header -->
+                                                                                    <div class="card-body pad" style="display: none;">
+
+
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="card card-outline card-warning collapsed-card">
+                                                                                    <div class="card-header">
+                                                                                        <h3 class="card-title">
+                                                                                            EXTERNAL MERCHANT ACCOUNT 1
+                                                                                            <small>Description EXTERNAL MERCHANT ACCOUNT 1</small>
+                                                                                        </h3>
+                                                                                        <!-- tools box -->
+                                                                                        <div class="card-tools">
+                                                                                            <button type="button" class="btn btn-tool btn-sm" title="Earnings made by this account">
+                                                                                                <span class="badge badge-warning float-right">0<sup style="font-size: 10px">XAF</sup></span></button>
+                                                                                            <button type="button" class="btn btn-tool btn-sm" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                                                                                <i class="fas fa-plus"></i></button>
+                                                                                            <button type="button" class="btn btn-tool btn-sm" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                                                                                                <i class="fas fa-times"></i></button>
+                                                                                        </div>
+                                                                                        <!-- /. tools -->
+                                                                                    </div>
+                                                                                    <!-- /.card-header -->
+                                                                                    <div class="card-body pad" style="display: none;">
+                                                                                        <!-- if confirm required -->
+                                                                                        <div class="callout callout-warning">
+                                                                                            <h5>I Need a confirmation!</h5>
+                                                                                            <p>This alert is whowing if the Marchant of this account have not accept your linking.</p>
+                                                                                        </div>
+
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+
+                                                                <div class="card div_card_for_link_new_merchant_account_to_application" >
+                                                                    <div class="card-header">
+                                                                        <h3 class="card-title">Link New Activity</h3>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <div class="form-group">
+                                                                            <label>Identify the activity to link</label>
+                                                                            <select>
+
+                                                                                <option selected="selected" disabled >Select your own Merchant account</option>
+                                                                                <option>My MERCHANT ACCOUNT 1</option>
+                                                                                <option disabled="disabled">My MERCHANT ACCOUNT 2</option>
+                                                                                <option>My MERCHANT ACCOUNT 3</option>
+                                                                                <option disabled="disabled">My MERCHANT ACCOUNT 4</option>
+                                                                                <option>My MERCHANT ACCOUNT 5</option>
+                                                                                <option>My MERCHANT ACCOUNT 6</option>
+
+                                                                                {% set _accountGroupForUser = _accountGroupAll %}
+
+                                                                                {% for key1, accountGroupAll in _accountGroupAll %}
+                                                                                    {% if accountGroupAll.name == "ROLE_MERCHANT"%}
+                                                                                        {% set var = 0 %}
+                                                                                        {% for key2, accountGroupForUser in _accountGroupForUser %}
+                                                                                            {% if key2 == key1 %}
+                                                                                                {% for key2, account in _accounts %}
+                                                                                                    {% if accountGroupAll.name in account.roles and accountGroupAll.name == "ROLE_MERCHANT"%}
+                                                                                                        {% set var = var + 1 %}
+                                                                                                        <option {% if account.id in accountGroupForUser %}selected {% endif %} data-account_name="{{ account.name }}" data-account_description="{{ account.description }}"  data-account_id="{{ account.id }}" value="{{ account.id }}" class="nav-link">{{ account.name }}</option>
+                                                                                                    {% endif %}
+                                                                                                {% endfor %}
+                                                                                            {% endif %}
+                                                                                        {% endfor %}
+                                                                                        {% if var == 0 %}
+                                                                                        {% endif %}
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                            </select>
+                                                                        </div>
+                                                                        <!-- /input-group -->
+                                                                        <div class="input-group">
+                                                                            <input id="new-event" type="text" class="form-control" placeholder="Merchant activity identifier">
+                                                                            <div class="input-group-append">
+                                                                                <button id="btn_add_new_merchant_activity_to_application" type="button" class="btn btn-primary">Add</button>
+                                                                            </div>
+                                                                            <!-- /btn-group -->
+                                                                        </div>
+                                                                        <!-- /input-group -->
+                                                                    </div>
+                                                                </div>
+                                                                <!-- /card -->
+                                                            </div>
+                                                            <!-- /.col -->
+                                                        </div>
+                                                        <!-- /.row -->
+
+                                                    </div>
+                                                </div>
+
+                                            </form>
                                         </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                {% endif %}
+
+                                {% set var = 0 %}{% for userRight in _profile.roles %}
+                                    {% if 'ROLE_BUSINESS' in userRight %}
+                                        {% set var = var + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if var > 0 %}
+                                    <div class="tab-pane" id="point_of_sale_settings">
+
+
+                                    </div>
+                                {% endif %}
+
+                                {% set var = 0 %}{% for userRight in _profile.roles %}
+                                    {% if 'ROLE_DEVELOPER' in userRight %}
+                                        {% set var = var + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if var > 0 %}
+                                    <div class="tab-pane" id="webhook_settings">
+                                        <h2 class="title">DatiCash System - Integrated Webhook</h2>
+                                        <form class="form-horizontal">
+                                            <div class="input-group mb-3 form-daticash_event_webhook">
+                                                <div class="col-sm-8">
+                                                    <span class="schemes-title">Application</span>
+                                                    <select class="daticash__account-listbox" style="display: flex; margin: 0; width: 100%;" name="webhook_app_daticash__account-listbox" id="webhook_app_daticash__account-listbox">
+                                                        {% set _accountGroupForUser = _accountGroupAll %}
+
+                                                        {% for key1, accountGroupAll in _accountGroupAll %}
+                                                        {% if accountGroupAll.name == "ROLE_DEVELOPER"%}
+                                                        <optgroup style="color:gray;" label="My {{ accountGroupAll.description }}">
+                                                            {% set var = 0 %}
+                                                            {% for key2, accountGroupForUser in _accountGroupForUser %}
+                                                                {% if key2 == key1 %}
+                                                                    {% for key2, account in _accounts %}
+                                                                        {% if accountGroupAll.name in account.roles and accountGroupAll.name == "ROLE_DEVELOPER"%}
+                                                                            {% set var = var + 1 %}
+                                                                            <option style="color:#17a2b8;" data-account_name="{{ account.name }}" data-account_description="{{ account.description }}"  data-account_id="{{ account.id }}" value="{{ account.id }}" class="nav-link">{{ account.name }}</option>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            {% if var == 0 %}
+                                                                <option data-account_id="" value="" disabled="" >Empty</option>
+                                                            {% endif %}
+                                                            {% endif %}
+                                                            {% endfor %}
+
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-12">
+                                                            <span class="schemes-title">Apikey</span>
+                                                            <small id="apikey_app-feedback"></small>
+                                                            <input type="text" class="form-control" id="apikey_app" name="apikey_app" placeholder="" value="" disabled="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-sm-12 row form-daticash_event_webhook">
+                                                    <label for="name" class="col-sm-2 col-form-label">Event</label>
+                                                    <div class="col-sm-8" style="width:80%;">
+                                                        <select class="daticash__account-listbox" style="display: flex; margin: 0; width: 100%;" name="daticash__account-listbox" id="webhook_daticash__account-listbox">
+                                                            <option data-account_id="" value="" disabled="" selected >Please select</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-2" style="width:20%;">
+                                                        <button type="button" class="btn btn-info">Register</button>
+                                                    </div>
+                                                </div>
+                                            </div><hr>
+                                            <div class="row">
+                                                <label>Registered events</label>
+                                                <div class="col-md-12">
+                                                    <div class="card card-primary collapsed-card">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title">USERACCOUNTACTIVATIONSTATUS</h3>
+
+                                                            <div class="card-tools">
+                                                                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                                                    <i class="fas fa-plus"></i></button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body" style="display: none;">
+
+                                                        </div>
+                                                        <!-- /.card-body -->
+                                                    </div>
+                                                    <!-- /.card -->
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="card card-primary collapsed-card">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title">USERCONTACTMAILVERIFICATIONSTATUS</h3>
+
+                                                            <div class="card-tools">
+                                                                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                                                    <i class="fas fa-plus"></i></button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body" style="display: none;">
+
+                                                        </div>
+                                                        <!-- /.card-body -->
+                                                    </div>
+                                                    <!-- /.card -->
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="card card-primary collapsed-card">
+                                                        <div class="card-header">
+                                                            <h3 class="card-title">TRANSACTIONSTATUSCHANGE</h3>
+
+                                                            <div class="card-tools">
+                                                                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                                                    <i class="fas fa-plus"></i></button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body" style="display: none;">
+
+                                                        </div>
+                                                        <!-- /.card-body -->
+                                                    </div>
+                                                    <!-- /.card -->
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                {% endif %}
+
                                 <div class="tab-pane" id="security_settings">
                                     <!--// email and phone Number verification -->
                                     <form class="form-horizontal">
@@ -546,7 +676,7 @@
                                                         <!-- /.modal -->
                                                     </div>
 
-                                                    <div class="row col-12 text-right" id="div_phoneActivate" name="div_emailActivate">
+                                                    <div class="row col-12 text-right mb-3" id="div_phoneActivate" name="div_emailActivate">
                                                         <div class="col-6" id="label_phone_status" name="label_phone_status">
                                                             PHONE {% if _profile.isPhoneActivated == true %} ALREADY {% else %} UN{% endif %}VERIFIED&nbsp;
                                                             {% if _profile.isPhoneActivated == true %}<i class="fa fa-check text-success pull-left" style = "margin-right: 12px" aria-hidden="true"></i>{% else %}<i class="fa fa-times text-danger pull-left" aria-hidden="true"></i>{% endif %}
@@ -583,23 +713,53 @@
                                                         </div>
                                                         <!-- /.modal -->
                                                     </div>
+
+                                                    <div class="row col-12 text-right" id="div_phoneActivate" name="div_emailActivate">
+                                                        <div class="col-6" id="label_phone_status" name="label_phone_status">
+                                                            <span>2FO (Two Factor Authentication) </span>
+                                                        </div>
+                                                        <div class="col-6" id="action_and_info_phone_status" name="action_and_info_phone_status" style="max-width: max-content;">
+                                                            <div class="form-group">
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
+                                                                    <label class="custom-control-label" for="customSwitch1"></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
+
+                                    </form>
                                 </div>
-                                </form>
+
+                                <div class="tab-pane" id="account_settings">
+                                    <form class="form-horizontal">
+                                        <div class="form-group row">
+                                            <div class="modal-content" style="background: #f4f6f9; box-shadow: none;">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Coming Soon!</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+
+                                <!-- /.tab-pane -->
                             </div>
-                            <!-- /.tab-pane -->
-                        </div>
-                        <!-- /.tab-content -->
-                    </div><!-- /.card-body -->
+                            <!-- /.tab-content -->
+                        </div><!-- /.card-body -->
+                    </div>
+                    <!-- /.nav-tabs-custom -->
                 </div>
-                <!-- /.nav-tabs-custom -->
+                <!-- /.col -->
             </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
+            <!-- /.row -->
         </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
@@ -607,6 +767,7 @@
 
 
 {% block javascripts %}
+
     <!-- Bootstrap 4 -->
     <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- Waves Effect Plugin Js -->
@@ -621,6 +782,7 @@
     <script src="{{ asset('assets/js/jquery.keypad.js') }}"></script>
     <!-- International Telephone Input-->
     <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
+
     <script type="text/javascript"><!--
         var left_time = 30
         var second = 60;
@@ -761,7 +923,7 @@
                 refresh: function(){
                     var $this = $('select#daticash__account-listbox').find("option[selected]");
                     {% if app.request.get('item') is defined and app.request.get('item') is not empty %}
-                    {% if app.request.get('item') == "account_settings" and app.request.get('aid') is defined and app.request.get('aid') is not empty %}
+                    {% if app.request.get('item') == "application_settings" and app.request.get('aid') is defined and app.request.get('aid') is not empty %}
 
                     var id = "{{ app.request.get('aid') }}";
                     $this = $('select#daticash__account-listbox').find('option[data-account_id="'+id+'"]');
@@ -809,8 +971,8 @@
                     $('#description').val("");
 
                     {% if app.request.get('item') is defined and app.request.get('item') is not empty %}
-                    {% if app.request.get('item') == "account_settings" and app.request.get('aid') is defined and app.request.get('aid') is not empty %}
-                    setTimeout(function(){ $('.nav-link[href^="#account_settings"]').click()}, 100);
+                    {% if app.request.get('item') == "application_settings" and app.request.get('aid') is defined and app.request.get('aid') is not empty %}
+                    setTimeout(function(){ $('.nav-link[href^="#application_settings"]').click()}, 100);
                     {% endif %}
                     {% endif %}
 
@@ -831,7 +993,7 @@
                     $('#name').val(pname);
                     $('#description').val(pdesc);
 
-                    var elem = $('a[href^="#account_settings"]');
+                    var elem = $('a[href^="#application_settings"]');
 
                     if(pid){
                         var elemTop = elem.first().offset().top;
@@ -843,8 +1005,8 @@
 
 
                     {% if app.request.get('item') is defined and app.request.get('item') is not empty %}
-                    {% if app.request.get('item') == "account_settings" and app.request.get('aid') is defined and app.request.get('aid') is not empty %}
-                    setTimeout(function(){ $('.nav-link[href^="#account_settings"]').click()}, 100);
+                    {% if app.request.get('item') == "application_settings" and app.request.get('aid') is defined and app.request.get('aid') is not empty %}
+                    setTimeout(function(){ $('.nav-link[href^="#application_settings"]').click()}, 100);
 
                     {% endif %}
                     {% endif %}
@@ -857,6 +1019,50 @@
             };
 
         })(jQuery);
+
+        $(function(){
+
+            var current_effect = $('#waitMe_ex_effect').val();
+
+            $('#btn_add_new_merchant_activity_to_application').click(function(){
+                run_waitMe($('#application_settings'), 1, current_effect);
+            });
+
+            function run_waitMe(el, num, effect){
+                text = 'Please wait...';
+                fontSize = '';
+                switch (num) {
+                    case 1:
+                        maxSize = '';
+                        textPos = 'vertical';
+                        break;
+                    case 2:
+                        text = '';
+                        maxSize = 30;
+                        textPos = 'vertical';
+                        break;
+                    case 3:
+                        maxSize = 30;
+                        textPos = 'horizontal';
+                        fontSize = '18px';
+                        break;
+                }
+                el.waitMe({
+                    effect: effect,
+                    text: text,
+                    bg: 'rgba(255,255,255,0.7)',
+                    color: '#000',
+                    maxSize: maxSize,
+                    waitTime: -1,
+                    source: 'img.svg',
+                    textPos: textPos,
+                    fontSize: fontSize,
+                    onClose: function(el) {}
+                });
+            }
+
+
+        });
 
         $(document).ready(function(){
             /*Textbox Events*/
@@ -890,6 +1096,8 @@
 
                 })
                 .on('change', '.profile input[type="file"]' , function(e) {
+                    var image_upload = $("#image_upload").val();
+
                     var input = this;
                     var myForm = document.getElementById('upload-file');
                     var formData = new FormData(myForm);
@@ -916,42 +1124,43 @@
                                                                       })
 
                     #}
+                    https://api.daticash.com/api/user/16/profile-picture-edit
 
+                        fetch(uploadAvatarPath+"/profile-picture-edit", {'method': 'POST', data: formData, 'headers': {'apikey': 'sec_5ed93806dd2ca', 'accept': 'application/json', 'Content-Type': 'multipart/form-data'}})//check status url
+                        //fetch(`https://api.daticash.com/api/user/${user_id}/profile-picture-edit`, {'method': 'POST', data: image_upload, 'headers': {'apikey': 'sec_5ed93806dd2ca', 'accept': 'application/json', 'Content-Type': 'multipart/form-data'}})//for test
+                            .then(
+                                function(response) {
+                                    if (!response.ok) {
+                                        console.log("application response = ");
+                                        console.log(response);
+                                    }else{
+                                        $("#upload-file").append(
+                                            '<div class="spinner" id="loading_image" style="display: hidden;">'+
+                                            '<div class="bounce1"></div>'+
+                                            '<div class="bounce2"></div>'+
+                                            '<div class="bounce3"></div>'+
+                                            '<h4>Uploading...</h4>'+
+                                            '</div>'
+                                        );
+                                        console.log("application response after submit profile_file_upload = " + response);
+                                        // Examine the text in the response
+                                        response.json().then(function(data) {
+                                            console.log("api response after submit profile_file_upload  = " + data);
+                                            if(data.code == 200){
+                                                var reader = new FileReader();
+                                                reader.onload = function (e) {
+                                                    console.log(e);
+                                                    $('.profile-user-img').attr('src', e.target.result);
+                                                }
 
-                    fetch(uploadAvatarPath+"/edit", {'method': 'PUT', data: formData, 'headers': {'apikey': 'sec_5ed93806dd2ca', 'accept': 'application/json', 'Content-Type': 'multipart/form-data'}})//check status url
-                        .then(
-                            function(response) {
-                                if (!response.ok) {
-                                    console.log("application response = ");
-                                    console.log(response);
-                                }else{
-                                    $("#upload-file").append(
-                                        '<div class="spinner" id="loading_image" style="display: hidden;">'+
-                                        '<div class="bounce1"></div>'+
-                                        '<div class="bounce2"></div>'+
-                                        '<div class="bounce3"></div>'+
-                                        '<h4>Uploading...</h4>'+
-                                        '</div>'
-                                    );
-                                    console.log("application response after submit profile_file_upload = " + response);
-                                    // Examine the text in the response
-                                    response.json().then(function(data) {
-                                        console.log("api response after submit profile_file_upload  = " + data);
-                                        if(data.code == 200){
-                                            var reader = new FileReader();
-                                            reader.onload = function (e) {
-                                                console.log(e);
-                                                $('.profile-user-img').attr('src', e.target.result);
+                                                reader.readAsDataURL(input.files[0])
+                                                    .then(function(response) {
+                                                        $('.profile-user-img').remove();
+                                                    });
                                             }
-
-                                            reader.readAsDataURL(input.files[0])
-                                                .then(function(response) {
-                                                    $('.profile-user-img').remove();
-                                                });
-                                        }
-                                    })
-                                }
-                            })
+                                        })
+                                    }
+                                })
 
                     {#    				$.ajax({
                                             url: imagePath,
@@ -1163,7 +1372,7 @@
                     var description = $("#description").val();
                     var $this = $('select#daticash__account-listbox').find("option:selected");
                     var pid = $($this).attr("data-account_id");
-
+                    //edit_account
                     fetch(`https://api.daticash.com/api/account/${pid}/edit?name=${name}&description=${description}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "PUT"})//check status url //for test
                         .then(
                             function(response) {
@@ -1221,7 +1430,8 @@
 
                     if(pid !== "" && $("#name").val() !== "" && $("#description").val() !== ""){
                         $btn.text("Processing...").prop("disabled", true);
-                        fetch(`https://api.daticash.com/api/account/${pid}/estimate`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "GET"})//check status url
+                        //estimate
+                        fetch(`https://api.daticash.com/api/account/${pid}/estimate`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "GET"})//for test
                             .then(
                                 function(response) {
                                     if (!response.ok) {
@@ -1249,6 +1459,7 @@
                                                     confirmButtonText: 'Yes, create it!'
                                                 }).then((result) => {
                                                     if (result.value) {
+                                                    //generate_confirm_code
                                                     return fetch(`https://api.daticash.com/api/account/${user_id}/generate-confirm-code?by=SMS`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "GET"} )//confirm-password url //for test
                                                         .then(
                                                             function(response) {
@@ -1280,7 +1491,7 @@
                                                                                 cancelButtonAriaLabel: "Thumbs down",
                                                                                 preConfirm: (confirm_code) => {
                                                                                 let confirmPath = "{{ path("transactions_update") }}";
-
+                                                                            //create_account
                                                                             return fetch(`https://api.daticash.com/api/account/new?user_id=${user_id}&role=${pid}&name=${name}&description=${description}&confirm_code=${confirm_code}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "POST"} )//confirm-password url //for test
                                                                                 .then(response => {
                                                                                 if (!response.ok) {
@@ -1380,6 +1591,7 @@
                                             })
 
                                             }else{
+                                                //create_account
                                                 return fetch(`https://api.daticash.com/api/account/new?user_id=${user_id}&role=${pid}&name=${name}&description=${description}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "POST"} )//confirm-password url //for test
                                                     .then(response => {
                                                     if (!response.ok) {
@@ -1488,7 +1700,7 @@
 
                     $btn.text("Processing...").prop("disabled", true);
 
-                    var updateProfilePath = '{{ path("profile", {'id':'user_id'}) }}';
+                    var updateProfilePath = '{{ path("profile_update", {'id':'user_id'}) }}';
                     updateProfilePath = updateProfilePath.replace("user_id", user_id);
 
                     fetch(updateProfilePath + "?firstname="+firstname+"&lastname="+lastname, {"method": "POST", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
@@ -1505,7 +1717,7 @@
                                     response.json().then(function(data) {
                                         console.log("api response after submit  = " + data);
                                         if(data.code === 202){//activation reussi
-                                            $('.login-feedback').html(show_alert('success', "Succefully activated", 1));
+                                            $('.login-feedback').html(show_alert('success', "Succefully update", 1));
 
                                         }else{
                                             console.log()
@@ -1547,7 +1759,7 @@
                         var description = $("#description").val();
                         var $this = $('select#daticash__account-listbox').find("option:selected");
                         var pid = $($this).attr("data-account_id");
-
+                        //delete_account
                         fetch(`https://api.daticash.com/api/account/${pid}/delete`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "DELETE"})//check status url //for test
                             .then(
                                 function(response) {
@@ -1617,32 +1829,125 @@
                             );
 
                             $("#help_card-footer").empty().append(
-                                    {% for userRight in _profile.roles %}
-                                    {% if 'ROLE_BUSINESS' not in userRight and 'ROLE_ADMIN' not in userRight and 'ROLE_USER' in userRight %}
-                                '<div class="row">'+
-                                '<div class="col-sm-6 mb-2" style="display: inline-grid;">'+
-                                '<a href="{{ path('profile') }}?item=account_settings&aid=0&create=ROLE_MERCHANT" class="btn btn-sm btn-info float-left" name="become_CM_account" id="become_CM_account">Become Merchant</a>'+
-                                '</div>'+
-                                '<div class="col-sm-6 mb-2" style="display: inline-grid;">'+
-                                '<a href="{{ path('profile') }}?item=account_settings&aid=0&create=ROLE_DEVELOPER" class="btn btn-sm btn-info float-rigth" name="become_CD_account" id="become_CD_account">Become Developer</a>'+
-                                '</div>'+
-                                '</div>'
-                                    {% endif %}
-                                    {% endfor %}
+                                    {#
+                                        {% set var = 0 %}
+                                        {% for userRight in _profile.roles %}
+                                            {% if 'ROLE_BUSINESS' not in userRight %}
+                                                {% set var = var + 1 %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if var == 0 %}
+                                            //set element here
+                                        {% else %}
+                                            //set element here
+                                            {% set _accountGroupForUser = _accountGroupAll %}
+                                            {% set var1 = 0 %}
+                                            {% for key1, accountGroupAll in _accountGroupAll %}
+                                                {% if accountGroupAll.name == "ROLE_BUSINESS"%}
+                                                  {% for key2, accountGroupForUser in _accountGroupForUser %}
+                                                      {% if key2 == key1 %}
+                                                          {% for key2, account in _accounts %}
+                                                              {% if accountGroupAll.name in account.roles and accountGroupAll.name == "ROLE_BUSINESS"%}
+                                                                  {% set var1 = var1 + 1 %}
+                                                              {% endif %}
+                                                          {% endfor %}
+                                                      {% endif %}
+                                                  {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if var1 == 0 %}
+                                                //set element here
+                                            {% endif %}
+                                        {% endif %}
+                                      {% for userRight in _profile.roles %}
+                                          {% if 'ROLE_BUSINESS' not in userRight and 'ROLE_ADMIN' not in userRight and 'ROLE_USER' in userRight %}
+                                                '<div class="row">'+
+                                                  '<div class="col-sm-6 mb-2" style="display: inline-grid;">'+
+                                                    '<a href="{{ path('settings') }}?item=application_settings&aid=0&create=ROLE_MERCHANT" class="btn btn-sm btn-info float-left" name="become_CM_account" id="become_CM_account">Become Merchant</a>'+
+                                                  '</div>'+
+                                                  '<div class="col-sm-6 mb-2" style="display: inline-grid;">'+
+                                                    '<a href="{{ path('settings') }}?item=application_settings&aid=0&create=ROLE_DEVELOPER" class="btn btn-sm btn-info float-rigth" name="become_CD_account" id="become_CD_account">Become Developer</a>'+
+                                                  '</div>'+
+                                                '</div>'
+                                          {% endif %}
+                                      {% endfor %}
+                                    #}
                             );
 
                             break;
-                        case "#account_settings":// account settings
+                        case "#application_settings":// account settings
+                        case "#activity_settings":
+                        case "#point_of_sale_settings":
+
                             $("#help_card-body").empty().append(
                                 '<div class="text-center">'+
                                 '<img class="img-fluid"'+
-                                'src="{{ asset("assets/img/account-illu.png") }}"'+
+                                'src="'+
+                                    {% if app.request.get('aid') is defined and app.request.get('aid') == "0" and app.request.get('create') is defined and app.request.get('create') is not empty %}
+                                    {% if app.request.get('create') == "ROLE_MERCHANT" %}
+                                '{{ asset("assets/img/illustrations/merchant_account-illu.jpg") }}"'+
                                 'alt="Account picture"'+
                                 'style="height: 100px; width: auto;">'+
                                 '</div>'+
-                                '<h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="miniHelp_title">Manage your Account</h3>'+
-                                '<p class="text-muted text-center text-ellipsied" id="miniHelp_description">You can Add, update and Migrate your account... Choose one action in selector and submit your request.</p>'+
-                                '<div class="pin-block text-right">'+
+                                '<h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="miniHelp_title">Create an Activity</h3>'+
+                                '<p class="text-muted text-left text-ellipsied" id="miniHelp_description">'+
+                                'With this type of account you can: get his payments online; request recurrent payments from its services subscribers; take advantage of the DatiCash invoice service; have his accountancy done easily thanks to the detailed transaction history...'+
+                                '<span class="pincode_label" style="float:right">'+
+                                '<a href="https://support.daticash.com/docs/daticash-api/daticash-users-guide/accounts-2/business-account/" title="Learn more about Business Account" target="_blank"><i class="fa fa-question-circle datibox-bg-light"></i>&nbsp;Learn more</a>'+
+                                '</span>'+
+                                '</p>'+
+
+                                    {% elseif app.request.get('create') == "ROLE_BUSINESS" %}
+                                '{{ asset("assets/img/illustrations/business_account-illu.jpg") }}"'+
+                                'alt="Account picture"'+
+                                'style="height: 100px; width: auto;">'+
+                                '</div>'+
+                                '<h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="miniHelp_title">Create activity</h3>'+
+                                '<p class="text-muted text-left text-ellipsied" id="miniHelp_description">'+
+                                'With this type of account you can: send and receive money to and from others; receive commissions from DatiCash system; help DatiCash merchant account users get their money free of charge...'+
+                                '<span class="pincode_label text-right" style="float:right">'+
+                                '<a style="display: inline-block;" href="https://support.daticash.com/docs/daticash-api/daticash-users-guide/accounts-2/business-account/" title="Learn more about Business Account" target="_blank"><i class="fa fa-question-circle datibox-bg-light"></i>&nbsp;Learn more</a>'+
+                                '</span>'+
+                                '</p>'+
+
+
+                                    {% elseif app.request.get('create') == "ROLE_DEVELOPER" %}
+                                '{{ asset("assets/img/illustrations/developer_account-illu.jpg") }}"'+
+                                'alt="Account picture"'+
+                                'style="height: 100px; width: auto;">'+
+                                '</div>'+
+                                '<h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="miniHelp_title">Create Application</h3>'+
+                                '<p class="text-muted text-left text-ellipsied" id="miniHelp_description">'+
+                                'With this type of account you can: add many applications to my dashboard; integrate the gateway in each application; receive separate incomes from each application accountancy; securely change the id token of an application to prevent it to use my account abusively; take advantage of a robust, secure know-how, without lift a finger; interact directly with the API of the DatiCash system; subscribe to webhooks'+
+                                '<span class="pincode_label text-right" style="float:right">'+
+                                '<a style="display: inline-block;" href="https://support.daticash.com/docs/daticash-api/daticash-users-guide/accounts-2/developer-account/" title="Learn more about Developer Account" target="_blank"><i class="fa fa-question-circle datibox-bg-light"></i>&nbsp;Learn more</a>'+
+                                '</span>'+
+                                '</p>'+
+                                    {% else %}
+                                '{{ asset("assets/img/account-illu.png") }}"'+
+                                'alt="Account picture"'+
+                                'style="height: 100px; width: auto;">'+
+                                '</div>'+
+                                '<h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="miniHelp_title">Create Developer Account</h3>'+
+                                '<p class="text-muted text-left text-ellipsied" id="miniHelp_description">'+
+                                'You can Add, update and Migrate your account... Choose one action in selector and submit your request.'+
+                                '</p>'+
+
+                                    {% endif %}
+
+                                    {% else %}
+                                '{{ asset("assets/img/account-illu.png") }}"'+
+                                'alt="Account picture"'+
+                                'style="height: 100px; width: auto;">'+
+                                '</div>'+
+                                '<h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="miniHelp_title">Create Developer Account</h3>'+
+                                '<p class="text-muted text-left text-ellipsied" id="miniHelp_description">'+
+                                'You can Add, update and Migrate your account... Choose one action in selector and submit your request.'+
+                                '</p>'+
+
+                                    {% endif %}
+
+                                '<div class="pin-block text-right" style="float: right;">'+
                                 '<span class="pincode_label">'+
                                 '<a href="javascript:void(0)" id="show_more_description">Show more</a>'+
                                 '</span>'+
@@ -1659,6 +1964,27 @@
                             $('#daticash__account_type-listbox').prop("disabled", true);
 
                         {% endif %}
+
+                            break;
+
+                        case "#webhook_settings"://webhook settings
+                            $("#help_card-body").empty().append(
+                                '<div class="text-center img-circle">'+
+                                '<img class="img-fluid"'+
+                                'src="{{ asset('assets/img/what-are-webhooks.jpg') }}"'+
+                                'alt="Webhook picture"'+
+                                'style="height: 100px; width: auto;">'+
+                                '</div>'+
+                                '<h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="miniHelp_title">Webhook</h3>'+
+                                '<p class="text-muted text-center text-ellipsied" id="miniHelp_description">Here we going Explain the header of webhook configuration...</p>'+
+                                '<div class="pin-block text-right">'+
+                                '<span class="pincode_label">'+
+                                '<a href="javascript:void(0)" id="show_more_description">Show more</a>'+
+                                '</span>'+
+                                '</div>'
+                            );
+
+                            $("#help_card-footer").empty();
 
                             break;
 
@@ -1682,6 +2008,28 @@
                             $("#help_card-footer").empty();
 
                             break;
+
+                        case "#account_settings":// profile settings
+                            $("#help_card-body").empty().append(
+                                '<div class="text-center img-circle">'+
+                                '<img class="img-fluid"'+
+                                'src="{{ asset('assets/img/account-illu.jpg') }}"'+
+                                'alt="Webhook picture"'+
+                                'style="height: 100px; width: auto;">'+
+                                '</div>'+
+                                '<h3 class="profile-username text-center" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="miniHelp_title">Account</h3>'+
+                                '<p class="text-muted text-center text-ellipsied" id="miniHelp_description">Here we going Explain the header of account configuration...</p>'+
+                                '<div class="pin-block text-right">'+
+                                '<span class="pincode_label">'+
+                                '<a href="javascript:void(0)" id="show_more_description">Show more</a>'+
+                                '</span>'+
+                                '</div>'
+                            );
+
+                            $("#help_card-footer").empty();
+
+                            break;
+
                         default:
                             $("#help_card-body img").attr("src", "{% if _profile.avatar is null %}{{ asset('assets/img/mascotte.png') }} {% else %} {{ _profile.avatar }} {% endif %}").addClass("img-circle");
                     }
@@ -1700,6 +2048,59 @@
                     $(this).text("Show more");
                     $(this).attr("id","show_more_description");
                 })
+                .on('change', '#customSwitch1' , function(e) {
+                    e.preventDefault();
+                    var $btn = $(this);
+                    var user_id = "{{ _profile.id }}";
+
+                    if ($btn.prop("checked")){
+                        var is_otp_enabled = 1;
+                    }else{
+                        var is_otp_enabled = 0;
+                    }
+
+                    $btn.text("Processing...").prop("disabled", true);
+
+                    var updateProfilePath = '{{ path("profile_update", {'id':'user_id'}) }}';
+                    updateProfilePath = updateProfilePath.replace("user_id", user_id);
+
+                    fetch(updateProfilePath + "?is_otp_enabled="+is_otp_enabled, {"method": "POST", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                        .then(
+                            function(response) {
+                                if (!response.ok) {
+                                    console.log("application response after confirm code submit = ");
+                                    console.log(response);
+                                }else{
+                                    console.log("api response after confirm code submit = ");
+                                    console.log(response);
+
+                                    // Examine the text in the response
+                                    response.json().then(function(data) {
+                                        console.log("api response after submit  = " + data);
+                                        if(data.code === 202){//activation reussi
+                                            $('.login-feedback').html(show_alert('success', "Succefully change", 1));
+
+                                        }else{
+                                            console.log()
+                                            switch(data.code) {
+                                                case 208:
+                                                    $('.login-feedback').append('<div class="alert alert-success alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspanother account user with the given mail or username already exists. Update Canceled.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                    break;
+                                                case 400:
+                                                    $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspSomething is wrong with the request, possibly missing or improperly formatted parameter.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                    break;
+                                                case 403:
+                                                    $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspused ApiKey owner does not have permission to access this resource.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                    break;
+                                                default :
+                                                    $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp Error Connection<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                            }
+                                        }
+                                    })
+                                }
+                                $btn.text("Save Changes").prop("disabled", false);
+                            })
+                })
 
             $('.profile-user-img, .profile-user-label').click(function(e){
                 e.preventDefault();
@@ -1713,8 +2114,98 @@
 
         })
 
-
-
         //--></script>
+
+{% endblock %}
+
+{% block topup_and_sweetalert %}
+    <!-- /.modal of create account-->
+    <div class="modal fade" id="dati_create_account_modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header mb-2">
+                    <h4 class="modal-title">
+                        <!-- CREATE NEW ACTIVITY&nbsp / UPDATE ACTIVITY-->
+                        <!-- CREATE NEW APPLICATION&nbsp / UPDATE APPLICATION-->
+                        CREATE NEW POINT OF SALE&nbsp
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-12 pl-5 pr-5">
+                            <form class="form-horizontal">
+                                <div class="input-group mb-3 form-daticash_account">
+                                    <div class="col-sm-10" style="width:80%;">
+                                        <select class="swal2-select" style="display: flex; margin: 0; width: 100%;" name="daticash__account-listbox" id="daticash__account-listbox">
+                                            <option style="color:#17a2b8;" data-account_name="" data-account_description =""  data-account_id ="0" value="0" class="nav-link" selected>Add New </option>
+
+                                            {% set _accountGroupForUser = _accountGroupAll %}
+
+                                            {% for key1, accountGroupAll in _accountGroupAll %}
+                                                <optgroup style="color:gray;" label="My {{ accountGroupAll.description }}">
+                                                    {% set var = 0 %}
+                                                    {% for key2, accountGroupForUser in _accountGroupForUser %}
+                                                        {% if key2 == key1 %}
+                                                            {% for key2, account in _accounts %}
+                                                                {% if accountGroupAll.name in account.roles %}
+                                                                    {% set var = var + 1 %}
+                                                                    <option style="color:#17a2b8;" data-account_name="{{ account.name }}" data-account_description="{{ account.description }}"  data-account_id="{{ account.id }}" value="{{ account.id }}" class="nav-link">{{ account.name }}</option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if var == 0 %}
+                                                        <option data-account_id="" value="" disabled="" >Empty</option>
+                                                    {% endif %}
+                                                </optgroup>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2" style="width:20%;">
+                                        <a class="btn btn-default btn-sm change_phone_number_btn" href="#" data-user_id = "{{ _profile.id }}" data-toggle="modal" data-target="#change_phone_number_modal">
+                                            <i class="fas fa-edit">
+                                            </i>
+                                            Change
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="name" class="col-sm-2 col-form-label">Name</label>
+                                    <div class="col-sm-10">
+                                        <small id="account_name-feedback"></small>
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="Name" value="">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="description" class="col-sm-2 col-form-label">Description</label>
+                                    <div class="col-sm-10">
+                                        <small id="account_description-feedback"></small>
+                                        <textarea class="form-control" id="description" name="description" placeholder="Description" value=""></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="offset-sm-2 col-sm-10 account_action_div_btn">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
 {% endblock %}

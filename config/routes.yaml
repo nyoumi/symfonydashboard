@@ -33,6 +33,10 @@ activation:
     path: /activation/{user_id}/{email}
     controller: App\Controller\ActivationController::activation
     methods: GET
+viewUser:
+    path: /user_view/{id}
+    controller: App\Controller\ActivationController::viewUser
+    methods: GET
 activated:
     path: /activated
     controller: App\Controller\ActivationController::activatedAction
@@ -66,7 +70,7 @@ list_accounts_types:
     controller: App\Controller\AccountController::listAccountsTypes
     methods: GET
 generate_confirm_code:
-    path: /accounts/generateConfirmCode
+    path: /accounts/generateConfirmCode/{id}
     controller: App\Controller\AccountController::generateConfirmCode
     methods: GET
 estimate:
@@ -102,45 +106,66 @@ history:
     controller: App\Controller\DashboardController::viewHistory
 operation.index:
     path: /operation
-    controller: App\Controller\TransactionsController::start
+    controller: App\Controller\DatiTransactionController::start
 pricing:
     path: /pricing
-    controller: App\Controller\TransactionsController::getPricing
+    controller: App\Controller\DatiTransactionController::getPricing
 convert:
     path: /convert
-    controller: App\Controller\TransactionsController::convert
+    controller: App\Controller\DatiTransactionController::convert
 #transactions_init:
 #    path:     /transactions/{id}/{number}
-#    controller: App\Controller\TransactionsController::start
+#    controller: App\Controller\DatiTransactionController::start
 #    methods:  [GET]
 #    requirements:
 #            id: '\d+'
 
 transactions_view:
     path:     /transactions/{id?}
-    controller: App\Controller\TransactionsController::view
+    controller: App\Controller\DatiTransactionController::view
     methods:  [GET]
+transactions_view_local:
+    path:     /transaction/local/{id}
+    controller: App\Controller\DatiTransactionController::viewLocal
+    methods:  [GET]
+transactions_create_local:
+    path:     /transaction/create_local/{id?}
+    controller: App\Controller\DatiTransactionController::createLocalAction
+    methods:  [GET|POST]
 transactions_create:
     path:     /transactions
-    controller: App\Controller\TransactionsController::createAction
+    controller: App\Controller\DatiTransactionController::createAction
     methods:  [POST]
 #cette route est security anonymous
 transactions_create_anonymous:
     path:     /send_money
-    controller: App\Controller\TransactionsController::createAction
+    controller: App\Controller\DatiTransactionController::createAction
     methods:  [POST]
 transactions_update:
     path:     /transactions/{id?}
-    controller: App\Controller\TransactionsController::updateAction
+    controller: App\Controller\DatiTransactionController::updateAction
     methods:  [PUT]
-profile:
-    path:     /profile_update/{id?}
-    controller: App\Controller\ProfileController::editAction
-    methods:  GET|POST
+transaction_update_webhook:
+    path:     /transaction_update_webhook
+    controller: App\Controller\DatiTransactionController::updateWebhook
+    methods:  [POST|GET|PUT]
+main_settings:
+    path:     /main_settings/{id?}
+    controller: App\Controller\SettingsController::viewAction
+    methods:  GET
+
 profile_test:
     path:     /profile_testing/{id?}
     controller: App\Controller\ProfileController::testing
     methods:  GET|POST
+profile_update:
+    path:     /profile_update/{id?}
+    controller: App\Controller\ProfileController::editAction
+    methods:  GET|POST
+user_refresh:
+    path:     /user_refresh/{id?}
+    controller: App\Controller\ProfileController::refreshUser
+    methods:  GET
 profile_file_upload:
     path:     /profile_file_upload/{id?}
     controller: App\Controller\ProfileController::uploadAction
@@ -149,3 +174,43 @@ profile_file_receive_test:
     path:     /file_upload
     controller: App\Controller\ProfileController::testAction
     methods:  PUT
+settings:
+    path:     /settings
+    controller: App\Controller\SettingsController::viewAction
+    methods:  GET
+accounts:
+    path:     /accounts
+    controller: App\Controller\AccountController::viewAction
+    methods:  GET
+view_affiliate_account:
+    path: /affiliate/accounts/{type}/view/{id}
+    controller: App\Controller\AccountController::viewAffiliateAction
+    methods: GET
+list_affiliate_account:
+    path: /affiliate/accounts/{type}/list/{id}
+    controller: App\Controller\AccountController::listAffiliateAction
+    methods: GET
+estimate_creation_affiliate_account:
+    path: /affiliate/accounts/{type}/estimate_creation
+    controller: App\Controller\AccountController::estimateCreatioinAffiliateAction
+    methods: GET
+estimate_subscription_affiliate_account:
+    path: /affiliate/accounts/{type}/estimate_subscription
+    controller: App\Controller\AccountController::estimateSubscriptionAffiliateAction
+    methods: GET
+subscribe_affiliate_account:
+    path: /affiliate/accounts/{type}/subscribe_account/{id}
+    controller: App\Controller\AccountController::subscribeAffiliateAction
+    methods: POST
+new_affiliate_account:
+    path: /affiliate/accounts/{type}/new_account
+    controller: App\Controller\AccountController::newAffiliateAction
+    methods: POST
+edit_affiliate_account:
+    path: /affiliate/accounts/{type}/edit_account/{id}
+    controller: App\Controller\AccountController::editAffiliateAction
+    methods: POST
+delete_affiliate_account:
+    path: /affiliate/accounts/{type}/delete_account/{id}
+    controller: App\Controller\AccountController::deleteAffiliateAction
+    methods: POST

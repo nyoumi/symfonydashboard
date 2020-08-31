@@ -51,8 +51,16 @@ security:
         - { path: ^/send_activation_token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/activation, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/file_upload, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, roles: [ROLE_USER] }
         - { path: ^/profile_testing, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/transaction/create_local/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/transaction, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/transaction/create_local, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user_view, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        - { path: ^/, roles: [ROLE_USER] }
+
+
+
 
         # - { path: ^/profile, roles: ROLE_USER }
 

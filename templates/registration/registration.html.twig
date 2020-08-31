@@ -268,6 +268,8 @@
                                 '<div class="login-feedback"></div>'+
                                 '<div class="card body_card_daticash_login">'+
                                     '<div class="card-body login-card-body" style="background-color: rgba(255, 255, 255, 0);">'+
+                                    '<div class="col-12 mb-3 dati_login_row" style="text-align: right;font-weight: 700;color: #007bff;color: #007bff;" ><p class="text-right" style="display: inline;color: #777777;font-weight: 100;">have account ?</p><p style="cursor:pointer;display: inline;" id="dati_login_modal" name="dati_login_modal"><a href="{{ path('login') }}"> Login Now!</a></p></div>'+
+
                                         '<small id="allow_reset-feedback"></small>'+
                                         '<form method="post" class="form login-form" >'+
                                             '<label for="phone_number" style="width: 100%; margin-bottom: .5rem;">'+
@@ -767,6 +769,8 @@
                         '<input type="hidden" name="country_code" id="registration_form_country_code" value="'+ tampon_data.country_code +'">'+
                         '<input type="hidden" name="new_password"  value="'+ tampon_data.new_password +'">'
                     );
+          
+                    
                     //alert(tampon_data.phone_number)
                     //alert(tampon_data.country_code)
                     //alert(tampon_data.new_password)
@@ -817,10 +821,15 @@
 				    tampon_data.email= $("#email").val();
 				    
 						$(".chat-popup").remove();
-
+						
                             $('#body_mask').after(daticash_register_if_not_exist_step1_popUp);			
+						
+            {% if app.session.get('phone_number') is defined and app.session.get('phone_number')|length > 0 %}
+				
             				$('.login-logo').after(daticash_display_transaction_status_topUp());
             				daticash_select_transaction_status_position(1);
+				
+            {% endif %}
 					                    
                         $("#new_password").val(tampon_data.new_password);
                         $("#retype_new_password").val(tampon_data.retype_new_password);	
@@ -832,13 +841,12 @@
                         $('#new_password').keypad();
                         $('#retype_new_password').keypad();
     			
-    			    $("#phone_number").prop('disabled', true);	
 				})	
 				.on('focus', 'input', '.login-form input, .login-form textarea' , function() {
 					$("#password-feedback").empty();
 					$("#username-feedback").empty();
 					$("#email-feedback").empty();
-					$(".login-feedback").empty();
+					//$(".login-feedback").empty();
 					
 				// daticash reset or change pin	
 					$("#check_pin_code_correspondance-feedback").empty();

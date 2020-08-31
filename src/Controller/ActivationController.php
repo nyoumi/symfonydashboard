@@ -160,6 +160,27 @@ class ActivationController extends AbstractController
 
     }
 
+    public function viewUser($id)
+    {
+
+
+            $endpoint="user/".$id."/view";
+
+
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+
+        $params=[
+            'id' =>  $id,
+        ];
+        $response=$this->make_get_request($params,$headers,$endpoint);
+        return new Response(json_encode($response), Response::HTTP_OK,[
+            "Content-Type"=>'application/json'
+        ]);
+    }
+
     /**
      * @param array $parameters
      * @param array $header

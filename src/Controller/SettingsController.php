@@ -24,7 +24,7 @@ use Symfony\Component\Mime\Part\Multipart\FormDataPart;
  * Class ActivationController
  * @package App\Controller
  */
-class ProfileController extends AbstractController
+class SettingsController extends AbstractController
 {
     /**
      * @var HttpClientInterface
@@ -46,6 +46,7 @@ class ProfileController extends AbstractController
      * ActivationController constructor.
      * @param UrlGeneratorInterface $urlGenerator
      * @param HttpClientInterface $client
+     * @param Security $security
      */
     public function __construct(UrlGeneratorInterface $urlGenerator,HttpClientInterface $client,Security $security)
     {
@@ -69,73 +70,14 @@ class ProfileController extends AbstractController
      * @param $id
      * @return RedirectResponse|Response
      */
-    public function editAction(Request $request,$id)
+    public function viewAction(Request $request)
     {
 
 
-        //effacer toute info de modification précédemment sauvegardée dans la session
-        $this->removeToSession($this->create_action);
-
-        if($request->getMethod()=="POST"){
-            // }
-            // $file = $request->files->get('avatar');
-
-            $data = $request->getContent();
-            $data=json_decode($data);
-
-
-            if(!is_object($data)){
-                parse_str($request->getContent(),$output);
-                $data=(object) $output;
-            }
-
-            if($this->emptyObj($data) ){
-                $data=$request->query->all();
-                $data=(object) $data;
-            }
-            $endpoint="user/".$id."/edit";
-            $headers=[
-                'Accept' => 'application/json',
-                "apikey"=> $this->apikey,
-                'Content-Type' => "multipart/form-data"
-            ];
-
-            $params=(array)$data;
-
-            $response=$this->make_put_request($params,$headers,$endpoint,(array)$data);
-
-
-            if (isset($response) && isset($response["id"]) ) {
-                $this->getUser()->setEmail($response["email"]);
-                $this->getUser()->setAccounts($response["accounts"]);
-                $this->getUser()->setCurrencyCode($response["currency_code"]);
-                $this->getUser()->setFirstname($response["firstname"]);
-                $this->getUser()->setLastname($response["lastname"]);
-                $this->getUser()->setCountryCode($response["country_code"]);
-                $this->getUser()->setPhoneNumber($response["phone_number"]);
-                $this->getUser()->setRoles($this->getRoles($response));
-                $this->getUser()->setSalt("");
-                $this->getUser()->setUsername($response["username"]);
-                $this->getUser()->setAvatar($response["avatar"]);
-                $this->getUser()->setCurrencyCode($response["currency_code"]);
-                $this->getUser()->setIsEmailActivated($response["is_email_activated"]);
-                $this->getUser()->setIsPhoneActivated($response["is_phone_activated"]);
-                $this->getUser()->setUserInfos($response);
-
-
-
-
-            }
-            return new Response(json_encode($response), Response::HTTP_OK,[
-                "Content-Type"=>'application/json'
-            ]);
-        }
 
 
         $data=$request->query->all();
-        if (isset($data["create"])){
-            $this->saveToSession($this->create_action,$data);
-        }
+
         $endpoint="accounts/types";
         $headers=[
             'Accept' => 'application/json',
@@ -146,63 +88,17 @@ class ProfileController extends AbstractController
         $account_types=[];
         $response=$this->make_get_request($params,$headers,$endpoint);
         if(isset($response['code'])){
-          $account_types["account_types"]=$response;
+            $account_types["account_types"]=$response;
         }
 
 
-        return $this->render(':pages:main_settings.html.twig',[
-            "account_types"=>$response
+        return $this->render('pages/main_settings.html.twig',[
+                "account_types"=>$response
             ]
         );
-
-
-
-       // return new RedirectResponse($this->urlGenerator->generate('home'));
-
-
+        // return new RedirectResponse($this->urlGenerator->generate('home'));
 
     }
-
-    public function refreshUser($id){
-        $endpoint="user/".$id."/edit?zip=0000";
-        $headers=[
-            'Accept' => 'application/json',
-            "apikey"=> $this->apikey,
-            'Content-Type' => "multipart/form-data"
-        ];
-
-        $params=[];
-
-        $response=$this->make_put_request($params,$headers,$endpoint,['zip' => "0000"]);
-
-
-        if (isset($response) && isset($response["id"]) ) {
-            $this->getUser()->setEmail($response["email"]);
-            $this->getUser()->setAccounts($response["accounts"]);
-            $this->getUser()->setCurrencyCode($response["currency_code"]);
-            $this->getUser()->setFirstname($response["firstname"]);
-            $this->getUser()->setLastname($response["lastname"]);
-            $this->getUser()->setCountryCode($response["country_code"]);
-            $this->getUser()->setPhoneNumber($response["phone_number"]);
-            $this->getUser()->setRoles($this->getRoles($response));
-            $this->getUser()->setSalt("");
-            $this->getUser()->setUsername($response["username"]);
-            $this->getUser()->setAvatar($response["avatar"]);
-            $this->getUser()->setCurrencyCode($response["currency_code"]);
-            $this->getUser()->setIsEmailActivated($response["is_email_activated"]);
-            $this->getUser()->setIsPhoneActivated($response["is_phone_activated"]);
-            $this->getUser()->setUserInfos($response);
-
-
-
-
-        }
-        return new Response(json_encode($response), Response::HTTP_OK,[
-            "Content-Type"=>'application/json'
-
-        ]);
-    }
-
 
     private function getRoles($user)
     {
@@ -267,7 +163,7 @@ class ProfileController extends AbstractController
 
         if($request->getMethod()=="POST") {
 
-             $file = $request->files->get('avatar');
+            $file = $request->files->get('avatar');
             return new Response(json_encode([
                 "file"=>$file->getClientOriginalName()]), Response::HTTP_CREATED,[
                 "Content-Type"=>'application/json'
@@ -358,7 +254,7 @@ class ProfileController extends AbstractController
                 ]
             );
 
-            if($response->getStatusCode()==201 | $response->getStatusCode()==200 |  $response->getStatusCode()==202){
+            if($response->getStatusCode()==201 | $response->getStatusCode()==200){
 
                 return $response->toArray();
             }else {
@@ -396,30 +292,30 @@ class ProfileController extends AbstractController
      */
     public function make_test_post_request(array $parameters, array $header, $endpoint,File $file)
     {
-       // var_dump($file->getPathname());
-       /* $curl = curl_init();
+        // var_dump($file->getPathname());
+        /* $curl = curl_init();
 
 
 
-        $data=['avatar'=>new CURLFILE('C:/Users/GOOGLE/Desktop/imgs/astro.png')];
+         $data=['avatar'=>new CURLFILE('C:/Users/GOOGLE/Desktop/imgs/astro.png')];
 
-        curl_setopt($curl, CURLOPT_POSTFIELDS,$data);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+         curl_setopt($curl, CURLOPT_POSTFIELDS,$data);
+         curl_setopt($curl, CURLOPT_POST, 1);
+         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-        curl_setopt($curl, CURLOPT_POSTFIELDS,
-            array('avatar'=> new CURLFILE('/C:/Users/GOOGLE/Desktop/imgs/images.jpg')));
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($curl, CURLOPT_HTTPHEADER,
-            array('User-Agent: Opera/9.80 (Windows NT 6.2; Win64; x64) Presto/2.12.388 Version/12.15',
-                'Content-Type: multipart/form-data',"apikey:".$this->apikey));
+         curl_setopt($curl, CURLOPT_POSTFIELDS,
+             array('avatar'=> new CURLFILE('/C:/Users/GOOGLE/Desktop/imgs/images.jpg')));
+         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+         curl_setopt($curl, CURLOPT_HTTPHEADER,
+             array('User-Agent: Opera/9.80 (Windows NT 6.2; Win64; x64) Presto/2.12.388 Version/12.15',
+                 'Content-Type: multipart/form-data',"apikey:".$this->apikey));
 
-        $response = curl_exec($curl);
+         $response = curl_exec($curl);
 
-        curl_close($curl);
-        var_dump($response);
+         curl_close($curl);
+         var_dump($response);
 
-        echo $response;*/
+         echo $response;*/
 
         $curl = curl_init();
 
@@ -476,20 +372,20 @@ class ProfileController extends AbstractController
 
         $data=['avatar'=>new CURLFILE('C:\sers\images.JPG')];
 
- /*       $formFields = [
-            'regular_field' => 'some value',
-            'avatar' => DataPart::fromPath('C:\sers\images.jpg'),
-        ];
-        $formData = new FormDataPart($formFields);
-        $headers=$formData->getPreparedHeaders()->toArray();
+        /*       $formFields = [
+                   'regular_field' => 'some value',
+                   'avatar' => DataPart::fromPath('C:\sers\images.jpg'),
+               ];
+               $formData = new FormDataPart($formFields);
+               $headers=$formData->getPreparedHeaders()->toArray();
 
-        try {
-            $this->client->request('POST', $endpoint, [
-                'headers' => $header,
-                'body' => $formData->bodyToIterable(),
-            ]);
-        } catch (TransportExceptionInterface $e) {
-        }*/
+               try {
+                   $this->client->request('POST', $endpoint, [
+                       'headers' => $header,
+                       'body' => $formData->bodyToIterable(),
+                   ]);
+               } catch (TransportExceptionInterface $e) {
+               }*/
 
 
         return "";

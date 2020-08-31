@@ -26,6 +26,7 @@ class Transaction
     private $last_requested_at;
     private $step;
     private $step_description;
+    private $recipient_name;
 
     public function __construct( )
     {

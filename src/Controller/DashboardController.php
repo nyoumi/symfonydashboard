@@ -36,9 +36,6 @@ class DashboardController extends Controller
     }
     public function make_get_request(array $parameters,array $header,$endpoint){
 
-
-
-
         $params="";
         foreach($parameters as $key=>$value)
         {
@@ -56,7 +53,6 @@ class DashboardController extends Controller
                 ]
             );
             if($response->getStatusCode()==200){
-
                 return $response->toArray();
             }else{
                 /*$this->addFlash(
@@ -65,18 +61,14 @@ class DashboardController extends Controller
                 );*/
                 $resp=[
                     'code' => $response->getStatusCode(),
-
                 ];
                 return $resp;
             }
-
         } catch (\Throwable $th) {
             //throw $th;
         }
 
         return null;
-
-
 
     }
     public function view(): Response
@@ -87,7 +79,7 @@ class DashboardController extends Controller
         $user = $this->security->getUser();
         $user_roles=$user->getRoles();
 
-        $endpoint="mobilemoneys";
+        $endpoint="mobilemoney/list";
         $headers=[
             'Accept' => 'application/json',
             "apikey"=> $this->apikey
@@ -106,13 +98,11 @@ class DashboardController extends Controller
                 $this->transactions=[];
             }
 
-
-
         } catch (\Throwable $th) {
             //throw $th;
         }
 
-        $endpoint="user/".$this->user_id;
+        $endpoint="user/".$this->user_id."/view";
         $params=[];
         try {
             $user = $this->make_get_request($params,$headers,$endpoint);
@@ -120,7 +110,7 @@ class DashboardController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
         }
-        $endpoint="mobilemoney/services";
+        $endpoint="mobilemoney/services/list";
         $params=[];
 
             $services = $this->make_get_request($params,$headers,$endpoint);
@@ -182,13 +172,8 @@ class DashboardController extends Controller
         $session->set('services', $this->services);
         $session->set('account_types', $this->account_types);
 
+        if( isset($user) && isset($user["id"])){
 
-
-
-
-
-
-        if( isset($user)){
         $this->accounts = $user["accounts"];
 
         foreach ($this->accounts  as $account) {
@@ -235,7 +220,7 @@ class DashboardController extends Controller
         $user = $this->security->getUser();
         $user_roles=$user->getRoles();
 
-        $endpoint="mobilemoneys";
+        $endpoint="mobilemoney/list";
         $headers=[
             'Accept' => 'application/json',
             "apikey"=> $this->apikey
