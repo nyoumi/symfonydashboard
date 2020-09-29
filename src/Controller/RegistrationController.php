@@ -57,7 +57,6 @@ class RegistrationController extends Controller
     {
 
         $user = new WebserviceUser();
-        var_dump($request->headers->get('referer'));
 
 
 

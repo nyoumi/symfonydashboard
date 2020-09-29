@@ -108,6 +108,16 @@ class DatiTransaction
      */
     private $recipient_name;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tmp_confirm_code_prefix;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $confirm_trials_nb;
+
 
 
     public function getStatus(): ?string
@@ -286,6 +296,30 @@ class DatiTransaction
     public function setRecipientName(?string $recipient_name): self
     {
         $this->recipient_name = $recipient_name;
+
+        return $this;
+    }
+
+    public function getTmpConfirmCodePrefix(): ?string
+    {
+        return $this->tmp_confirm_code_prefix;
+    }
+
+    public function setTmpConfirmCodePrefix(?string $tmp_confirm_code_prefix): self
+    {
+        $this->tmp_confirm_code_prefix = $tmp_confirm_code_prefix;
+
+        return $this;
+    }
+
+    public function getConfirmTrialsNb(): ?string
+    {
+        return $this->confirm_trials_nb;
+    }
+
+    public function setConfirmTrialsNb(?string $confirm_trials_nb): self
+    {
+        $this->confirm_trials_nb = $confirm_trials_nb;
 
         return $this;
     }

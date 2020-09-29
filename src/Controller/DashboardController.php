@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use DateInterval;
 use DateTime;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -43,7 +44,7 @@ class DashboardController extends Controller
             
         }
         $params = substr($params, 0, -1);
-        $params=urlencode($params);
+        //$params=urlencode($params);
         try {
             $response = $this->client->request(
                 'GET',
@@ -79,16 +80,18 @@ class DashboardController extends Controller
         $user = $this->security->getUser();
         $user_roles=$user->getRoles();
 
+
         $endpoint="mobilemoney/list";
         $headers=[
             'Accept' => 'application/json',
             "apikey"=> $this->apikey
         ];
         $params=[
-            'order' => 'asc',
+            'order' => 'desc',
             'user_id' => $this->user_id,
-            'start_at'=> '2020-01-01 00:00:00',
-            'end_at'=>'2021-01-01 00:00:00',
+            'sender_phone' => $user->getPhoneNumber(),
+            'starting_at'=> '2020-01-01 00:00:00',
+            'ending_at'=>'2021-01-01 00:00:00',
             'page'=> '1',
             'limit'=>'10'
         ];
@@ -116,7 +119,7 @@ class DashboardController extends Controller
             $services = $this->make_get_request($params,$headers,$endpoint);
             //var_dump($services);
            // var_dump("+++++++++++++++++++++++++++++++++++++");
-            if (!isset($services['code'])){
+            if (!isset($services['code']) && isset($services)){
 
 
                 for ($i = 0; $i < sizeof($services); $i++) {
@@ -178,7 +181,7 @@ class DashboardController extends Controller
 
         foreach ($this->accounts  as $account) {
             $this->total_balance=$this->total_balance+(float) $account["balance"];
- 
+
         }
        }
 
@@ -212,13 +215,15 @@ class DashboardController extends Controller
         
     }
 
-    public function viewHistory()
+    public function viewHistory(Request $request)
     {
         $this->apikey = $this->getParameter('app.apikey');
         $this->site_url = $this->getParameter('app.site_url');
         $this->user_id=$this->getUser()->getid();
         $user = $this->security->getUser();
         $user_roles=$user->getRoles();
+        $data=$request->request->all();
+        $this->view();
 
         $endpoint="mobilemoney/list";
         $headers=[
@@ -234,15 +239,23 @@ class DashboardController extends Controller
 
         } catch (\Exception $e) {
         }
-        //echo $now;
+
+            //echo $now;
         $params=[
             'order' => 'asc',
             'user_id' => $this->user_id,
+            'sender_phone' =>$user->getPhoneNumber(),
             'start_at'=> $now->format('Y-m-d H:i:s'),
             'end_at'=>$limitDate->format('Y-m-d H:i:s'),
             'page'=> '1',
             'limit'=>'100'
         ];
+
+        if(isset($data)){
+            if (isset($data["starting_at"])) $params["start_at"]=$data["starting_at"];
+            if (isset($data["ending_at"])) $params["end_at"]=$data["ending_at"];
+
+        }
         try {
             $this->transactions=$this->make_get_request($params,$headers,$endpoint);
             if(!(isset($this->transactions) && isset($this->transactions[0]['id']))){

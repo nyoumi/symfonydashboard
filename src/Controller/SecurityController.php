@@ -36,6 +36,22 @@ class SecurityController extends AbstractController
             ]);
         }
 
+    public function participantLogin(AuthenticationUtils $authenticationUtils):Response
+    {
+
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+        //$this->userProvider->loadUserByUsername($lastUsername);
+
+        return $this->render('pages/participantLogin.html.twig', [
+            'last_username' => $lastUsername,
+            'error'         => $error,
+        ]);
+    }
+
         
     /**
      * @Route("/logout", name="app_logout")

@@ -27,6 +27,8 @@ class Transaction
     private $step;
     private $step_description;
     private $recipient_name;
+    private $tmp_confirm_code_prefix;
+    private $confirm_trials_nb;
 
     public function __construct( )
     {
@@ -300,6 +302,54 @@ class Transaction
     {
         $this->account_ref = $account_ref;
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRecipientName()
+    {
+        return $this->recipient_name;
+    }
+
+    /**
+     * @param mixed $recipient_name
+     */
+    public function setRecipientName($recipient_name): void
+    {
+        $this->recipient_name = $recipient_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getConfirmTrialsNb()
+    {
+        return $this->confirm_trials_nb;
+    }
+
+    /**
+     * @param mixed $confirm_trials_nb
+     */
+    public function setConfirmTrialsNb($confirm_trials_nb): void
+    {
+        $this->confirm_trials_nb = $confirm_trials_nb;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTmpConfirmCodePrefix()
+    {
+        return $this->tmp_confirm_code_prefix;
+    }
+
+    /**
+     * @param mixed $tmp_confirm_code_prefix
+     */
+    public function setTmpConfirmCodePrefix($tmp_confirm_code_prefix): void
+    {
+        $this->tmp_confirm_code_prefix = $tmp_confirm_code_prefix;
     }
 
 }

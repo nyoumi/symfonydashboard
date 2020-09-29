@@ -2,13 +2,17 @@
 {% set _transactions = transactions %}
 {% set _currency = app.user.currency_code %}
 
-{% set _accounts = app.user.accounts %}    
- 
+{% set _username = _profile.firstname ~ ' ' ~ _profile.lastname %}
+{% set _user_phone = '+' ~ _profile.countryCode ~ _profile.phoneNumber %}
+
+
+{% set _accounts = app.user.accounts %}
+
 {% extends "base.html.twig" %}
 
 {% set _categories = app.session.get('services') %}
 
-
+{#
 {% set _transactions = [
   {
     "id": "TR9842",
@@ -29,7 +33,7 @@
     "recipient_account_num": "",
     "trans_fees": "0.0",
     "type": "deposit"
-  },  
+  },
   {
     "id": "TR2513",
     "last_consulted_at": "2020-08-15T19:30:17.397Z",
@@ -73,7 +77,7 @@
 ]
 
 %}
-
+#}
 {% block stylesheets %}
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('adminLTE/plugins/fontawesome-free/css/all.min.css') }}">
@@ -83,45 +87,45 @@
     <link rel="stylesheet" href="{{ asset('adminLTE/plugins/daterangepicker/daterangepicker.css') }}">
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminLTE/dist/css/adminlte.min.css') }}">
     <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">	
-{% endblock %}            
-            
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+{% endblock %}
+
 {% block navbar %}
-   {% include "body/navbar.html.twig" ignore missing %}
+    {% include "body/navbar.html.twig" ignore missing %}
 {% endblock %}
 
 {% block sidebar %}
-   {% include "body/sidebar.html.twig" ignore missing %}
+    {% include "body/sidebar.html.twig" ignore missing %}
 {% endblock %}
 
 {% block content_header %}
     <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark">History</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">History</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">History</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">History</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+            <div class="login-feedback"></div>
+        </div><!-- /.container-fluid -->
     </div>
 {% endblock %}
 
-{% block content_main %}    
+{% block content_main %}
     {% for flashError in app.flashes('error') %}
         <div class="alert alert-danger alert-dismissible" role="alert">
             <i class="fa fa-exclamation-circle"></i>&nbsp{{ flashError }}
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-        </div>    
+        </div>
     {% endfor %}
     {% for message in app.flashes('notice') %}
         <div class="alert alert-warning alert-dismissible  flash-notice">
@@ -132,225 +136,714 @@
 
     {# read and display several types of flash messages #}
     {% for label, messages in app.flashes(['success']) %}
-        {% for message in messages %}                            
+        {% for message in messages %}
             <div class="alert alert-success alert-dismissible">
                 <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }} }}
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
             </div>
         {% endfor %}
     {% endfor %}
-	<!-- Main content -->
-	<section class="content">
-        <!-- /.row -->
-        <div class="row">
-          <div class="col-12">
+<!-- Main content -->
+<section class="content">
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-12">
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Transactions history</h3>
-                  <div class="card-tools">
+                <div class="card-header">
+                    <h3 class="card-title">Transactions history</h3>
+                    <div class="card-tools">
 
-                    <button type="button" class="btn btn-tool" id="daterange-btn" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                      <i class="far fa-calendar-alt mr-1" ></i><span id="reportrange"> Choose Date range </span>
-                      <i class="fas fa-caret-down ml-1"></i>
-                    </button> 
-                    
-                  </div>                
-             
-                
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-					  <th>ID</th>
-					  <th>Type</th>
-					  <th>Status</th>
-					  <th>Sender</th>
-					  <th>Receiver</th>
-					  <th>Date</th>
-					  <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-					    
-					{% for transaction in _transactions %}
-						<tr>
-						  <td><a href="{{ path("history") }} ">{{ transaction.id }}</a></td>
-						  <td>
-{% if (transaction.type)|lower == 'withdraw' %}
-                  <span class="badge datibadge-dark">Withdraw</span>
-                  <small class="datitext-dark mr-1">
-                    <i class="fas fa-arrow-up"></i>
-                  </small><br>
-                  {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                             
-      {% elseif (transaction.type)|lower == 'deposit' %}
-                  <span class="badge datibadge-primary">Deposit</span>
-                  <small class="datitext-primary mr-1">
-                      <i class="fas fa-arrow-down"></i>
-                  </small><br>
-                  {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>                              
-      {% else %}
-                  <span class="badge badge-default">{{ transaction.type }}</span>
-                  <small class="text-default mr-1">
-                      <i class="far fa-dot-circle"></i>
-                  </small><br>
-                  {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>	
-{% endif %}
+                        <button type="button" class="btn btn-tool" id="daterange-btn" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                            <i class="far fa-calendar-alt mr-1" ></i><span id="reportrange"> Choose Date range </span>
+                            <i class="fas fa-caret-down ml-1"></i>
+                        </button>
 
-						  </td>
-						  <td>{{ transaction.status }}</td>
-						  <td>
-							<div class="sparkbar" data-color="#00a65a" data-height="20">{{ transaction.account_ref }}</div>
-						  </td>
-						  <td>
-							<div class="sparkbar" data-color="#00a65a" data-height="20">{% if (transaction.recipient_account_num) is empty %} {{ "+"~ transaction.recipient_country_code ~ transaction.recipient_phone  }} {% else %} {{ transaction.recipient_account_num }}{% endif %}</div>
-						  </td>
-						  <td>{{ transaction.created_at|date("d-m-Y h:m:s") }}</td>
-					      <td class="project-actions text-right">
-                              <a class="btn btn-info btn-sm transaction_detail_btn" href="#" data-transaction_id = "{{ transaction.id }}" data-toggle="modal" data-target="#transaction_detal_modal">
-                                  <i class="fas fa-eye"></i>
-                              </a>
-                          </td>
-                          {#<td>{{ transaction.date ~" " ~transaction.time }}</td>#}
-						</tr>
-					{% endfor %}
-                  </tbody>
-                  <tfoot>
-                  <tr>
-					  <th>ID</th>
-					  <th>Type</th>
-					  <th>Status</th>
-					  <th>Sender</th>
-					  <th>Receiver</th>
-					  <th>Date</th>
-					  <th></th>
-                  </tr>
-                  </tfoot>
-                </table>
-              </div>
-              <!-- /.card-body -->
+                    </div>
+
+
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Sender</th>
+                            <th>Receiver</th>
+                            <th>Date</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for transaction in _transactions %}
+
+                            <tr {#
+						{% if "now"|date("d-m-Y") ==  transaction.created_at|date("d-m-Y") %}
+					        {% if "now"|date("d-m-Y h:m:s") < transaction.created_at|date_modify("+10 minute")|date("d-m-Y h:m:s") and "now"|date("d-m-Y h") == transaction.created_at|date("d-m-Y h") %} class="blink_text" {% endif %}
+					    {% endif %}
+					    #}
+                            >
+                                <td><a href="{{ path("history") }} ">{{ transaction.id }}</a></td>
+                                <td>
+                                    {% if transaction.is_topup == false  %}
+                                        <span class="badge datibadge-dark">Send</span>
+                                        <small class="datitext-dark mr-1">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </small><br>
+                                        {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>
+                                    {% elseif transaction.is_topup == true %}
+                                        <span class="badge datibadge-primary">Received</span>
+                                        <small class="datitext-primary mr-1">
+                                            <i class="fas fa-arrow-down"></i>
+                                        </small><br>
+                                        {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>
+                                    {% else %}
+                                        <span class="badge badge-default">{{ transaction.type }}</span>
+                                        <small class="text-default mr-1">
+                                            <i class="far fa-dot-circle"></i>
+                                        </small><br>
+                                        {{ transaction.amount_sent }}<sup style="font-size: 10px">{{ _currency }}</sup></span>
+                                    {% endif %}
+
+                                </td>
+                                <td
+                                        {% if "now"|date("d-m-Y") ==  transaction.created_at|date("d-m-Y") %}
+                                            {% if "now"|date("m") < transaction.created_at|date("m")+5 and "now"|date("d-m-Y h") == transaction.created_at|date("d-m-Y h") %} class="blink_text_status" {% endif %}
+                                        {% endif %}
+                                >
+                                    {% if transaction.status == "WAITING" %}
+                                        <span style="color: #ffc107!important"><i class="far fa-dot-circle"></i> {{ transaction.status }}</span>
+                                    {% elseif transaction.status == "FAILED" %}<span style="color: #dc3545!important">
+                                        <i class="far fa-dot-circle"></i> {{ transaction.status }}</span>
+                                    {% elseif transaction.status == "COMPLETED" %}
+                                        <span style="color: #28a745!important"><i class="far fa-dot-circle"></i> {{ transaction.status }}</span>
+                                    {% elseif transaction.status == "CONFIRM_REQUESTED" %}
+                                        <span style="color: #2C6FB7!important"><i class="far fa-dot-circle"></i> {{ transaction.status }}</span>
+                                    {% else %}
+                                        {{ transaction.status }}
+                                    {% endif %}
+
+                                </td>
+                                <td>
+                                    <div class="sparkbar" data-color="#00a65a" data-height="20">{% if (transaction.account_ref) is empty %} {{ "+"~ transaction.sender_country_code ~ transaction.sender_phone  }} {% else %} {{ transaction.account_ref}}{% endif %}</div>
+                                </td>
+                                <td>
+                                    <div class="sparkbar" data-color="#00a65a" data-height="20">{% if (transaction.recipient_account_num) is empty %} {{ "+"~ transaction.recipient_country_code ~ transaction.recipient_phone  }} {% else %} {{ transaction.recipient_account_num }}{% endif %}</div>
+                                </td>
+                                <td>{{ transaction.created_at|date("d-m-Y h:m:s") }}</td>
+                                <td class="project-actions text-right">
+                                    <a class="btn btn-info btn-sm transaction_detail_btn" href="#"
+                                       data-transaction_id = "{{ transaction.id }}" data-toggle="modal" data-target="#transaction_detail_modal"
+
+                                       data-transaction_status = "{{ transaction.status }}"
+                                       data-transaction_recipient_account_num = "{{ transaction.recipient_account_num }}"
+                                       data-transaction_local = "local"
+                                       data-submit_again_id = "{% if transaction.type == "withdrawal" %}1{% else %}2{% endif %}"
+                                       data-transaction_action = "init_mobilemoney_transaction";
+                                       data-transaction_type = "{{ transaction.type }}"
+                                       data-transaction_account_ref = "{{ transaction.account_ref }}"
+                                       data-transaction_amount_sent = "{{ transaction.amount_sent }}"
+                                       data-transaction_currency_sent = "{{ transaction.currency }}"
+                                       data-transaction_recipient_phone = "{{ transaction.recipient_phone }}"
+                                       data-transaction_recipient_name = "{{ transaction.recipient_name }}"
+                                       data-transaction_recipient_country_code = "{{ transaction.recipient_country_code }}"
+                                       data-transaction_sender_phone = "{{ transaction.sender_phone }}"
+                                       data-transaction_sender_country_code = "{{ transaction.sender_country_code }}"
+                                       data-transaction_reason = "{{ transaction.reason }}"
+                                       data-transaction_step_description = "{{ transaction.step_description }}"
+
+                                       data-transaction_created_at = "{{ transaction.created_at|date("d-m-Y h:m:s") }}"
+                                       data-transaction_fees = "{{ transaction.trans_fees }}"
+                                       data-transaction_amount_received = "{{ transaction.amount_received }}"
+
+                                       data-transaction_from_name = "{% if ("+"~ transaction.sender_country_code ~ transaction.sender_phone) == _user_phone %} {{ _username }} {% else %} / {% endif %}"
+                                       data-transaction_from_phone = "{{ "+"~ transaction.sender_country_code ~ transaction.sender_phone }}"
+                                       data-transaction_from_email = "{% if ("+"~ transaction.sender_country_code ~ transaction.sender_phone) == _user_phone %} {{ _profile.email }} {% else %}  {% endif %}"
+                                       data-transaction_from_account_ref = "{{ transaction.account_ref }}"
+
+                                       data-transaction_to_name = "{% if ("+"~ transaction.recipient_country_code ~ transaction.recipient_phone) == _user_phone %} {{ _username }} {% elseif (transaction.recipient_name) is not empty %} {{ transaction.recipient_name }} {% else %} / {% endif %}"
+                                       data-transaction_to_phone = "{{ "+"~ transaction.recipient_country_code ~ transaction.recipient_phone }}"
+                                       data-transaction_to_email = "{% if ("+"~ transaction.recipient_country_code ~ transaction.recipient_phone) == _user_phone %} {{ _profile.email }} {% else %}  {% endif %}"
+                                       data-transaction_to_account_ref = "{{ transaction.recipient_account_num }}"
+                                    >
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+
+
+
+
+                                {#<td>{{ transaction.date ~" " ~transaction.time }}</td>#}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Sender</th>
+                            <th>Receiver</th>
+                            <th>Date</th>
+                            <th></th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- /.card-body -->
             </div>
             <!-- /.card -->
-          </div>
-          <!-- /.col -->
         </div>
-        <!-- /.row -->
-	</section>
-	<!-- /.content -->
-	
-      <div class="modal fade" id="transaction_detail_modal">
-        <div class="modal-dialog modal-md">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Verify your Phone Number</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
+
+<!-- /.modal -->
+<div class="modal fade" id="transaction_detail_modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header mb-2">
+                <h4 class="modal-title">
+                    TRANSACTION DETAIL&nbsp
+                    <small>(This page has been enhanced for printing. Click the print button at the bottom of the invoice to print.)</small>
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
             </div>
-            <div class="col-6" id="action_and_info_phone_status" name="action_and_info_phone_status" style="max-width: max-content;">
-    			<div class="row text-center" style="max-width: max-content;">
-    			 <div class="col-12" id="dati_check_whith_sms" >
-    			 </div>
-    			</div>
-    		   <p class="alert text-danger text-center"></p>
-    		</div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>                                                    			
-          </div>
-          <!-- /.modal-content -->
+            <div class="col-sm-12 col-md-12">
+
+                <div class="row">
+                    <div class="col-12">
+
+                        <!-- Main content -->
+                        <div class="invoice p-3 mb-3">
+                            <!-- title row -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>
+                                        <i class="fas fa-globe"></i> DatiCash - System.
+                                        <small class="float-right">Date: {{ "now"|date("m/d/Y") }}</small>
+                                    </h4>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- info row -->
+                            <div class="row invoice-info">
+                                <div class="col-sm-4 invoice-col" id="invoice-info_from">
+
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-4 invoice-col" id="invoice-info_to">
+
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-4 invoice-col" id="invoice-info_operation_detail">
+
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+                            <!-- info row -->
+                            <div class="row invoice-info">
+                                <div class="col-sm-8 invoice-col" id="invoice-info_detail_status">
+
+                                </div>
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.invoice -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+
+                <!-- /.row -->
+
+                <!-- this row will not appear when printing -->
+                <div class="row no-print">
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <a href="invoice-print.html" target="_blank" class="btn btn-default" disabled><i class="fas fa-print"></i> Print</a>
+                    <!-- this row will not appear when printing -->
+                    <div class="row no-print">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-info float-right" id="submit_transaction_again"><i class="far fa-credit-card"></i> Submit
+                                Transaction Again
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
-      </div>
-    <!-- /.modal -->	
-	
-	
-{% endblock %}
+    </div>
+    <!-- /.modal -->
 
-{% block javascripts %}
-    <!-- Bootstrap 4 -->
-    <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- InputMask -->
-    <script src="{{ asset('adminLTE/plugins/moment/moment.min.js') }}"></script>
-    <!-- date-range-picker -->
-    <script src="{{ asset('adminLTE/plugins/daterangepicker/daterangepicker.js') }}"></script>
-    <!-- Tempusdominus Bootstrap 4 -->
-    <script src="{{ asset('adminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-    <!-- DataTables -->
-    <script src="{{ asset('adminLTE/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('adminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('adminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <!-- AdminLTE App -->
-    <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script>    
-    <script src="{{ asset('adminLTE/plugins/ion-rangeslider/js/ion.rangeSlider.js') }}"></script>
-            
-<!-- page script -->
 
-<script>
-  $(function () {
-    //Date range as a button
-    $('#daterange-btn').daterangepicker(
-      {
-        timePicker: true,
-        ranges   : {
-          'Today'       : [moment(), moment()],
-          'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-          'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
-          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-          'This Month'  : [moment().startOf('month'), moment().endOf('month')],
-          'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        startDate: moment().subtract(29, 'days'),
-        endDate  : moment()
-      },
-      function (start, end) {
-        $('#reportrange').html(start.format('YYYY-M-D hh:mm:ss') + ' - ' + end.format('MMMM D, YYYY'));
-        
-        var order = "asc"
-        var user_id = "{{ _profile.id }}"
-        var start_at = start.format('YYYY-M-D hh:mm:ss')
-        var end_at = end.format('YYYY-M-D hh:mm:ss')
-        var limit = "100"
 
-        window.location = `{{ path("history") }}?order=${order}&user_id=${user_id}&account_id=&account_ref=&type=&sender_country_code=&recipient_country_code=&start_at=${start_at}&end_at=${end_at}&page=&limit=${limit}`;
+    {% endblock %}
 
-      }
-    )
-  })
-  
-  
-</script>  
+    {% block javascripts %}
+        <!-- Bootstrap 4 -->
+        <script src="{{ asset('adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <!-- InputMask -->
+        <script src="{{ asset('adminLTE/plugins/moment/moment.min.js') }}"></script>
+        <!-- date-range-picker -->
+        <script src="{{ asset('adminLTE/plugins/daterangepicker/daterangepicker.js') }}"></script>
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="{{ asset('adminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+        <!-- DataTables -->
+        <script src="{{ asset('adminLTE/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('adminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+        <script src="{{ asset('adminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+        <!-- AdminLTE App -->
+        <script src="{{ asset('adminLTE/dist/js/adminlte.js') }}"></script>
+        <!-- AdminLTE for demo purposes -->
+        <script src="{{ asset('adminLTE/dist/js/demo.js') }}"></script>
+        <script src="{{ asset('adminLTE/plugins/ion-rangeslider/js/ion.rangeSlider.js') }}"></script>
 
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true,
-      "autoWidth": false,
-    });
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-    $(document).ready(function(){
-        /*Textbox Events*/
-        $("body")  
-          .on('click', '.transaction_detail_btn', function(f){
-            $("#transaction_detail_modal").modal("show");				
-        		f.stopImmediatePropagation();
-            })       
-            
-    })
-    
-</script>
-{% endblock %}
+        <!-- page script -->
+
+        <script>
+            $(function () {
+                //Date range as a button
+                $('#daterange-btn').daterangepicker(
+                    {
+                        timePicker: true,
+                        ranges   : {
+                            'Today'       : [moment(), moment()],
+                            'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                            'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+                            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                            'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+                            'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                        },
+                        startDate: moment().subtract(29, 'days'),
+                        endDate  : moment()
+                    },
+                    function (start, end) {
+                        $('#reportrange').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+
+                        var order = "asc"
+                        var user_id = "{{ _profile.id }}"
+                        var starting_at  = start.format('YYYY-M-D hh:mm:ss')
+                        var ending_at = end.format('YYYY-M-D hh:mm:ss')
+                        var limit = "100"
+
+                        window.location = `{{ path("history") }}?order=${order}&user_id=${user_id}&account_id=&account_ref=&type=&sender_country_code=&recipient_country_code=&starting_at=${starting_at }&ending_at=${ending_at}&page=&limit=${limit}`;
+
+                    }
+                )
+            })
+
+
+        </script>
+
+        <script>
+            $(function () {
+                $("#example1").DataTable({
+                    "responsive": true,
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": false,
+                    "ordering": true,
+                    "order": [[0, "desc"]],
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": true,
+                });
+            });
+            $(document).ready(function(){
+                /*Textbox Events*/
+                $("body")
+                    .on('click', '.transaction_detail_btn', function(f){
+                        $this = $(this);
+                        var transaction_status
+                        var transaction_step_description;
+
+                        //$this.attr("data-transaction_status", "CONFIRM_REQUESTED")//for test
+                        if($this.attr("data-transaction_status") == "WAITING"){
+                            transaction_status = '<span style="color: #ffc107!important"><i class="far fa-dot-circle"></i>&nbsp'+ $this.attr("data-transaction_status")+'</span>'
+                        }else{
+                            if($this.attr("data-transaction_status") == "FAILED"){
+                                transaction_status = '<span style="color: #dc3545!important"><i class="far fa-dot-circle"></i>&nbsp'+ $this.attr("data-transaction_status")+'</span>';
+                                transaction_step_description = ('<span style="color: #dc3545!important">DETAIL:&nbsp'+ $this.attr("data-transaction_step_description")+'</span>');
+                            }else{
+                                if($this.attr("data-transaction_status") == "COMPLETED"){
+                                    transaction_status = '<span style="color: #28a745!important"><i class="far fa-dot-circle"></i>&nbsp'+ $this.attr("data-transaction_status")+'</span>'
+                                }else{
+                                    if($this.attr("data-transaction_status") == "CONFIRM_REQUESTED"){
+                                        transaction_status = '<span style="color: #2C6FB7!important"><i class="far fa-dot-circle"></i>&nbsp'+ $this.attr("data-transaction_status")+'</span>'
+
+                                        $("#submit_transaction_again").text("Confirm Transaction").attr("id", "confirm_transaction");
+                                        $('#confirm_transaction').attr("data-transaction_id",$this.attr('data-transaction_id'))
+                                        $('#confirm_transaction').attr("data-transaction_amount_sent",$this.attr('data-transaction_amount_sent'))
+                                        $('#confirm_transaction').attr("data-transaction_currency_sent",$this.attr('data-transaction_currency_sent'))
+                                        $('#confirm_transaction').attr("data-transaction_recipient_country_code",$this.attr('data-transaction_recipient_country_code'))
+                                        $('#confirm_transaction').attr("data-transaction_recipient_phone",$this.attr('data-transaction_recipient_phone'))
+                                        $('#confirm_transaction').attr("data-transaction_recipient_name",$this.attr('data-transaction_recipient_name'))
+
+                                    }else{
+                                        transaction_status = $this.attr("data-transaction_status")
+                                    }
+                                }
+                            }
+                        }
+
+                        $('#invoice-info_detail_status').empty().append(transaction_step_description);
+
+                        $('#invoice-info_from').empty().append(
+                            'From<br>'+
+                            '<address>'+
+                            '<strong>'+$this.attr('data-transaction_from_name')+'</strong><br>'+
+                            '<b>Account:</b> '+$this.attr('data-transaction_from_account_ref')+'<br>'+
+                            'Phone: '+$this.attr('data-transaction_from_phone')+'<br>'+
+                            'Email: '+$this.attr('data-transaction_from_email')+
+                            '</address>'
+                        );
+
+                        $('#invoice-info_to').empty().append(
+                            'To<br>'+
+                            '<address>'+
+                            '<strong>'+$this.attr('data-transaction_to_name')+'</strong><br>'+
+                            '<b>Account:</b> '+$this.attr('data-transaction_to_account_ref')+'<br>'+
+                            'Phone: '+$this.attr('data-transaction_to_phone')+'<br>'+
+                            'Email: '+$this.attr('data-transaction_to_email')+
+                            '</address>'
+                        );
+
+                        $('#invoice-info_operation_detail').empty().append(
+                            '<b>Transaction ID:</b> #'+$this.attr('data-transaction_id')+' '+ transaction_status+'<br>'+
+                            '<b>Transaction Due:</b> '+$this.attr('data-transaction_created_at')+
+                            '<br>'+
+                            '<b>Send Amount:</b> '+$this.attr('data-transaction_amount_sent')+' '+$this.attr('data-transaction_currency_sent')+'<br>'+
+                            '<b>fees:</b> '+$this.attr('data-transaction_fees')+' '+$this.attr('data-transaction_currency_sent')+'<br>'+
+                            '<b>Total Pay:</b> '+$this.attr('data-transaction_amount_sent')+' '+$this.attr('data-transaction_currency_sent')+'<br>'+
+                            '<b>Recipient Gets:</b> '+$this.attr('data-transaction_amount_received')+' '+$this.attr('data-transaction_currency_sent')+'<br>'
+                        );
+
+                        $('#submit_transaction_again').attr("data-transaction_again_id",$this.attr('data-submit_again_id'))
+                        $('#submit_transaction_again').attr("data-transaction_again_recipient_account_num",$this.attr('data-transaction_recipient_account_num'))
+                        $('#submit_transaction_again').attr("data-transaction_again_local",$this.attr('data-transaction_local'))
+                        $('#submit_transaction_again').attr("data-transaction_again_action",$this.attr('data-transaction_action'))
+                        $('#submit_transaction_again').attr("data-transaction_again_type",$this.attr('data-transaction_type'))
+                        $('#submit_transaction_again').attr("data-transaction_again_account_ref",$this.attr('data-transaction_account_ref'))
+                        $('#submit_transaction_again').attr("data-transaction_again_amount_sent",$this.attr('data-transaction_amount_sent'))
+                        $('#submit_transaction_again').attr("data-transaction_again_currency_sent",$this.attr('data-transaction_currency_sent'))
+                        $('#submit_transaction_again').attr("data-transaction_again_recipient_phone",$this.attr('data-transaction_recipient_phone'))
+                        $('#submit_transaction_again').attr("data-transaction_again_recipient_country_code",$this.attr('data-transaction_recipient_country_code'))
+                        $('#submit_transaction_again').attr("data-transaction_again_sender_phone",$this.attr('data-transaction_sender_phone'))
+                        $('#submit_transaction_again').attr("data-transaction_again_sender_country_code",$this.attr('data-transaction_sender_country_code'))
+                        $('#submit_transaction_again').attr("data-transaction_again_reason",$this.attr('data-transaction_reason'))
+
+                        $("#transaction_detail_modal").modal("show");
+                        f.stopImmediatePropagation();
+
+                    })
+                    .on("click", '#confirm_transaction', function(e) {
+                        e.preventDefault();
+                        $this = $(this);
+
+                        let transaction_id = $this.attr('data-transaction_id');//id du service
+                        let recipient_country_code = $this.attr('data-transaction_recipient_country_code');
+                        let recipient_phone = $this.attr('data-transaction_recipient_phone');
+                        let amount_sent = $this.attr('data-transaction_amount_sent');
+                        let currency_sent = $this.attr('data-transaction_currency_sent');
+                        let recipient_username = $this.attr('data-transaction_recipient_name');
+                        //var tmpConfirmCodePrefix = $this.attr('data-tmpConfirmCodePrefix');
+                        tmpConfirmCodePrefix = "";//for test
+
+                        let confirmPath = "{{ path("transactions_confirm") }}";
+                        let checkPath = "{{ path("transactions_view") }}";
+
+                        Swal.fire({
+                            title: "Confirm Transaction!",
+                            html: 'You are about to make a transaction of '+amount_sent+' '+currency_sent+' to '+recipient_phone+'('+recipient_username+'). Enter the confirmation code for the transaction you just received by SMS or EMAIL:'+
+                            '<div class="row" style="flex-flow: nowrap;">'+
+                            '<div class="col-md-4 col-md-4" style="text-align: right; font-size: 27px; margin: 1em auto;"><span style="-webkit-text-stroke: medium;">'+tmpConfirmCodePrefix+' - </span></div>'+
+                            '<div class="col-sm-4 col-md-4"><input id="confirmation_code" class="swal2-input" placeholder="X X X X"></div>'+
+                            '<div class="col-sm-4 col-md-4"></div>'+
+                            '</div>'
+                            ,
+                            //closeOnConfirm: true,
+                            inputPlaceholder: "Your Confirmation Code",
+                            inputAttributes: {
+                                autocapitalize: "off"
+                            },
+                            showCancelButton: true,
+                            showLoaderOnConfirm: true,
+                            focusConfirm: false,
+                            confirmButtonText:'<i class="fa fa-thumbs-up"></i> Confirm',
+                            confirmButtonAriaLabel: "Thumbs up, great!",
+                            cancelButtonText:'<i class="fa fa-thumbs-down"></i> Cancel',
+                            cancelButtonAriaLabel: "Thumbs down",
+                            allowOutsideClick: false,
+                            preConfirm: (confirmation_code) => {
+                            var confirmation_code = document.getElementById('confirmation_code').value;
+                        //alert(confirmation_code)
+                        //return fetch(`https://api.daticash.com/v1/api/mobilemoney/${transaction_id }/confirm?confirmation_code=${confirmation_code }`, {"method": "PUT", "headers":{"apikey":"sec_5ed93806dd2ca"}})//confirm-password url
+                        return fetch(confirmPath + "/" + transaction_id  + "?confirmation_code=" +`${confirmation_code }`, {"method": "POST"})//confirm-password url
+                            .then(response => response.json())
+                    .then(githubUser => new Promise((resolve, reject) => {
+                            console.log("git")
+                        console.log(githubUser)
+                        if(githubUser.id){
+                            console.log(githubUser)
+                        }else{
+                            if(githubUser.code){
+                                //githubUser.code = 401//for test
+                                if(githubUser.code == 412){
+                                    throw new Error("This transaction is not in confirm requested state now. cannot confirm")
+                                }else{
+                                    if(githubUser.code == 404){
+                                        throw new Error("The given id does not match any transaction")
+                                    }else{
+                                        if(githubUser.code == 403){
+                                            throw new Error("FORBIDDEN: You do not have permission to access this resource")
+                                        }else{
+                                            if(githubUser.code == 401){
+                                                throw new Error("The provided code is not correct, do not forget this code is for one-time use in three tries. remaining to try 2")//here left try//for test
+                                                //throw new Error("The provided code is not correct, do not forget this code is for one-time use in three tries. remaining to try "+githubUser.confirmTrialsNb)//here left try                                                  }else{
+                                                if(githubUser.code == 400){
+                                                    throw new Error("Something is wrong with the request, possibly missing or improperly formatted parameters")
+                                                }else{
+                                                    throw new Error('Error Connection, please try again later')
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        setTimeout(() => {
+                            resolve(githubUser);
+                    }, 5000);
+                    }))
+                    .catch(error => {
+                            Swal.showValidationMessage(
+                            `${error}`
+                        )
+                    });
+                    },
+                        allowOutsideClick: () => !Swal.isLoading()
+                    }).then((result) => {
+                            console.log(result)
+                        if(result.isConfirmed && result.value.is_confirmed == true){
+                            //result.value.is_confirmed = true//for test
+                            var status
+                            var timerInterval
+                            Swal.fire({
+                                title: "Traitement en cour",
+                                html: "STATUS : <b class=\"status_js\">Updating transaction History.</b>"+
+                                "<br><span class=\"confirm_js\"></span>",
+                                icon: "info",
+                                timer: 350000,
+                                timerProgressBar: true,
+                                allowOutsideClick: false,
+                                onBeforeOpen: () => {
+                                Swal.showLoading()
+                            timerInterval = setInterval(() => {
+                                //return fetch(`https://api.daticash.com/v1/api/mobilemoney/${transaction_id}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}})//confirm-password url
+                                return fetch(checkPath + "/" + transaction_id , {"method": "GET"})//check status url
+                                    .then(
+                                        function(response) {
+                                            console.log("application response after confirm = " + response);
+                                            if (!response.ok) {
+                                                clearInterval(timerInterval)
+                                                // Examine the text in the response
+                                                response.json().then(function(data) {
+                                                    Swal.fire(
+                                                        "ERROR!",
+                                                        "Something is wrong with the request, transaction failed",
+                                                        "error"
+                                                    )
+                                                })
+                                            }else{
+                                                // Examine the text in the response
+                                                response.json().then(function(data) {
+                                                    status = data.stepDescription
+                                                    console.log("api response after confirm = " +data.stepDescription);
+
+                                                    switch(data.status.toLowerCase()) {
+                                                        case "completed"://Action successfully
+                                                            clearInterval(timerInterval)
+                                                            Swal.fire({
+                                                                title: "Complete!",
+                                                                icon: "success",
+                                                                html: 'Your transaction Successfully Completed.<br> ' +
+                                                                '<b><a href="{{ path("history") }}" target="_blank">Go to Historique</a></b> ' +
+                                                                'to show more details',
+                                                                showCloseButton: true,
+                                                                showCancelButton: false,
+                                                                focusConfirm: false,
+                                                                confirmButtonText:"OK"
+                                                            })
+                                                            break;
+
+                                                        case "failed"://BAD_REQUEST
+                                                            clearInterval(timerInterval)
+                                                            Swal.fire(
+                                                                "ERROR!",
+                                                                status,
+                                                                "error"
+                                                            )
+                                                            break;
+                                                    }
+
+                                                    const content = Swal.getContent()
+                                                    if (content) {
+                                                        const b = content.querySelector(".status_js")
+                                                        if (b) {
+                                                            b.textContent = status
+                                                        }
+                                                        if (confirm_request) {
+                                                            content.querySelector(".confirm_js").textContent = confirm_request
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    .catch(function(err) {
+                                        console.log("Fetch Error :-S", err);
+                                    });
+
+                        }, 5000);
+                        },
+                            showLoaderOnConfirm: true,
+                                onClose: () => {
+                                clearInterval(timerInterval)
+                                Swal.fire(
+                                    "Aborded!",
+                                    "Your session has been closed. But your transaction take too time...",
+                                    "info"
+                                )
+                            }
+                        }).then((result) => {
+                                // Read more about handling dismissals below
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                console.log("I was closed by the timer")
+                                Swal.fire({
+                                    title: "<strong>STATUS TRANSACTION</strong>",
+                                    icon: "info",
+                                    html:
+                                    'Was closed by the timer. Your transaction take too long, go to your ' +
+                                    '<b><a href="{{ path("history") }}" target="_blank">dashborad</a></b> ' +
+                                    'to check manually this transaction status',
+                                    showCloseButton: true,
+                                    showCancelButton: false,
+                                    focusConfirm: false,
+                                    confirmButtonText:"OK",
+                                })
+                            }
+                        })
+
+                        }else if (
+                            /* Read more about handling dismissals below */
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            Swal.fire(
+                                'Cancelled',
+                                'Your transaction canceled!',
+                                'error'
+                            )
+                        }
+
+                    })
+                    })
+                    .on("click", '#submit_transaction_again', function(e) {
+                        e.preventDefault();
+                        $this = $(this);
+
+                        let id = $this.attr('data-transaction_again_id');//id du service
+                        let recipient_account_num = $this.attr('data-transaction_again_recipient_account_num');
+                        let local = $this.attr('data-transaction_again_local');
+
+                        let action = $this.attr('data-transaction_again_action');
+                        let type = $this.attr('data-transaction_again_type');
+                        let skip_idem_potency = "1";
+                        let account_ref = $this.attr('data-transaction_again_account_ref');
+                        let amount_sent = $this.attr('data-transaction_again_amount_sent');
+                        let currency_sent = $this.attr('data-transaction_again_currency_sent');
+                        let recipient_phone = $this.attr('data-transaction_again_recipient_phone').replace(/[^0-9]+/g, "");
+                        let recipient_country_code = $this.attr('data-transaction_again_recipient_country_code');
+                        let sender_phone = $this.attr('data-transaction_again_sender_phone').replace(/[^0-9]+/g, "");
+                        let sender_country_code = $this.attr('data-transaction_again_sender_country_code');
+                        let reason = $this.attr('data-transaction_again_reason');
+
+
+                        $(".sendBtn").text("Processing...").prop("disabled", true);
+                        // OPERATION Prepare transaction process ------------------------------------------------------------------------------------------------------------------------------------
+
+                        let curl_data = "?currency_sent="+currency_sent+"&id="+id+"&local="+local+"&amount_sent="+amount_sent+"&type="+type+"&skip_idem_potency="+skip_idem_potency+"&sender_phone="+sender_phone+"&sender_country_code="+sender_country_code+"&recipient_country_code="+recipient_country_code+"&recipient_phone="+recipient_phone+"&recipient_account_num="+recipient_account_num+"&account_ref="+account_ref
+                        console.log(curl_data)
+
+                        let transaction_id
+
+                        Swal.fire({
+                            title: "Initiate Transaction",
+                            html: "STATUS : <b class=\"status_js\">Checking service availability.</b>"+
+                            "<br><span class=\"confirm_js\"></span>",
+                            icon: "info",
+                            timer: 700000,
+                            timerProgressBar: false,
+                            allowOutsideClick: false,
+                            onBeforeOpen: () => {
+                            Swal.showLoading()
+                        fetch("{{path('transactions_create')  }}"+curl_data  , {"method": "POST" })// url
+                        //return fetch(`https://api.daticash.com/v1/api/mobilemoney/new?currency_sent=XAF&id=1&amount_sent=122220&type=withdraw&sender_phone=676558870&sender_country_code=237&recipient_country_code=237&recipient_phone=691752255&recipient_account_num=&account_ref=`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "POST"})//confirm-password url(error) //for test
+                            .then(function(response){
+                                var contentStatus = response.status;
+                                if(contentStatus == 201) {// app success
+                                    return response.json().then(function(json) {// api response
+                                        console.log(contentStatus)
+                                        console.log(json)
+
+                                        /************************************************************ begin process transaction ******************************************/
+
+                                        if(json.id){
+                                            let json_id = json.id
+                                            dQS_submitTransaction(json_id)
+                                        }else{
+                                            let json_code = json.code
+                                            dQS_submitTransactionErrorCode(json_code)
+                                        }
+
+                                        /*********************************************************** end process transaction *********************************************/
+
+                                    })
+                                }else{
+                                    Swal.fire({
+                                        title: "ERROR!",
+                                        icon: "error",
+                                        text: "Error conection (Check your connection and try again later...) ",
+                                        showCloseButton: true,
+                                        showCancelButton: false,
+                                        focusConfirm: false,
+                                        confirmButtonText:"OK",
+                                    })//.then(function() {
+                                    //window.location = "{{ path("dashboard.index") }}";
+                                    //})
+                                    $(".sendBtn").text("Good! Click here to Send").prop("disabled", false);
+                                }
+                            })
+                    }
+                    })
+                        // END OPERATION Prepare transaction process ------------------------------------------------------------------------------------------------------------------------------------
+
+                    })
+
+            })
+
+        </script>
+    {% endblock %}
     

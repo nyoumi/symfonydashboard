@@ -4,11 +4,14 @@ namespace App\Controller;
 
 use App\Entity\DatiTransaction;
 use App\Entity\MyLogger;
+use App\Entity\Transaction;
 use DateTime;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Security\User\WebserviceUser;
 use JMS\Serializer\SerializerInterface;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -49,6 +52,7 @@ class DatiTransactionController extends AbstractController
         $this->userProvider = $userProvider;
         $this->urlGenerator = $urlGenerator;
 
+
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
 
@@ -76,9 +80,7 @@ class DatiTransactionController extends AbstractController
     public function viewLocal($id,LoggerInterface $logger)
     {
 
-        //$transaction=new DatiTransaction();
 
-        //$transaction->setStatus()
         $transaction = $this->getDoctrine()
             ->getRepository(DatiTransaction::class)
             ->find($id);
@@ -132,9 +134,12 @@ class DatiTransactionController extends AbstractController
         }
 
         $this->saveToSession($data);
-        /*        if (!isset($data->local)) {
+                if (!isset($data->local)) {
                     $user_exist = $this->verifyUserExist((array)$data);
 
+                    /*
+                     * si l'utilisateur existe mais son compte n'est pas activé
+                     */
                     if (is_array($user_exist)) {
                         return $this->render('pages/activations.html.twig',
                             ["user_id" => $user_exist["error_content"]["user_id"],
@@ -142,6 +147,10 @@ class DatiTransactionController extends AbstractController
                             ]);
 
                     }
+
+                    /*
+                     * l'utilisateur n'existe pas
+                     */
                     if (is_int($user_exist) && $user_exist == 404) {
                         $session = $this->get("session");
                         $session->set("phone_number", $data->sender_phone);
@@ -149,15 +158,12 @@ class DatiTransactionController extends AbstractController
 
                         return new RedirectResponse($this->urlGenerator->generate('register'));
                     }
-                }*/
+                }
 
 
         $params = $data;
-        /*
-         * @TODO à effacer à cause de l'id qui est fixe
-         */
-        //$endpoint = "mobilemoney/" . $data->id . "/new";
-        $endpoint = "mobilemoney/" . 2 . "/new";
+        $endpoint = "mobilemoney/" . $data->id . "/new";
+        //$endpoint = "mobilemoney/" . 2 . "/new";
         $headers = [
             'Accept' => 'application/json',
             "apikey" => $this->apikey
@@ -184,8 +190,13 @@ class DatiTransactionController extends AbstractController
         /*
          * si la transaction a été initiée ou echec de l'initiation l'effacer de la session
          */
-        // $session = $this->get('session');
-        //$session->remove('transaction_initiated');
+        try{
+            $session = $this->get('session');
+            $session->remove('transaction_initiated');
+
+        }catch(Exception $e){
+
+        }
         /*
         * si les datas proviennent du formulaire externe renvoyer json sinon renvoyer la page operations
          * */
@@ -216,6 +227,9 @@ class DatiTransactionController extends AbstractController
         $transaction = new DatiTransaction();
 
         $transaction->setId($response["id"]);
+        $transaction->setStatus($response["status"]);
+        if(isset($response["step_description"])) $transaction->setStepDescription($response["step_description"]);
+
 
         $transaction->setType($transactionData["id"]);
         $transaction->setAmountSent($transactionData["amount_sent"]);
@@ -322,18 +336,8 @@ class DatiTransactionController extends AbstractController
 
     }
 
-    public function updateAction(Request $request, $id)
+    public function confirmAction(Request $request,LoggerInterface $logger, $id)
     {
-
-        /*
-         * @TODO à effacer
-
-        return new Response(json_encode([
-            'code' => '201',
-            "message" => "created"
-        ]), Response::HTTP_CREATED, [
-            "Content-Type" => 'application/json'
-        ]);*/
 
         $this->apikey = $this->getParameter('app.apikey');
         $this->site_url = $this->getParameter('app.site_url');
@@ -341,15 +345,45 @@ class DatiTransactionController extends AbstractController
          * $data c'est le mot de passe
          */
         $data = $request->getContent();
-
         $data = json_decode($data);
 
-        $endpoint = "mobilemoney/" . $id;
+        if (!is_object($data)) {
+            parse_str($request->getContent(), $output);
+            $data = (object)$output;
+        }
+
+        if ($this->emptyObj($data)) {
+            $data = $request->query->all();
+            $data = (object)$data;
+        };
+        $data=(array)$data;
+
+        $endpoint = "mobilemoney/" . $id."/confirm";
         $headers = [
             'Accept' => 'application/json',
             "apikey" => $this->apikey
         ];
 
+        $response = $this->make_put_request((array)$data, $headers, $endpoint, (array)$data);
+        $response = $this->handle_response($response, false);
+        return $response;
+    }
+
+    public function updateAction(Request $request, $id)
+    {
+
+        $this->apikey = $this->getParameter('app.apikey');
+        $this->site_url = $this->getParameter('app.site_url');
+        /*
+         * $data c'est le mot de passe
+         */
+        $data = $request->getContent();
+        $data = json_decode($data);
+        $endpoint = "mobilemoney/" . $id."/confirm";
+        $headers = [
+            'Accept' => 'application/json',
+            "apikey" => $this->apikey
+        ];
 
         /*
          * recupère la transaction dans la session afin de recupérer le country code et le phone_number
@@ -388,9 +422,9 @@ class DatiTransactionController extends AbstractController
         /*
          * ajout des paramètres necessaires pour la requete
          */
-        $data["status"] = "confirmed";
-        $data["response"] = "";
-        $data["step"] = "";
+       // $data["status"] = "confirmed";
+        //$data["response"] = "";
+        //$data["step"] = "";
 
         $response = $this->make_put_request((array)$data, $headers, $endpoint, (array)$data);
         $response = $this->handle_response($response, false);
@@ -406,6 +440,9 @@ class DatiTransactionController extends AbstractController
 
     public function start()
     {
+        $this->user_id=$this->getUser()->getid();
+
+
         return $this->render('pages/operation.html.twig');
     }
 
@@ -414,11 +451,9 @@ class DatiTransactionController extends AbstractController
         $params = "";
         foreach ($parameters as $key => $value) {
             $params = $params . $key . "=" . $value . "&";
-
         }
         $params = substr($params, 0, -1);
         //$params = urlencode($params);
-
         try {
             $response = $this->client->request(
                 'GET',
@@ -428,6 +463,10 @@ class DatiTransactionController extends AbstractController
                 ]
             );
 
+            try{
+                MyLogger::writeRequestLog($response->toArray());
+
+            }catch (Exception $e){}
             if ($response->getStatusCode() == 200 || $response->getStatusCode() == 201) {
 
                 return $response->toArray();
@@ -460,16 +499,21 @@ class DatiTransactionController extends AbstractController
                     'json' => $body
                 ]
             );
+            try{
+                MyLogger::writeRequestLog($response->toArray());
+            }catch (Exception $e){}
+
+
             if ($response->getStatusCode() == 200 || $response->getStatusCode() == 201 || $response->getStatusCode() == 202) {
                 return $response->toArray();
             } else {
-                return $response->getStatusCode();
+                return  $response->getStatusCode();
             }
         } catch (TransportExceptionInterface |DecodingExceptionInterface
         |ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
             $this->addFlash(
                 'error',
-                'Une erreur interne s\'est produite veuillez réessayer plus tard'
+                'Internal error'
             );
             return null;
         }
@@ -493,6 +537,16 @@ class DatiTransactionController extends AbstractController
             );
 
 
+            try{
+                file_put_contents(__DIR__."/../../var/log/request".date("j.n.Y").'.log',(string) $response->toArray(true), FILE_APPEND);
+
+                MyLogger::writeRequestLog($response->toArray());
+
+            }catch (Exception $e){
+                $log=$e->getTraceAsString();
+                file_put_contents(__DIR__."/../../var/log/logger_".date("j.n.Y").'.log', $log, FILE_APPEND);
+
+            }
             if ($response->getStatusCode() == 200 || $response->getStatusCode() == 201 || $response->getStatusCode() == 202) {
                 return $response->toArray();
             } else {
@@ -531,8 +585,11 @@ class DatiTransactionController extends AbstractController
                 "message" => 'erreur interne au serveur'
             ];
         }
-        if (!$resp == "array") {
-            return new Response(json_encode($response), Response::HTTP_CREATED, [
+        /*
+         * si la fonction demande un retour en array ou en reponse http
+         */
+        if (!($resp == "array")) {
+            return new Response(json_encode($res), Response::HTTP_CREATED, [
                 "Content-Type" => 'application/json'
             ]);
         }
@@ -625,7 +682,7 @@ class DatiTransactionController extends AbstractController
             ]);
 
         }
-        if(isset($data)) $logger->error("webhook---payload----------->".gettype ($data));
+        if(isset($data)) $logger->error("webhook---payload-type---------->".gettype ($data));
 
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -645,11 +702,15 @@ class DatiTransactionController extends AbstractController
 
 
             if (isset($data["id"])) {
+                $transaction->setAccountRef("01");
                 if(isset($data["status"])) $transaction->setStatus($data["status"]);
                 if(isset($data["step"])) $transaction->setStep($data["step"]);
                 if(isset($data["step_description"])) $transaction->setStepDescription($data["step_description"]);
                 if(isset($data["recipient_name"])) $transaction->setRecipientName($data["recipient_name"]);
-               // if(isset($data["last_requested_at"])) $transaction->setLastRequestedAt($data["last_requested_at"]);
+                if(isset($data["tmp_confirm_code_prefix"])) $transaction->setTmpConfirmCodePrefix($data["tmp_confirm_code_prefix"]);
+                if(isset($data["confirm_trials_nb"])) $transaction->setConfirmTrialsNb($data["confirm_trials_nb"]);
+
+                // if(isset($data["last_requested_at"])) $transaction->setLastRequestedAt($data["last_requested_at"]);
 
 
                 $entityManager->persist($transaction);

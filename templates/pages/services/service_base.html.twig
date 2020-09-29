@@ -1,0 +1,266 @@
+{% set _locale = 'fr' %}
+{% set _profile = app.user %}
+
+<!DOCTYPE html>
+<html lang="{{ _locale }}">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <title>{% block title %}DatiCash - {% endblock %}</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+    {% block stylesheets %}
+        <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@3/dark.css">
+        <link rel="stylesheet" href="{{ asset('adminLTE/plugins/sweetalert2/sweetalert2.min.css') }}">
+
+
+
+    {% endblock %}
+    <style>
+        .register{
+            background: -webkit-linear-gradient(left, #3931af, #00c6ff);
+            margin-top: 3%;
+            padding: 3%;
+        }
+        .register-left{
+            text-align: center;
+            color: #fff;
+            margin-top: 4%;
+        }
+        .register-left input{
+            border: none;
+            border-radius: 1.5rem;
+            padding: 2%;
+            width: 60%;
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #383d41;
+            margin-top: 10%;
+            font-size: .85em;
+            margin-bottom: 3%;
+            cursor: pointer;
+        }
+        .register-right{
+            background: #f8f9fa;
+            border-top-left-radius: 10% 50%;
+            border-bottom-left-radius: 10% 50%;
+        }
+        .register-left img{
+            margin-top: 15%;
+            margin-bottom: 5%;
+            width: 25%;
+            -webkit-animation: mover 2s infinite  alternate;
+            animation: mover 1s infinite  alternate;
+        }
+        @-webkit-keyframes mover {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
+        }
+        @keyframes mover {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
+        }
+        .register-left p{
+            font-weight: lighter;
+            padding: 12%;
+            margin-top: -9%;
+        }
+        .register .register-form{
+            /*padding: 10% 20%;*/
+            display: block;
+            text-align: center;
+            margin: auto;
+            width: 70%;
+
+        }
+        .loader-div{
+            width: 50%;
+            margin-left: 25%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 5%;
+
+        }
+        .history-div{
+            display: flex;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btnRegister{
+            margin-bottom: 5%;
+            margin-top: 10%;
+            border: none;
+            border-radius: 1.5rem;
+            padding: 2%;
+            background: #0062cc;
+            color: #fff;
+            font-weight: 600;
+            width: 50%;
+            cursor: pointer;
+        }
+        .btnRegister:disabled{
+            background: #2f89ff85;
+
+        }
+        .tab-pane {
+            text-align: center;
+        }
+        .register .nav-tabs{
+            margin-top: 3%;
+            border: none;
+            background: #0062cc;
+            border-radius: 1.5rem;
+            float: right;
+            margin-bottom: 3%;
+        }
+        li.nav-item {
+        }
+        .register .nav-tabs .nav-link{
+            padding: 2%;
+            height: 34px;
+            font-weight: 600;
+            color: #fff;
+            border-top-right-radius: 1.5rem;
+            border-bottom-right-radius: 1.5rem;
+            padding-right: 3px;
+        }
+        .register .nav-tabs .nav-link:hover{
+            border: none;
+        }
+        .register .nav-tabs .nav-link.active{
+            width: 100px;
+            color: #0062cc;
+            border: 2px solid #0062cc;
+            border-top-left-radius: 1.5rem;
+            border-bottom-left-radius: 1.5rem;
+        }
+        .register-heading{
+
+            text-align: center;
+            margin-top: 5%;
+            color: #495057;
+            display: inline-block;
+            width: 100%;
+
+        }
+        #history-button{
+            display: none;
+
+            border: none;
+            border-radius: 1.5rem;
+            padding: 2%;
+            width: 60%;
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #383d41;
+            margin-top: 10%;
+            font-size: .85em;
+            margin-bottom: 3%;
+            cursor: pointer;
+        }
+        .loader {
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            animation: spin 2s linear infinite;
+            display: none;
+
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .tab-pane.active {
+            animation: slide-down .4s ease-out;
+        }
+
+        @keyframes slide-down {
+            0% { opacity: 0; transform: translateY(5%); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @media screen and (max-width: 600px) {
+            .register-heading h3 {
+                text-align: center;
+                margin-top: 5%;
+                color: #495057;
+                display: inline-block;
+            }
+            .register{
+                padding-bottom: 15%;
+            }
+            .register-left input {
+                display: none;
+            }
+            .register-right {
+                background: #f8f9fa;
+                border-radius: 12%;
+            }
+            #history-button{
+                display: block;
+            }
+            .register .register-form {
+
+                width: 90%;
+            }
+        }
+
+
+    </style>
+
+    {% block head_javascripts %}
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+        <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
+        <script src="{{ asset('assets/js/intlTelInput/intlTelInput-jquery.min.js') }}"></script>
+
+        <script src="{{ asset('assets/js/sweetalert2/sweetalert2.all.min.js') }}"></script>
+        <script src="{{ asset('assets/js/sweetalert2/sweetalert2.min.js') }}"></script>
+
+    {% endblock %}
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+{% block body %}
+    <div class="wrapper">
+
+        <div class="content-wrapper">
+
+            <!-- Content Header (Page header) -->
+            {% block content_header %}{% endblock %}
+            <!-- /.content-header -->
+
+            <!-- Main content -->
+            {% block content_main %}{% endblock %}
+            <!-- /.content -->
+
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2019-2020 <a href="https://daticash.com">DatiCash System</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 1.0.0
+            </div>
+        </footer>
+    </div>
+    <!-- ./wrapper -->
+
+{% endblock body %}
+
+{% block javascripts %}{% endblock %}
+
+
+
+</body>
+</html>

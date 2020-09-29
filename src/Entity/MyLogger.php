@@ -24,6 +24,12 @@ class MyLogger
         file_put_contents(__DIR__."/../../var/log/log_".date("j.n.Y").'.log', "/n", FILE_APPEND);
 
     }
+    public static function writeRequestLog($txt){
+        //Save string to log, use FILE_APPEND to append.
+        file_put_contents(__DIR__."/../../var/log/log_request_".date("j.n.Y").'.log', $txt, FILE_APPEND);
+        file_put_contents(__DIR__."/../../var/log/log_request_".date("j.n.Y").'.log', "/n", FILE_APPEND);
+
+    }
 
     public function adminLog($txt){
         $this->writeLog($txt);

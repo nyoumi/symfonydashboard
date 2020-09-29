@@ -145,6 +145,10 @@ transactions_update:
     path:     /transactions/{id?}
     controller: App\Controller\DatiTransactionController::updateAction
     methods:  [PUT]
+transactions_confirm:
+    path:     /transactions/{id?}
+    controller: App\Controller\DatiTransactionController::confirmAction
+    methods:  [POST]
 transaction_update_webhook:
     path:     /transaction_update_webhook
     controller: App\Controller\DatiTransactionController::updateWebhook
@@ -213,4 +217,58 @@ edit_affiliate_account:
 delete_affiliate_account:
     path: /affiliate/accounts/{type}/delete_account/{id}
     controller: App\Controller\AccountController::deleteAffiliateAction
+    methods: GET
+services:
+    path: /services
+    controller: App\Controller\ServiceController::viewAction
+    methods: GET
+service_payment:
+    path: /service_payments/get/{service_id}
+    controller: App\Controller\ServicePaymentController::viewAction
+    methods: GET
+    requirements:
+            id: '\d+'
+service_payment_list:
+    path: /service_payments/list
+    controller: App\Controller\ServicePaymentController::listAction
+    methods: GET
+service_payment_merchant_list:
+    path: /service_payments/merchant/{merchant_id}/list
+    controller: App\Controller\ServicePaymentController::merchantListAction
+    methods: GET
+service_payment_participant_list:
+    path: /service_payments/participant/list
+    controller: App\Controller\ServicePaymentController::participantListAction
+    methods: GET
+service_payment_participant_check:
+    path: /service_payments/participant/check/{service_id}
+    controller: App\Controller\ServicePaymentController::participantCheckAction
+    methods: GET
+service_payment_create:
+    path: /service_payments/create/{merchant_id}
+    controller: App\Controller\ServicePaymentController::createAction
     methods: POST
+service_payment_add_participant:
+    path: /service_payments/participant/add/{service_id}
+    controller: App\Controller\ServicePaymentController::participantAddAction
+    methods: POST
+service_payment_enable_participant:
+    path: /service_payments/participant/enable/{service_id}/{participant_id}
+    controller: App\Controller\ServicePaymentController::participantEnableAction
+    methods: POST
+service_payment_pay:
+    path: /service_payments/pay/{service_id}
+    controller: App\Controller\ServicePaymentController::payAction
+    methods: POST
+service_payment_history:
+    path: /service_payments_history
+    controller: App\Controller\ServicePaymentController::payAction
+    methods: GET
+service_payment_participant_login:
+    path: /service_payments/participant/login/{service_id}
+    controller: App\Controller\ServicePaymentController::participantLoginAction
+    methods: GET
+service_payment_get_history:
+    path: /service_payments/history
+    controller: App\Controller\ServicePaymentController::getHistoryAction
+    methods: GET

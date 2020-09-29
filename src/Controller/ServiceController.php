@@ -2,9 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\MyLogger;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -16,7 +21,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  * Class ActivationController
  * @package App\Controller
  */
-class ActivationController extends AbstractController
+class ServiceController extends AbstractController
 {
     /**
      * @var HttpClientInterface
@@ -30,161 +35,57 @@ class ActivationController extends AbstractController
      * @var
      */
     private $apikey ;
+    private $urlGenerator;
+    private $security;
 
     /**
      * ActivationController constructor.
+     * @param UrlGeneratorInterface $urlGenerator
      * @param HttpClientInterface $client
+     * @param Security $security
      */
-    public function __construct(HttpClientInterface $client)
+    public function __construct(UrlGeneratorInterface $urlGenerator,HttpClientInterface $client,Security $security)
     {
         $this->client = $client;
+        $this->urlGenerator = $urlGenerator;
+        $this->security=$security;
 
     }
+
 
     /**
+     * @param Request $request
      * @param $id
-     * @param $token
-     * @return Response
+     * @return RedirectResponse|Response
      */
-    public function activate($id, $token)
+    public function viewAction(Request $request)
     {
-
-        $endpoint="user/".$id."/activate";
+        $endpoint="accounts/types";
         $headers=[
             'Accept' => 'application/json',
             "apikey"=> $this->apikey
         ];
 
-        $params=[
-            'token' => $token,
-            'id' =>  $id,
-        ];
-        $response=$this->make_put_request($params,$headers,$endpoint,$params);
-
-
-
-
-        return new Response(json_encode($response), Response::HTTP_OK,[
-            "Content-Type"=>'application/json'
-        ]);
-    }
-
-    public function activatedAction(Request $request)
-    {
-
-
-        $activated=$request->query->get("activated");
-        if ("true"==$activated){
-            $this->addFlash(
-                'activated',
-                'Compte activé'
-            );
-        }else{
-            $this->addFlash(
-                'inapropriate',
-                'merci de votre confiance.'
-            );
-        }
-        return $this->render('pages/action.html.twig',
-            ["activated"=>$activated
-            ]);
-    }
-
-    public function activation($user_id,$email)
-    {
-        return $this->render('pages/activations.html.twig',
-            ["user_id"=>$user_id,
-                "user_email"=>$email
-            ]);
-    }
-
-    /**
-     * @param $type
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function send_activation_token($type,$id)
-    {
-        if($type=="sms"){
-            $endpoint="users/".$id."/token-sms";
-
-        }else{
-            $endpoint="users/".$id."/token-mail";
-
-        }
-        $headers=[
-            'Accept' => 'application/json',
-            "apikey"=> $this->apikey
-        ];
-
-        $params=[
-            'id' =>  $id,
-        ];
+        $params=[];
+        $account_types=[];
         $response=$this->make_get_request($params,$headers,$endpoint);
-        return new Response(json_encode($response), Response::HTTP_OK,[
-            "Content-Type"=>'application/json'
-        ]);
-    }
-
-    public function verify(Request $request)
-    {
-        /*
-         * lecture des données envoyées par post, submit ou dans la requête
-         */
-
-        $data = $request->getContent();
-        $data=json_decode($data);
-
-
-        if(!is_object($data)){
-            parse_str($request->getContent(),$output);
-            $data=(object) $output;
+        if(isset($response['code'])){
+            $account_types["account_types"]=$response;
         }
 
-        if($this->emptyObj($data) ){
-            $data=$request->query->all();
-            $data=(object) $data;
-        }
-        $endpoint="user/".$data->id."/verify-contact";
-        $headers=[
-            'Accept' => 'application/json',
-            "apikey"=> $this->apikey
-        ];
 
-        $params=(array)$data;
+        return $this->render('pages/service_manager.html.twig',[
+                "account_types"=>$response
+            ]
+        );
 
-        $response=$this->make_put_request($params,$headers,$endpoint,(array)$data);
-        return new Response(json_encode($response), Response::HTTP_OK,[
-            "Content-Type"=>'application/json'
-        ]);
-
-    }
-
-    public function viewUser($id)
-    {
-
-
-            $endpoint="user/".$id."/view";
-
-
-        $headers=[
-            'Accept' => 'application/json',
-            "apikey"=> $this->apikey
-        ];
-
-        $params=[
-            'id' =>  $id,
-        ];
-        $response=$this->make_get_request($params,$headers,$endpoint);
-        return new Response(json_encode($response), Response::HTTP_OK,[
-            "Content-Type"=>'application/json'
-        ]);
     }
 
     /**
      * @param array $parameters
      * @param array $header
      * @param $endpoint
+     * @param $body
      * @return null
      */
     public function make_put_request(array $parameters, array $header, $endpoint,$body)
@@ -193,6 +94,8 @@ class ActivationController extends AbstractController
         $this->site_url = $this->getParameter('app.site_url');
         $this->apikey = $this->getParameter('app.apikey');
         $header["apikey"]=$this->apikey;
+
+
 
         $params = "";
         foreach ($parameters as $key => $value) {
@@ -208,11 +111,76 @@ class ActivationController extends AbstractController
                 $this->site_url . $endpoint . "?" . $params,
                 [
                     'headers' => $header,
-                    'json' => $body
+                    'body' => $body
+
+
                 ]
             );
 
-            if($response->getStatusCode()==200 |$response->getStatusCode()==208|$response->getStatusCode()==201 ){
+            if($response->getStatusCode()==201 | $response->getStatusCode()==200){
+
+                return $response->toArray();
+            }else {
+
+
+                return [
+                    "code"=>$response->getStatusCode()
+                ];
+            }
+
+
+
+
+        } catch (TransportExceptionInterface | ClientExceptionInterface |ServerExceptionInterface| DecodingExceptionInterface | RedirectionExceptionInterface $e) {
+
+            $this->addFlash(
+                'error',
+                'An internal error has occurred please try again later!'
+            );
+            return [
+                "code"=>0
+            ];
+        }
+
+
+
+    }
+
+
+
+    /**
+     * @param array $parameters
+     * @param array $header
+     * @param $endpoint
+     * @return null
+     */
+    public function make_get_request(array $parameters, array $header, $endpoint)
+    {
+
+        $this->site_url = $this->getParameter('app.site_url');
+        $this->apikey = $this->getParameter('app.apikey');
+        $header["apikey"]=$this->apikey;
+
+        $params = "";
+        foreach ($parameters as $key => $value) {
+            $params = $params . $key . "=" . $value . "&";
+
+        }
+        $params = substr($params, 0, -1);
+        //$params = *
+
+        try {
+            $response = $this->client->request(
+                'GET',
+                $this->site_url . $endpoint . "?" . $params,
+                [
+                    'headers' => $header,
+
+
+                ]
+            );
+
+            if($response->getStatusCode()==201 | $response->getStatusCode()==200){
 
                 return $response->toArray();
             }else {
@@ -222,62 +190,89 @@ class ActivationController extends AbstractController
                 ];
             }
 
+
+
+
         } catch (TransportExceptionInterface | ClientExceptionInterface |ServerExceptionInterface| DecodingExceptionInterface | RedirectionExceptionInterface $e) {
+
+
             return [
                 "code"=>0
             ];
         }
 
+
+
     }
-    /**
-     * @param array $parameters
-     * @param array $header
-     * @param $endpoint
-     * @return null
-     */
-    public function make_get_request(array $parameters, array $header, $endpoint)
+
+
+    public function make_post_request(array $parameters, array $header, $endpoint, $body)
     {
-        $this->site_url = $this->getParameter('app.site_url');
-        $this->apikey = $this->getParameter('app.apikey');
-        $header["apikey"]=$this->apikey;
         $params = "";
         foreach ($parameters as $key => $value) {
             $params = $params . $key . "=" . $value . "&";
         }
         $params = substr($params, 0, -1);
-        //$params = *
         try {
             $response = $this->client->request(
-                'GET',
+                'POST',
                 $this->site_url . $endpoint . "?" . $params,
                 [
                     'headers' => $header,
-
+                    'json' => $body
                 ]
             );
 
-            if($response->getStatusCode()==201 | $response->getStatusCode()==200
-                | $response->getStatusCode()==202 | $response->getStatusCode()==208){
-                $code=$response->getStatusCode();
-                $response=$response->toArray();
 
-                $response["code"]=$code;
+            try{
+                file_put_contents(__DIR__."/../../var/log/request".date("j.n.Y").'.log',(string) $response->toArray(true), FILE_APPEND);
 
-                return $response;
-            }else {
+                MyLogger::writeRequestLog($response->toArray());
 
-                return [
-                    "code"=>$response->getStatusCode()
-                ];
+            }catch (Exception $e){
+                // $log=$e->getTraceAsString();
+                // file_put_contents(__DIR__."/../../var/log/logger_".date("j.n.Y").'.log', $log, FILE_APPEND);
+
             }
+            if ($response->getStatusCode() == 200 || $response->getStatusCode() == 201 || $response->getStatusCode() == 202) {
+                return $response->toArray();
+            } else {
+                return $response->getStatusCode();
+            }
+        } catch (TransportExceptionInterface |DecodingExceptionInterface
+        |ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
 
-        } catch (TransportExceptionInterface | ClientExceptionInterface |ServerExceptionInterface| DecodingExceptionInterface | RedirectionExceptionInterface $e) {
 
-            return [
-                "code"=>0
+            return null;
+        }
+    }
+
+
+    private function handle_response($response, $resp)
+    {
+        if (isset($response) && is_int($response)) {
+            $res = [
+                "code" => (string)$response
             ];
         }
-
+        if (isset($response) && is_array($response)) {
+            $res = $response;
+        }
+        if (!isset($response)) {
+            $res = [
+                "code" => (string)0,
+                "message" => 'erreur interne au serveur'
+            ];
+        }
+        /*
+         * si la fonction demande un retour en array ou en reponse http
+         */
+        if (!($resp == "array")) {
+            return new Response(json_encode($res), Response::HTTP_CREATED, [
+                "Content-Type" => 'application/json'
+            ]);
+        }
+        return $res;
     }
 
     private function emptyObj( $obj ) {
@@ -285,7 +280,7 @@ class ActivationController extends AbstractController
             array($prop);
             return FALSE;
         }
+
         return TRUE;
     }
-
 }

@@ -1,0 +1,1513 @@
+{% extends "pages/services/service_base.html.twig" %}
+{% set _service = service %}
+{% set _service = service %}
+{% block body %}
+<div id="body_mask" class="body_mask">
+    <div class="container register">
+        <div class="row">
+            <div class="col-md-4 register-left">
+                <img src="{{ service.logo }}" alt="logo"/>
+                <h3>{{ service.label }}</h3>
+                <p>{{ service.description }}</p>
+                <input type="submit" name="" value="Consult history" onclick="$('#history-button').trigger('click')" /><br/>
+            </div>
+            <div class="col-md-8 register-right">
+                <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="false">Payment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Registration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="login-tab" data-toggle="tab" href="#login" role="tab"
+                           aria-controls="login" aria-selected="true" style="display: none">login</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab">
+                       <div id="payment-home">
+                            <div class="register-heading">
+                           <div><h3>Who Are You?</h3></div>
+                           <div><h6 class="help">Please insert your phone number</h6></div>
+                       </div>
+                            <div class="row register-form">
+                            <div class="col-md-12" >
+                                <div class="form-group " id="teleform">
+                                    <input  class="form-control" type="tel" placeholder="Phone number *" value="" id="telephone" />
+                                </div>
+                                <div id="success-div" style="display:none;">
+                                    <div id="verified-number">
+
+                                    </div>
+                                </div>
+                                <div id="error-div" style="display:none;">
+                                    <h6 class="text-danger">The phone number you provided is not registered for this service! </h6>
+                                    <h6>change your phone number or</h6>
+                                        <a class="text-info" data-toggle="tab"
+                                           href="#profile" role="tab" onclick="$('#profile-tab').trigger('click')"
+                                           aria-controls="profile" aria-selected="false"><h4>register here</h4></a>
+
+
+
+                                </div>
+
+
+
+
+                            </div>
+
+                            <input type="submit" class="btnRegister"  value="Check" id="valid-number"/>
+                            <input type="submit" class="btnRegister"  value="Continue"
+                                   id="Continue" style="display: none;"/>
+
+
+
+                        </div>
+                       </div>
+                        <div class="tab-pane  " style="display: none" id="datipay" role="tabpanel" >
+                            <div class="register-heading">
+                                <div><h3>Payment</h3></div>
+                                <div><h4>Service Amount: {{ service.cost }} {{ service.currency }}</h4></div>
+                            </div>
+                            <div class="row register-form">
+                                <div class="col-md-12">
+                                    <div class="form-group ">
+                                        <input  class="form-control" type="tel" placeholder="payment phone number *" value="" id="telephone3" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="number" class="form-control" placeholder="Amout you want to pay *" value="{{ service.cost }}" id="amount" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Currency *" value="{{ service.currency }}" id="currency" disabled />
+                                    </div>
+                                    <div id="success-payment-div" style="display:none;">
+                                        <h6 class="text-success">Payment successfully Registered</h6>
+                                    </div>
+                                    <div id="error-payment-div" style="display:none;">
+
+                                    </div>
+                                    <input type="submit" class="btnRegister"  value="Pay" id="pay-button"/>
+                                    <div id="valid-number">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show " id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="register-heading">
+                            <div><h3>Registration</h3></div>
+                            <div><h6 class="help">Please fill the form </h6></div>
+                        </div>
+                        <div class="row register-form">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Name *" value="" id="name" />
+                                </div>
+
+
+                                <div class="form-group ">
+                                    <input  class="form-control" type="tel" placeholder="Phone number *" value="" id="telephone2" />
+                                </div>
+
+                                <div id="success-register-div" style="display:none;">
+                                    <h6 class="text-success"> Successfully Registered</h6>
+                                </div>
+                                <div id="error-register-div" style="display:none;">
+                                    <h6 class="text-danger">Registration failed! </h6>
+                                    <div id="error-text" class='text-danger'></div>
+
+                                </div>
+
+
+                                <input type="submit" class="btnRegister"  value="Register" id="register"/>
+
+                                <input type="submit" class="btnRegister" onclick="$('#home-tab').trigger('click')"
+                                       value="Make Payment" id="payment-tab-button" style="display: none"/>
+
+
+                                <div id="valid-number">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show " id="login" role="tabpanel" aria-labelledby="login-tab">
+                        <div class="" id="login-container">
+                            <div class="register-heading">
+                                <div><h3>Login</h3></div>
+                                <div><h6 class="help">Please fill the form </h6></div>
+                            </div>
+                            <div class="row register-form">
+                                <div class="col-md-12">
+                                    <div class="form-group ">
+                                        <input  class="form-control" type="tel" placeholder="Phone number *" value="" id="telephone4" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control" placeholder="password ex; 123456" id="password" />
+                                    </div>
+
+                                    <div id="success-login-div" style="display:none;">
+                                        <h6 class="text-success"> Successfully logged</h6>
+                                    </div>
+                                    <div id="error-login-div" style="display:none;">
+                                        <h6 class="text-danger">login failed! </h6>
+                                        <div id="error-text" class='text-danger'></div>
+
+                                    </div>
+
+
+                                    <input type="submit" class="btnRegister"  value="login" id="login-button" />
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="history-table" class="table-responsive text-nowrap" style="display: none;width: 90%;margin-left: 5%;">
+                            <div class="register-heading">
+                                <div><h3>HISTORY</h3></div>
+                                <div><h6 class="help">Your transactions History</h6></div>
+                            </div>
+                            <table class="table table-striped w-auto" id="history-table-table" >
+
+                                <!--Table head-->
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Status</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Phone number</th>
+                                </tr>
+                                </thead>
+                                <!--Table head-->
+
+                                <!--Table body-->
+                                <tbody>
+
+                                </tbody>
+                                <!--Table body-->
+
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    <div class="loader-div">  <div class="loader" id="loader"></div></div>
+                    <div class="message-div">  </div>
+
+
+                </div>
+
+
+            </div>
+        <div class="history-div">
+            <input type="submit" name="" value="Consult history" id="history-button" /><br/>
+        </div>
+
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+
+    var myVar;
+    var intlNumber;
+    var participant;
+    var country;
+
+
+    function showLoader() {
+        document.getElementById("loader").style.display = "block";
+        document.getElementById("valid-number").style.display = "none";
+        document.getElementById("error-div").style.display = "none";
+        document.getElementById("success-div").style.display = "none";
+        document.getElementById("telephone").disabled = true;
+
+
+
+    }
+    function showRegisterLoader() {
+        document.getElementById("loader").style.display = "block";
+        document.getElementById("register").style.display = "none";
+        document.getElementById("error-register-div").style.display = "none";
+        document.getElementById("success-register-div").style.display = "none";
+        document.getElementById("telephone2").disabled = true;
+        document.getElementById("name").disabled = true;
+    }
+    function showPaymentLoader() {
+        document.getElementById("loader").style.display = "block";
+        document.getElementById("register").style.display = "none";
+        document.getElementById("error-payment-div").style.display = "none";
+        document.getElementById("pay-button").style.display = "none";
+        document.getElementById("success-payment-div").style.display = "none";
+        document.getElementById("telephone3").disabled = true;
+        document.getElementById("amount").disabled = true;
+    }
+    function showLoginLoader() {
+        document.getElementById("loader").style.display = "block";
+        document.getElementById("error-login-div").style.display = "none";
+        document.getElementById("login-button").style.display = "none";
+        document.getElementById("success-login-div").style.display = "none";
+        document.getElementById("telephone4").disabled = true;
+        document.getElementById("password").disabled = true;
+    }
+
+
+    function notShowPage() {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("valid-number").value = "Check again";
+        document.getElementById("valid-number").style.display = "inline";
+    }
+    function showSuccess() {
+        document.getElementById("success-div").style.display = "block";
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("error-div").style.display = "none";
+        document.getElementById("Continue").style.display = "inline";
+        document.getElementById("telephone").disabled = true;
+    }
+    function showRegisterSuccess() {
+        document.getElementById("success-register-div").style.display = "block";
+        document.getElementById("error-register-div").style.display = "none";
+        document.getElementById("payment-tab-button").style.display = "inline";
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("telephone2").disabled = false;
+        document.getElementById("name").disabled = false;
+        document.getElementById("register").style.display = "none";
+    }
+    function showPaymentSuccess() {
+        document.getElementById("success-payment-div").style.display = "block";
+        document.getElementById("error-payment-div").style.display = "none";
+        document.getElementById("payment-tab-button").style.display = "inline";
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("telephone3").disabled = false;
+        document.getElementById("amount").disabled = false;
+        document.getElementById("pay-button").style.display = "none";
+    }
+    function showLoginSuccess() {
+        document.getElementById("success-login-div").style.display = "block";
+
+        document.getElementById("error-login-div").style.display = "none";
+        document.getElementById("login-button").style.display = "none";
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("telephone4").disabled = false;
+        document.getElementById("password").disabled = false;
+        showLoginLoader()
+    }
+    function showPaymentInitiated(id){
+        dQS_submitTransaction(id)
+    }
+
+    function showError() {
+        document.getElementById("success-div").style.display = "none";
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("error-div").style.display = "block";
+        document.getElementById("telephone").disabled = false;
+    }
+
+    function showRegisterError() {
+        document.getElementById("success-register-div").style.display = "none";
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("error-register-div").style.display = "block";
+        document.getElementById("telephone2").disabled = false;
+        document.getElementById("register").style.display = "inline";
+
+
+    }
+    function showPaymentError() {
+        document.getElementById("success-payment-div").style.display = "none";
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("error-payment-div").style.display = "block";
+        document.getElementById("telephone3").disabled = false;
+        document.getElementById("amount").disabled = false;
+        document.getElementById("pay-button").style.display = "inline";
+    }
+    function showLoginError() {
+        document.getElementById("success-login-div").style.display = "none";
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("error-login-div").style.display = "block";
+        document.getElementById("telephone4").disabled = false;
+        document.getElementById("password").disabled = false;
+        document.getElementById("login-button").style.display = "inline";
+    }
+
+    function myFunction() {
+        myVar = setTimeout(showLoader, 10);
+    }
+
+    function showLogin() {
+        $('#login-tab').trigger('click')
+    }
+
+
+
+    function getHistory(participant_phonenumber, countryCode, password) {
+        fetch("{{ path("service_payment_get_history") }}"
+            + "?participant_phone_number=" + participant_phonenumber
+            + "&token=" + password
+            + "&page=1&limit=10&order=ASC"
+            + "&participant_country_code=" + countryCode, {"method": "GET"})
+            .then(
+                function (response) {
+                    console.log(response);
+
+                    if (!response.ok) {
+                        console.log("application response after request = ");
+                        notShowPage();
+                        showLoginError();
+                        return 0;
+
+                    } else {
+
+                        response.json().then(function (data) {
+                            console.log(data);
+                            /*
+                            * en cas de succès
+                             */
+                            if ($.isArray(data)) {
+
+
+                                for (var i = 0; i < Object.keys(data).length; i++) {
+                                    $('#history-table-table').children('tbody').append(
+                                        '<tr class="table-info">' +
+                                        '<th scope="row">'+data[i].id+'</th>' +
+                                        '<td>'+data[i].status+'</td>' +
+                                        '<td>'+data[i].amount_sent+' '+data[i].currency+'</td>' +
+                                        '<td>'+ new Date(data[i].created_at).toDateString()+'</td>' +
+                                        '<td>'+data[i].recipient_phone+'</td>' +
+                                        '</tr>');
+
+                                }
+                                document.getElementById("history-table").style.display = "block";
+                                document.getElementById("login-container").style.display = "none";
+                                notShowPage()
+
+
+                            } else {
+                                notShowPage();
+                                showLoginError();
+
+                                theDiv = document.getElementById("error-text");
+                                theDiv.innerHTML = "Invalid password/Phone number";
+                                return 0;
+
+                            }
+                        })
+
+
+                    }
+                });
+    }
+
+    function showToast(){
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 15000,
+            showCloseButton: true,
+
+            didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+    })
+
+        Toast.fire({
+            icon: 'info',
+            title: 'Welcome',
+            html: '<div>To make a payment you must be a subscriber of this service. <br>' +
+            'Please enter your phone number for verification.</div>',
+            text:'/n '
+        })
+    }
+
+    function showIncorrectNumberToast(){
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'bottom',
+            showConfirmButton: false,
+            timer: 4000,
+            didOpen: (toast) => {
+    }
+    })
+
+        Toast.fire({
+            icon: 'error',
+            title: 'Error',
+            text:'Incorrect phone number entered!'
+        })
+    }
+
+    $(document).ready(function(){
+        var input = document.querySelector("#telephone");
+        var telephone3 = document.querySelector("#telephone3");
+        var telephone2 = document.querySelector("#telephone2");
+        var telephone4 = document.querySelector("#telephone4");
+        var countryCode;
+        showToast();
+
+
+        var iti = window.intlTelInput(input, {
+            autoPlaceholder:"polite",
+            initialCountry:"CM",
+            autoHideDialCode:true,
+            utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}"
+        });
+
+        var iti2 = window.intlTelInput(telephone2, {
+
+            autoPlaceholder:"polite",
+            initialCountry:"CM",
+            autoHideDialCode:true,
+            utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",//get value
+        });
+
+        var iti3 = window.intlTelInput(telephone3, {
+
+            autoPlaceholder:"polite",
+            initialCountry:"CM",
+            autoHideDialCode:true,
+            utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",//get value
+        });
+        var iti4 = window.intlTelInput(telephone4, {
+
+            autoPlaceholder:"polite",
+            initialCountry:"CM",
+            autoHideDialCode:true,
+            utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",//get value
+        });
+
+        $( "#Continue" ).click(function() {
+            document.getElementById("payment-home").style.display = "none";
+            document.getElementById("datipay").style.display = "block";
+        });
+        $( "#valid-number" ).click(function() {
+            if(!iti.isValidNumber()){
+                showIncorrectNumberToast();
+                return;
+            }
+
+            intlNumber =iti.getNumber();
+            setTimeout(myFunction, 500);
+            checkParticipant(intlNumber)
+
+
+        });
+        $( "#register" ).click(function() {
+            if(!iti2.isValidNumber()){
+                showIncorrectNumberToast();
+                return;
+            }
+
+            intlNumber =iti2.getNumber();
+            country=iti2.getSelectedCountryData();
+            userName = $("#name").val();
+
+            setTimeout(showRegisterLoader, 500);
+            registerParticipant(intlNumber,country,userName)
+        });
+
+        $( "#pay-button" ).click(function() {
+            if(!iti3.isValidNumber()){
+                showIncorrectNumberToast();
+                return;
+            }
+
+            mobile_money_account =iti3.getNumber();
+            country=iti3.getSelectedCountryData();
+            amount = $("#amount").val();
+            currency=$("#currency").val();
+
+            setTimeout(showPaymentLoader, 500);
+            makePayment(intlNumber,country,amount,currency,mobile_money_account,"1","3","1")
+        });
+        $( "#payment-tab-button" ).click(function() {
+
+            iti3.setNumber(intlNumber);
+            $('#Continue').trigger('click');
+
+
+        });
+        $( "#history-button" ).click(function() {
+            if(participant){
+                console.log(participant)
+                if(!participant.enabled){
+                    Swal.mixin({
+                        input: 'password',
+                        confirmButtonText: 'Next &rarr;',
+                        showCancelButton: true,
+                        progressSteps: ['1', '2']
+                    }).queue([
+                        {
+                            title: 'Account disabled',
+                            text: 'Before consulting your history you must create a password. Enter your password to activate your account'
+                        },
+                        'Confirm password',
+                    ]).then((result) => {
+                        if (result.value) {
+
+                        if (result.value[0]===result.value[1]) {
+
+                            participantEnable(intlNumber,country,result.value[0])
+
+                            let timerInterval
+                            Swal.fire({
+                                title: 'creating...',
+                                html: 'Your password is been created',
+                                timerProgressBar: true,
+                                willOpen: () => {
+                                Swal.showLoading()
+                        },
+                        }).then((result) => {
+
+                        })
+
+
+
+                            console.log(result.value)
+
+
+                        }
+
+
+                    }else{
+                        Swal.fire({
+                            title: 'Wrong password',
+                            html: `<pre><code>You must enter a new password</code></pre>`,
+                            confirmButtonText: 'Cancel!'
+                        })
+                    }
+                })
+
+                }else{
+                    showLogin()
+                }
+                showLogin()
+            }else{
+                Swal.fire({
+                    title: "login error",
+                    text:"You have to log in first before consult your history",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: `login`,
+                    denyButtonText: `cancel`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                    showLogin()
+                } else if (result.isDenied) {
+
+                }
+            });
+
+            }
+        });
+
+        $("#login-button").click(function () {
+            intlNumber =iti4.getNumber();
+            mobile_money_account =iti3.getNumber();
+            country=iti3.getSelectedCountryData();
+            password = $("#password").val();
+            setTimeout(showLoginLoader, 500);
+            login(intlNumber,country,password)
+        });
+/*
+
+        var handleChange = function() {
+            document.getElementById("valid-number").disabled = !iti.isValidNumber();
+        };
+
+        var handleChange3 = function() {
+            document.getElementById("pay-button").disabled = !iti3.isValidNumber();
+        };
+
+        var handleChange2 = function() {
+            document.getElementById("register").disabled = !iti2.isValidNumber();
+        };
+        var handleChange4 = function() {
+            //if(document.getElementById("password").value)
+            document.getElementById("login-button").disabled = !iti4.isValidNumber();
+        };
+*/
+/*
+        input.addEventListener('change', handleChange);
+        telephone3.addEventListener('change', handleChange3);
+        telephone2.addEventListener('change', handleChange2);
+        telephone4.addEventListener('change', handleChange4);
+
+        input.addEventListener('keyup', handleChange);
+        telephone3.addEventListener('keyup', handleChange3);
+        telephone2.addEventListener('keyup', handleChange2);
+        telephone4.addEventListener('keyup', handleChange4);
+*/
+// listen to "keyup", but also "change" to update when the user selects a country
+
+        var checkParticipant=function (participant_phonenumber) {
+            var countryData = iti.getSelectedCountryData();
+            console.log(countryData);
+            country=countryData;
+            countryCode=countryData.dialCode;
+            console.log(participant_phonenumber);
+            participant_phonenumber=participant_phonenumber.replace("+"+countryCode,"");
+            fetch("{{ path("service_payment_participant_check",{'service_id':service.id}) }}"
+                + "?phone_number="+ participant_phonenumber
+                + "&country_code="+countryCode , {"method": "GET"})
+                .then(
+                    function(response) {
+                        console.log(response);
+
+                        if (!response.ok) {
+                            console.log("application response after request = ");
+                            console.log(response)
+
+                        }else{
+
+                            response.json().then(function(data) {
+                                console.log(data)
+                                /*
+                                * en cas de succès
+                                 */
+                                if(data.message==="FOUND"){
+                                    participant=data;
+                                    showSuccess()
+                                    theDiv = document.getElementById("verified-number");
+                                    userName=[data.firstname, data.lastname].filter(Boolean).join(' ');
+
+                                    theDiv.innerHTML = "<h6 class=\"text-success\">Number verified successfully</h6>"+
+                                        "<h5 class=\"text-success\">"+userName+"</h5>";
+
+                                    iti3.setNumber(intlNumber);
+                                    console.log("success");
+                                }else{
+                                    notShowPage();
+                                    showError();
+                                }
+                            })
+                        }
+                    })
+        }
+
+        var registerParticipant=function (participant_phonenumber,contry,firstname) {
+            console.log(country);
+            countryCode=country.dialCode;
+            console.log(participant_phonenumber);
+            participant_phonenumber=participant_phonenumber.replace("+"+countryCode,"");
+            fetch("{{ path("service_payment_add_participant",{'service_id':service.id}) }}"
+                + "?phone_number="+ participant_phonenumber
+                + "&firstname="+ firstname
+                + "&priority=0"
+                + "&country_code="+countryCode , {"method": "POST"})
+                .then(
+                    function(response) {
+                        console.log(response);
+
+                        if (!response.ok) {
+                            console.log("application response after request = ");
+                            notShowPage();
+                            showRegisterError();
+                            return 0;
+
+                        }else{
+
+                            response.json().then(function(data) {
+                                console.log(data)
+                                /*
+                                * en cas de succès
+                                 */
+                                if(data.participants){
+                                    console.log("success");
+                                    showRegisterSuccess()
+                                    theDiv = document.getElementById("success-register-div");
+                                    theDiv.innerHTML += "<h5 id=\"firstname\">"+firstname+ "</h5>";
+                                    instance.setNumber("+44 7733 123 456");
+                                    iti.setNumber(participant_phonenumber);
+
+                                }else{
+                                    if(data.code===400){
+                                        console.log("errrrrrrrrrrrrrrrror");
+                                        notShowPage();
+                                        showRegisterError();
+                                        return 0;
+                                    }
+
+                                    if(data.code===409){
+
+                                        notShowPage();
+                                        showRegisterError();
+
+                                        theDiv = document.getElementById("error-text");
+                                        theDiv.innerHTML = "This phone number is already registered for this service";
+                                        return 0;
+
+                                    }
+                                    if(data.code===412){
+
+                                        notShowPage();
+                                        showRegisterError();
+
+                                        theDiv = document.getElementById("error-text");
+                                        theDiv.innerHTML = "Your daticash account is not activated";
+                                        return 0;
+                                    }
+
+
+                                }
+                            })
+                        }
+                    })
+        }
+        var makePayment=function (participant_phonenumber,country,amount,currency,mobile_money_account,skip_idem_potency,merchant_developer_id,force_mobile) {
+            countryCode=country.dialCode;
+            console.log(participant_phonenumber);
+            participant_phonenumber=participant_phonenumber.replace("+"+countryCode,"");
+            mobile_money_account=mobile_money_account.replace("+"+countryCode,"");
+            fetch("{{ path("service_payment_pay",{'service_id':service.id}) }}"
+                + "?phone_number="+ participant_phonenumber
+                + "&amount="+ amount
+                + "&currency="+currency
+                + "&mobile_money_account="+mobile_money_account
+                + "&skip_idem_potency="+skip_idem_potency
+                + "&merchant_developer_id="+merchant_developer_id
+                + "&force_mobile="+force_mobile
+
+
+            + "&country_code="+countryCode , {"method": "POST"})
+                .then(
+                    function(response) {
+                        console.log(response);
+
+                        if (!response.ok) {
+                            console.log("application response after request = ");
+                            notShowPage();
+                            showPaymentError();
+                            return 0;
+
+                        }else{
+
+                            response.json().then(function(data) {
+                                console.log(data)
+                                /*
+                                * en cas de succès
+                                 */
+                                if(data.id){
+                                    console.log("success");
+                                    showPaymentInitiated(data.id)
+                                    return 0;
+
+                                }else{
+                                    if(data.code===400){
+                                        console.log("errrrrrrrrrrrrrrrror");
+                                        showPaymentError();
+                                        return 0;
+                                    }
+
+                                    if(data.code===409){
+
+                                        notShowPage();
+                                        showPaymentError();
+
+                                        $('#exampleModal').trigger('click');
+                                        return 0;
+
+                                    }
+                                    if(data.code===412){
+                                        showPaymentError();
+
+                                        theDiv = document.getElementById("error-text");
+                                        theDiv.innerHTML = "Your daticash account is not activated";
+                                        return 0;
+                                    }
+                                    if(data.code==="0"){
+                                        console.log("system error")
+
+                                        showPaymentError();
+
+                                        theDiv = document.getElementById("error-text");
+                                        theDiv.innerHTML = "Unknown error!";
+                                        return 0;
+                                    }
+                                    if(data.code==="402" ){
+                                        showPaymentError();
+
+                                        theDiv = document.getElementById("error-payment-div");
+                                        theDiv.innerHTML = "<h6 class=\"text-danger\">payment failed! </h6>"+
+                                        "<div id=\"error-text\" class='text-info'>No money in your Daticash account! You should first Topup your daticash account</div>";
+                                        return 0;
+
+                                    }
+                                    if(data.code ){
+                                        showPaymentError();
+
+                                        theDiv = document.getElementById("error-payment-div");
+                                        theDiv.innerHTML = "<h6 class=\"text-danger\">payment failed! </h6>"+
+                                            "<div id=\"error-text\" class='text-info'>Please contact your service provider</div>";
+                                        return 0;
+
+                                    }
+
+
+
+                                }
+                            })
+                        }
+                    })
+        }
+        var login=function (participant_phonenumber,country,password) {
+            console.log(country);
+            countryCode=country.dialCode;
+            console.log(participant_phonenumber);
+            participant_phonenumber=participant_phonenumber.replace("+"+countryCode,"");
+            fetch("{{ path("service_payment_participant_login",{'service_id':service.id}) }}"
+                + "?phone_number="+ participant_phonenumber
+                + "&password="+ password
+                + "&country_code="+countryCode , {"method": "GET"})
+                .then(
+                    function(response) {
+                        console.log(response);
+
+                        if (!response.ok) {
+                            console.log("application response after request = ");
+                            notShowPage();
+                            showLoginError();
+                            return 0;
+
+                        }else{
+
+                            response.json().then(function(data) {
+                                console.log(data);
+                                /*
+                                * en cas de succès
+                                 */
+                                if(data.id){
+                                    participant=data;
+                                    console.log("success");
+                                    showLoginSuccess();
+                                    showLoginLoader()
+                                    console.log("history")
+                                    getHistory(participant_phonenumber,countryCode, password)
+
+
+                                }else{
+                                        notShowPage();
+                                        showLoginError();
+
+                                        theDiv = document.getElementById("error-text");
+                                        theDiv.innerHTML = "Invalid password/Phone number";
+                                        return 0;
+
+                                }
+                            })
+                        }
+                    })
+        }
+        var participantEnable=function (participant_phonenumber,country,password) {
+            console.log(country);
+            countryCode=country.dialCode;
+            console.log(participant_phonenumber);
+            participant_phonenumber=participant_phonenumber.replace("+"+countryCode,"");
+
+            path="{{ path("service_payment_enable_participant",{'service_id':service.id,'participant_id':'participant_id'}) }}"
+
+            path = path.replace("participant_id",participant.id);
+            fetch(path
+                + "?phone_number="+ participant_phonenumber
+                + "&token="+ password
+                + "&country_code="+countryCode , {"method": "POST"})
+                .then(
+                    function(response) {
+                        console.log(response);
+
+                        if (!response.ok) {
+                            console.log("application response after request = ");
+                            notShowPage();
+                            showLoginError();
+                            return 0;
+
+                        }else{
+
+                            response.json().then(function(data) {
+                                console.log(data);
+                                /*
+                                * en cas de succès
+                                 */
+                                if(data.id){
+                                    participant=data;
+                                    console.log("success");
+                                    showLoginSuccess();
+                                    showLoginLoader()
+                                    console.log("history")
+                                    getHistory(participant_phonenumber,countryCode, password)
+
+
+                                }else{
+                                    notShowPage();
+                                    showLoginError();
+
+                                    theDiv = document.getElementById("error-text");
+                                    theDiv.innerHTML = "Invalid password/Phone number";
+                                    return 0;
+
+                                }
+                            })
+                        }
+                    })
+        }
+
+    });
+
+    function dQS_submitTransaction(json_id) {
+        //Submit the informations to valide and proceed the transaction (complete version)
+
+        var confirm_request
+        var status = "Checking service availability."
+        var timerInterval
+        var checkPath = "{{ path("transactions_view") }}";
+        var confirmPath = "{{ path("transactions_confirm") }}";
+
+        console.log("json_id=")
+        console.log(json_id)
+
+        if (json_id && json_id !== 0) {
+            /************************************************************ begin process transaction ******************************************/
+            var transaction_id = json_id
+
+            Swal.fire({
+                title: "Processing...",
+                html: "STATUS : <b class=\"status_js\">Updating transaction History.</b>"+
+                "<br><span class=\"confirm_js\"></span>",
+                icon: "info",
+                timer: 700000,
+                timerProgressBar: true,
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                Swal.showLoading()
+            timerInterval = setInterval(() => {
+                jQuery.ajax({
+                type: "GET",
+                url: checkPath + "/" + transaction_id, // call the php file ajax/
+                dataType: "json",
+                success: function(data){
+                    console.log("ajax metthod: ")
+                    console.log(data)
+                    if(data.id){
+                        if(data.stepDescription != null){
+                            status = data.stepDescription
+                            if(data.type == 2){
+                                confirm_request = 'The transaction have been initiated: Required the confirmation for a Source Account.'
+                            }
+                        }else{
+                            status = "Waiting..."
+                        }
+                        console.log("api response = " +data.stepDescription);
+
+                        switch(data.status.toLowerCase()) {
+                            case "completed"://Action successfully
+                                clearInterval(timerInterval)
+                                Swal.stopTimer()//Stops the timer in case when timer parameter is set. Returns the time left
+                                Swal.isTimerRunning()//Returns the status of a timer: true if is running, false if it's paused
+
+                                Swal.fire({
+                                    title: "Complete!",
+                                    icon: "success",
+                                    html: 'Your transaction Successfully Completed.<br> ' ,
+                                    showCloseButton: true,
+                                    showCancelButton: false,
+                                    focusConfirm: false,
+                                    confirmButtonText:"OK"
+                                })
+                                showPaymentSuccess()
+                                break;
+
+                            case "failed"://BAD_REQUEST
+                                clearInterval(timerInterval)
+                                Swal.stopTimer()//Stops the timer in case when timer parameter is set. Returns the time left
+                                Swal.isTimerRunning()//Returns the status of a timer: true if is running, false if it's paused
+                                if(status == "Waiting..."){
+                                    Swal.fire({
+                                        title: "ERROR!",
+                                        icon: "error",
+                                        html: 'Your transaction failed.<br> ' ,
+                                        showCloseButton: true,
+                                        showCancelButton: false,
+                                        focusConfirm: false,
+                                        confirmButtonText:"OK"
+                                    })
+                                }else{
+                                    Swal.fire(
+                                        "ERROR!",
+                                        status,
+                                        "error"
+                                    )
+                                }
+                                break;
+
+                            case "canceled"://CANCELED
+                                clearInterval(timerInterval)
+                                Swal.stopTimer()//Stops the timer in case when timer parameter is set. Returns the time left
+                                Swal.isTimerRunning()//Returns the status of a timer: true if is running, false if it's paused
+
+                                Swal.fire(
+                                    "ERROR!",
+                                    "Transaction canceled by the user.",
+                                    "error"
+                                )
+                                break;
+
+                            case "confirm_requested"://CONFIRM-PIN-CODE
+                                clearInterval(timerInterval)
+                                Swal.stopTimer()//Stops the timer in case when timer parameter is set. Returns the time left
+                                Swal.isTimerRunning()//Returns the status of a timer: true if is running, false if it's paused
+                                var currency_sent = data.currencySent;
+                                var amount_sent = data.amountSent;
+                                var recipient_phone = "+"+data.recipientCountryCode+data.recipientPhone;
+                                var recipient_username = data.recipientName;
+                                var tmpConfirmCodePrefix = data.tmpConfirmCodePrefix;
+
+                                Swal.fire({
+                                    title: "Confirm Transaction!",
+                                    html: 'You are about to make a transaction of '+amount_sent+' '+currency_sent+' to '+recipient_phone+'('+recipient_username+'). Enter the confirmation code for the transaction you just received by SMS or EMAIL:'+
+                                    '<div class="row" style="flex-flow: nowrap;">'+
+                                    '<div class="col-md-4 col-md-4" style="text-align: right; font-size: 27px; margin: 1em auto;"><span style="-webkit-text-stroke: medium;">'+tmpConfirmCodePrefix+' - </span></div>'+
+                                    '<div class="col-sm-4 col-md-4"><input id="confirmation_code" class="swal2-input" placeholder="X X X X"></div>'+
+                                    '<div class="col-sm-4 col-md-4"></div>'+
+                                    '</div>'
+                                    ,
+                                    //closeOnConfirm: true,
+                                    inputPlaceholder: "Your Confirmation Code",
+                                    inputAttributes: {
+                                        autocapitalize: "off"
+                                    },
+                                    showCancelButton: true,
+                                    showLoaderOnConfirm: true,
+                                    focusConfirm: false,
+                                    confirmButtonText:'<i class="fa fa-thumbs-up"></i> Confirm',
+                                    confirmButtonAriaLabel: "Thumbs up, great!",
+                                    cancelButtonText:'<i class="fa fa-thumbs-down"></i> Cancel',
+                                    cancelButtonAriaLabel: "Thumbs down",
+                                    allowOutsideClick: false,
+                                    preConfirm: (confirmation_code) => {
+                                    var confirmation_code = document.getElementById('confirmation_code').value;
+                                //alert(confirmation_code)
+                                //return fetch(`https://api.daticash.com/v1/api/mobilemoney/${transaction_id }/confirm?confirmation_code=${confirmation_code }`, {"method": "PUT", "headers":{"apikey":"sec_5ed93806dd2ca"}})//confirm-password url
+                                return fetch(confirmPath + "/" + transaction_id  + "?confirmation_code=" +`${confirmation_code }`, {"method": "POST"})//confirm-password url
+                                    .then(response => response.json())
+                            .then(githubUser => new Promise((resolve, reject) => {
+                                console.log("git")
+                                console.log(githubUser)
+                                if(githubUser.id){
+                                    console.log(githubUser)
+                                }else{
+                                    if(githubUser.code){
+                                        //githubUser.code = 401//for test
+                                        if(githubUser.code == 412){
+                                            throw new Error("This transaction is not in confirm requested state now. cannot confirm")
+                                        }else{
+                                            if(githubUser.code == 404){
+                                                throw new Error("The given id does not match any transaction")
+                                            }else{
+                                                if(githubUser.code == 403){
+                                                    throw new Error("FORBIDDEN: You do not have permission to access this resource")
+                                                }else{
+                                                    if(githubUser.code == 401){
+                                                        throw new Error("The provided code is not correct, do not forget this code is for one-time use in three tries. remaining to try 2")//here left try//for test
+                                                        //throw new Error("The provided code is not correct, do not forget this code is for one-time use in three tries. remaining to try "+githubUser.confirmTrialsNb)//here left try
+                                                    }else{
+                                                        if(githubUser.code == 400){
+                                                            throw new Error("Something is wrong with the request, possibly missing or improperly formatted parameters")
+                                                        }else{
+                                                            throw new Error('Error Connection, please try again later')
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                setTimeout(() => {
+                                    resolve(githubUser);
+                        }, 5000);
+                    }))
+                    .catch(error => {
+                            Swal.showValidationMessage(
+                            `${error}`
+                        )
+                    });
+                    }
+                    }).then((result) => {
+                            console.log(result)
+                        if(result.isConfirmed && result.value.is_confirmed == true){
+                            //result.value.is_confirmed = true//for test
+                            var status
+                            var timerInterval
+                            Swal.fire({
+                                title: "Traitement en cour",
+                                html: "STATUS : <b class=\"status_js\">Updating transaction History.</b>"+
+                                "<br><span class=\"confirm_js\"></span>",
+                                icon: "info",
+                                timer: 350000,
+                                timerProgressBar: true,
+                                allowOutsideClick: false,
+                                onBeforeOpen: () => {
+                                Swal.showLoading()
+                            timerInterval = setInterval(() => {
+                                //return fetch(`https://api.daticash.com/v1/api/mobilemoney/${transaction_id}`, {"headers": {"apikey": "sec_5ed93806dd2ca"}})//confirm-password url
+                                return fetch(checkPath + "/" + transaction_id , {"method": "GET"})//check status url
+                                    .then(
+                                        function(response) {
+                                            console.log("application response after confirm = " + response);
+                                            if (!response.ok) {
+                                                clearInterval(timerInterval)
+                                                // Examine the text in the response
+                                                response.json().then(function(data) {
+                                                    Swal.fire(
+                                                        "ERROR!",
+                                                        "Something is wrong with the request, transaction failed",
+                                                        "error"
+                                                    )
+                                                })
+                                            }else{
+                                                // Examine the text in the response
+                                                response.json().then(function(data) {
+                                                    status = data.stepDescription
+                                                    console.log("api response after confirm = " +data.stepDescription);
+
+                                                    switch(data.status.toLowerCase()) {
+                                                        case "completed"://Action successfully
+                                                            clearInterval(timerInterval)
+                                                            Swal.fire({
+                                                                title: "Complete!",
+                                                                icon: "success",
+                                                                html: 'Your transaction Successfully Completed.<br> ',
+                                                                showCloseButton: true,
+                                                                showCancelButton: false,
+                                                                focusConfirm: false,
+                                                                confirmButtonText:"OK"
+                                                            })
+                                                            showPaymentSuccess()
+
+                                                            break;
+
+                                                        case "failed"://BAD_REQUEST
+                                                            clearInterval(timerInterval)
+                                                            Swal.fire(
+                                                                "ERROR!",
+                                                                status,
+                                                                "error"
+                                                            )
+                                                            break;
+                                                    }
+
+                                                    const content = Swal.getContent()
+                                                    if (content) {
+                                                        const b = content.querySelector(".status_js")
+                                                        if (b) {
+                                                            b.textContent = status
+                                                        }
+                                                        if (confirm_request) {
+                                                            content.querySelector(".confirm_js").textContent = confirm_request
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    .catch(function(err) {
+                                        console.log("Fetch Error :-S", err);
+                                    });
+
+                        }, 5000);
+                        },
+                            showLoaderOnConfirm: true,
+                                onClose: () => {
+                                clearInterval(timerInterval)
+                                Swal.fire(
+                                    "Aborded!",
+                                    "Your session has been closed. But your transaction take too time...",
+                                    "info"
+                                )
+                            }
+                        }).then((result) => {
+                                // Read more about handling dismissals below
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                console.log("I was closed by the timer")
+                                Swal.fire({
+                                    title: "<strong>STATUS TRANSACTION</strong>",
+                                    icon: "info",
+                                    html:
+                                    'Was closed by the timer. Your transaction take too long, go to your ' ,
+                                    showCloseButton: true,
+                                    showCancelButton: false,
+                                    focusConfirm: false,
+                                    confirmButtonText:"OK",
+                                })
+                            }
+                        })
+
+                        }else if (
+                            /* Read more about handling dismissals below */
+                            result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                            Swal.fire(
+                                'Cancelled',
+                                'Your transaction canceled!',
+                                'error'
+                            )
+                        }
+
+                    })
+                        break;
+
+                    default :
+
+                    }
+                        //end success process transaction
+                    }else{
+                        Swal.fire({
+                            title: "ERROR!",
+                            icon: "error",
+                            text: "Bad Request thrown(Something is wrong with the request, possibly missing or improperly formatted parameter) or Resource Not Found(The given id may be wrong...) ",
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            focusConfirm: false,
+                            confirmButtonText:"OK",
+                        }).then(function() {
+                            showPaymentError();
+                        })
+                    }
+                    //end error process transaction
+                    $(".sendBtn").text("Good! Click here to Send").prop("disabled", false);
+                },
+                error: function() {
+                    $(".sendBtn").text("Good! Click here to Send").prop("disabled", false);
+                    status = "Failed"
+                    Swal.fire({
+                        title: "ERROR!",
+                        icon: "error",
+                        text: "Connection failed",
+                        showCloseButton: true,
+                        showCancelButton: false,
+                        focusConfirm: false,
+                        confirmButtonText:"OK",
+                    }).then(function() {
+                        showPaymentError();
+                    })
+                }
+            });
+
+            const content = Swal.getContent()
+            if (content) {
+                const b = content.querySelector(".status_js")
+                if (b) {
+                    b.textContent = status
+                }
+                if (confirm_request) {
+                    content.querySelector(".confirm_js").textContent = confirm_request
+                }
+            }
+
+        }, 5000);
+        },
+            showLoaderOnConfirm: true,
+                onClose: () => {
+                clearInterval(timerInterval)
+                Swal.fire(
+                    "ABORDED!",
+                    "Your session has been closed. But your transaction take too time...",
+                    "info"
+                )
+            }
+        }).then((result) => {
+                // Read more about handling dismissals below
+                if (result.dismiss === Swal.DismissReason.timer) {
+                console.log("I was closed by the timer")
+                Swal.fire({
+                    title: "<strong>STATUS TRANSACTION</strong>",
+                    icon: "info",
+                    html:
+                    'Was closed by the timer. Your transaction take too long. ' ,
+                    showCloseButton: true,
+                    showCancelButton: false,
+                    focusConfirm: false,
+                    confirmButtonText:"OK",
+                })//.then(function() {
+                //})
+                $(".sendBtn").text("Good! Click here to Send").prop("disabled", false);
+            }
+        })
+
+            /*********************************************************** end process transaction *********************************************/
+        }
+
+    }
+
+    function dQS_submitTransactionErrorCode(json_code) {
+        //Submit the informations to valide and proceed the transaction (complete version)
+        console.log("json_code error = ")
+        console.log(json_code)
+
+        switch(json_code) {
+            case "0"://Action successfully
+                Swal.fire(
+                    "Error!",
+                    "CODE 0: Service not available Now! Please try again later.(Thanks for trusting us)",
+                    "error"
+                )
+                break;
+
+            case "400"://Action CODE 400
+                Swal.fire(
+                    "Error!",
+                    "CODE 400: Something is wrong with the request, possibly missing or improperly formatted parameter.",
+                    "error"
+                )
+                break;
+
+            case "402":// insufficient balance
+                Swal.fire({
+                    title: "Alert!",
+                    icon: "warning",
+                    html:
+                    'The account has insufficient balance. <br> You can Approvisionate It by a '+
+                    '<b><a href="{{ path('operation.index', {'cid': "1", 'sid': "2"}) }}">TopUp</a></b> from MobileMoney source or other account source.',
+                    showCloseButton: false,
+                    showCancelButton: true,
+                    showConfirmButton: false,
+                    focusConfirm: false,
+                    cancelButtonText:"Cancel",
+                }).then(function() {
+                    {% if app.session.get('requested_url_string') is defined and app.session.get('requested_url_string')|length > 0 %}
+                    window.location = "https://daticash.com/send-cash/";
+                    {% else %}
+                    console.log("cancel")
+                    {% endif %}
+                })
+
+
+                break;
+
+            case "404":// Sender account not found
+                Swal.fire({
+                    title: 'Alert!',
+                    html: 'Sender account not found.',
+                    icon: 'warning',
+                    showCancelButton: false,
+                    focusConfirm: true,
+                    confirmButtonText: "OK",
+                    cancelButtonText: "Cancel",
+                }).then((result) => {
+                    console.log(result)
+                if(result.isConfirmed){
+                    {% if app.session.get('requested_url_string') is defined and app.session.get('requested_url_string')|length > 0 %}
+                    window.location = "https://daticash.com/send-cash/";
+
+                    {% endif %}
+                }
+        })
+
+        break;
+
+
+    case "413"://Amount sent is below the authorized limit
+        Swal.fire(
+            "Alert!",
+            "The amount sent is below the authorized limit for this service.",
+            "warning"
+        )
+        break;
+
+    case "409"://Similar transaction
+    case 409 :
+        Swal.fire({
+            title: 'Alert!',
+            html: 'Similar transaction with same parameters have been done in the same day.<br>'+
+            'Do you want to continuous?',
+            icon: 'warning',
+            showCancelButton: true,
+            focusConfirm: true,
+            confirmButtonText: "YES",
+            cancelButtonText: "NO",
+        }).then((result) => {
+            console.log(result)
+        if(result.isConfirmed && result.value){
+            console.log("{{ app.session.get('requested_url_string') }}")
+            {% if app.session.get('requested_url_string') is defined and app.session.get('requested_url_string')|length > 0 %}
+            var requested_url_string = "{{ app.session.get('requested_url_string') }}";
+            const regex = /skip_idem_potency=0/gi;
+            requested_url_string = requested_url_string.replace(regex, 'skip_idem_potency=1');
+            console.log(requested_url_string)
+
+            const regex1 = /&amp;/gi;
+            requested_url_string = requested_url_string.replace(regex1, '&');
+
+            window.location = requested_url_string ;
+
+            {% else %}
+            $("#skip_idem_potency").val("1")
+            $(".sendBtn").attr("disabled", false).trigger("click")
+
+            $("#skip_idem_potency").val("0")
+            console.log($("#skip_idem_potency").val())
+
+
+            {% endif %}
+        }else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            {% if app.session.get('requested_url_string') is defined and app.session.get('requested_url_string')|length > 0 %}
+            window.location = "https://daticash.com/send-cash/";
+            {% else %}
+            Swal.fire(
+                'Cancelled',
+                'Your transaction canceled!',
+                'error'
+            )
+            {% endif %}
+        }
+    })
+
+
+        break;
+
+    case "412"://Account need activation
+        Swal.fire(
+            "Alert!",
+            "User account need activation.",
+            "warning"
+        )
+        break;
+
+    case "422"://Similar transaction
+        Swal.fire(
+            "Alert!",
+            "The requested service is not available.",
+            "warning"
+        )
+        break;
+
+    default :
+        Swal.fire({
+            title: "Sorry!",
+            icon: "error",
+            text: "Service not available Now! Please try again later.(Thanks for trusting us)",
+            showCloseButton: true,
+            showCancelButton: false,
+            focusConfirm: false,
+            confirmButtonText:"OK",
+        })//.then(function() {
+        //})
+    }
+
+
+
+    }
+//--></script>
+
+{% endblock %}

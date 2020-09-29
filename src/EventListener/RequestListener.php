@@ -21,13 +21,12 @@ class RequestListener
 // You get the exception object from the received event
         $request = $event->getRequest();
         if($request->get("source")=="external"){
-            var_dump($request->query->all());
-            var_dump($request->getRequestUri());
 
             $this->session->set("requested_url",$request->getPathInfo());
             $this->session->set("requested_url_data",$request->query->all());
             $this->session->set("requested_url_string",$request->getRequestUri());
             $this->session->set("requested_url_method",$request->getMethod());
+            $this->session->set("requested_url_data_string",$request->getRequestUri());
 
         }
 

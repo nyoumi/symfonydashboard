@@ -6,7 +6,11 @@ security:
             
 
     firewalls:
-
+        participant:
+            pattern: ^/service_payments_history
+            guard:
+                authenticators:
+                    - App\Security\ParticipantLoginFormAuthenticator
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
@@ -25,6 +29,7 @@ security:
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
+
 
 
 
@@ -56,6 +61,8 @@ security:
         - { path: ^/transaction, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/transaction/create_local, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/user_view, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/service_payments/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
 
         - { path: ^/, roles: [ROLE_USER] }
 

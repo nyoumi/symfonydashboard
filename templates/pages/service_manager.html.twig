@@ -1,0 +1,1139 @@
+{% set _profile = app.user %}
+{% set _username = _profile.firstname ~ ' ' ~ _profile.lastname %}
+{% set _user_phone = '+' ~ _profile.countryCode ~ _profile.phoneNumber %}
+{% set _accounts = app.user.accounts %} 
+{% set _categories = app.session.get('services') %}
+{% set _accountGroupAll = app.session.get('account_types') %}
+{% set userInfos = app.user.userInfos %}
+{% set _currency = app.user.currency_code %}
+
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+    <link href="{{ asset('assets/css/confirm-user-popup.css') }}" rel="stylesheet">
+    <!-- Numeric Keypad -->
+    <link href="{{ asset('assets/css/jquery.keypad.css') }}" rel="stylesheet">
+    <!-- International Telephone Input -->
+    <link href="{{ asset('assets/css/intlTelInput/intlTelInput.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block head_javascripts %}
+
+{% endblock %}
+
+{% block navbar %}
+    {% include "body/navbar.html.twig" ignore missing %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "body/sidebar.html.twig" ignore missing %}
+{% endblock %}
+
+{% block content_header %}
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">My Services</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">my services</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+            <div class="login-feedback"></div>
+        </div><!-- /.container-fluid -->
+    </div>
+{% endblock %}
+
+{% block content_main %}
+    {% for flashError in app.flashes('error') %}
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <i class="fa fa-exclamation-circle"></i>&nbsp{{ flashError }}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('notice') %}
+        <div class="alert alert-warning alert-dismissible  flash-notice">
+            <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }}"</a>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    {% endfor %}
+
+    {# read and display several types of flash messages #}
+    {% for label, messages in app.flashes(['success']) %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible">
+                <i class="fa fa-exclamation-circle"></i>&nbsp{{ message }} }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header p-2">
+                            <ul class="nav nav-pills">
+
+                                {% set var = 0 %}{% for userRight in _profile.roles %}{% if 'ROLE_MERCHANT' in userRight %}{% set var = var + 1 %}{% endif %}{% endfor %}{% if var > 0 %}<li class="nav-item service_settings"><a class="nav-link active" href="#service_settings" data-toggle="tab">Services</a></li>{% endif %}
+
+                            </ul>
+                        </div><!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="tab-content">
+
+                                {% set var = 0 %}{% for userRight in _profile.roles %}
+                                    {% if 'ROLE_DEVELOPER' in userRight %}
+                                        {% set var = var + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if var > 0 %}
+                                    <div class="active tab-pane" id="service_settings">
+                                        <div class="row manage_items">
+                                            <div class="col-sm-12 col-md-12">
+                                                <div class="input-group mb-4">
+                                                    <!-- here icon action and atatus -->
+                                                    <div class="col-sm-12 mb-12">
+                                                        <a href="#" data-toggle="modal" data-target="#dati_create_service" name="icon_add_service" id="icon_add_service">
+                                                            <i class="fas fa-plus-square"></i>
+                                                            Add new Service
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-12" id="service_selected_service-head">
+                                            <div class="row mb-2" style="flex-flow: nowrap;">
+
+                                                <div class="col-sm-6 col-md-6">
+
+                                                    <select class="swal2-select daticash__account-listbox" style="display: flex; margin: 0; width: 100%;" name="service_daticash__account-listbox" id="service_daticash__account-listbox">
+                                                        <option style="color:#17a2b8;" data-account_type="SERVICE" data-account_name="Service" data-account_description ="Merchant service"  data-account_id ="0" value="0" class="nav-link" selected>Please select Service</option>
+                                                        {% for categorie in _categories %}
+                                                            <optgroup style="color:gray;" data-category_label = "{{  categorie.label  }}" data-category_description = "{{  categorie.description  }}"  data-category_id = "{{  categorie.id  }}" label="{{ categorie.label }}">
+                                                                {% for service in categorie.services %}
+                                                                    <option style="color:#17a2b8;" class="dati_opt_item" data-service_description = "" data-service_label = "{{  service.label  }}" data-service_id = "{{  service.id  }}" value="{{  service.id  }}" {% if app.request.get('sid') is defined and app.request.get('sid') == service.id %}selected{% endif %}>{{  service.label  }}</option>
+                                                                {% endfor %}
+                                                            </optgroup>
+                                                        {% endfor %}
+
+                                                    </select>
+
+
+                                                </div>
+
+                                                <div class="col-sm-6 col-md-6">
+                                                    <!-- the activity -->
+                                                    <div class="form-group">
+                                                        <div class="col-sm-12">
+                                                            <small id="service_daticash__activity-listbox-feedback"></small>
+                                                            <div class="input-group" style="flex-flow: nowrap;">
+                                                                <div class="input-group mb-4" id="div_icon_action_service">
+                                                                    <!-- here icon action and atatus -->
+                                                                    <div class="col-sm-12 mb-12">
+                                                                        <a href="#" data-toggle="modal" data-target="#dati_create_service" name="icon_edit_service" id="icon_edit_service">
+                                                                            <i class="fas fa-edit"></i>
+                                                                            Edit
+                                                                        </a>
+                                                                        <a href="#" class="ml-4" style="color: #dc3545!important" data-toggle="modal" data-target="#dati_create_service" name="icon_delete_service" id="icon_delete_service">
+                                                                            <i class="fas fa-trash-alt"></i>
+                                                                            Delete
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-12" id="service_selected_service-content">
+                                            <form class="form-horizontal service-form" name="add_service_form" action="" method="">
+
+                                                <div class="form-group row">
+                                                    <label for="name" class="col-sm-2 col-form-label">Name</label>
+                                                    <div class="col-sm-10">
+                                                        <small id="service_name-feedback"></small>
+                                                        <input type="text" class="form-control" id="imput_service_name" name="imput_service_name" placeholder="Name of service" value="">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="description" class="col-sm-2 col-form-label">Description</label>
+                                                    <div class="col-sm-10">
+                                                        <small id="service_description-feedback"></small>
+                                                        <textarea class="form-control" id="imput_service_description" name="imput_service_description" placeholder="Description" value=""></textarea>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="name" class="col-sm-2 col-form-label">Amount</label>
+                                                    <div class="col-sm-10">
+                                                        <small id="service_cost-feedback"></small>
+                                                        <input type="text" class="form-control" id="imput_service_cost" name="imput_service_cost" placeholder="Amount coast of service" value="">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="imput_service_start" class="col-sm-2 col-form-label">Validity period</label>
+                                                    <div class="col-sm-10">
+                                                        <small id="service_period-feedback"></small>
+                                                        <input type="hidden" class="form-control" id="imput_service_start" name="imput_service_start" placeholder="Date service start" value="">
+                                                        <input type="hidden" class="form-control" id="imput_service_end" name="imput_service_end" placeholder="Date service end" value="">
+                                                        <button type="button" class="btn btn-tool" id="service_daterange-btn" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                                            <i class="far fa-calendar-alt mr-1" ></i><span id="reportrange"> Choose Date range </span>
+                                                            <i class="fas fa-caret-down ml-1"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="service_activity_daticash__account-listbox" class="col-sm-2 col-form-label">Categorie/Activity</label>
+                                                    <div class="col-sm-8">
+                                                        <small id="service_activity-feedback"></small>
+                                                        <select class="swal2-select daticash__account-listbox" style="display: flex; margin: 0; width: 100%;" name="id" id="service_activity_daticash__account-listbox">
+                                                            <option style="color:#17a2b8;" data-account_type="ACTIVITY" data-account_name="Activity" data-account_description ="Merchant account type(activity)"  data-account_id ="0" value="0" class="nav-link" selected>Please select activity</option>
+
+                                                            {% set _accountGroupForUser = _accountGroupAll %}
+                                                            {% for key1, accountGroupAll in _accountGroupAll %}
+                                                                {% if accountGroupAll.name == "ROLE_MERCHANT"%}
+                                                                    <optgroup style="color:gray;" label="My {{ accountGroupAll.description }}">
+                                                                    {% set var = 0 %}
+                                                                    {% for key2, accountGroupForUser in _accountGroupForUser %}
+                                                                        {% if key2 == key1 %}
+                                                                            {% for key2, account in _accounts %}
+                                                                                {% if accountGroupAll.name in account.roles and accountGroupAll.name == "ROLE_MERCHANT"%}
+                                                                                    {% set var = var + 1 %}
+                                                                                    <option style="color:#17a2b8;" data-account_type="{% if 'ROLE_MERCHANT' in account.roles %}ACTIVITY{% elseif 'ROLE_DEVELOPER' in account.roles  %}APPLICATION{% elseif 'ROLE_BUSINESS' in account.roles  %}POINT_OF_SALE{% endif %}" data-account_name="{{ account.name }}" data-account_description="{{ account.description }}"  data-account_id="{{ account.id }}" value="{{ account.id }}" class="nav-link">{{ account.name }}</option>
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                    {% if var == 0 %}
+                                                                        <option data-account_type="ACTIVITY" data-account_id="" value="" disabled="" >Empty</option>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                                </optgroup>
+                                                            {% endfor %}
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="offset-sm-2 col-sm-10">
+                                                        <button type="submit" id="btn_service_add_service" class="btn btn-info float-right">Create</button>
+                                                        <button type="submit" id="btn_service_update_service" class="btn btn-info float-right mr-2">Update</button>
+                                                        <button type="submit" id="btn_service_cancel_service" class="btn btn-default float-right mr-2">Cancel</button>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12">
+                                                        <div class="row">
+                                                            <div class="col-12">
+
+                                                                <div class="card" id="card_service_linked_activities">
+                                                                    <div class="card-header">
+                                                                        <h4 class="card-title">Participiants</h4>
+                                                                        <div class="card-tools">
+                                                                            <button type="button" class="btn btn-tool">
+                                                                                <a class="btn btn-info btn-sm" href="#" id="participiant_add_btn">
+                                                                                    <i class="fas fa-plus"></i>
+                                                                                    &nbsp;Add New Participiant
+                                                                                </a>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="card-body">
+                                                                        <!-- the events -->
+                                                                        <div class="external-events">
+                                                                            <table id="participiant_list" class="table table-bordered table-striped">
+                                                                                <thead>
+                                                                                <tr>
+                                                                                    <th>Phone 1</th>
+                                                                                    <th>Name</th>
+                                                                                    <th>Status</th>
+                                                                                    <th>Bill</th>
+                                                                                    <th></th>
+                                                                                </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                <tr>
+                                                                                    <td>23767658225</td>
+                                                                                    <td>User Name 1</td>
+                                                                                    <td><span style="color: #dc3545!important"><i class="far fa-dot-circle"></i> Is not activated</span></td>
+                                                                                    <td>
+                                                                                        0<sup style="font-size: 10px">FCFA</sup></span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a class="btn btn-defauult btn-sm participiant_edit_btn" href="#"
+                                                                                           data-participiant_id = "1" data-toggle="modal" data-target="#dati_create_participiant_modal"
+                                                                                           data-participiant_phone = "23755885548"
+                                                                                           data-participiant_name = "User Name 1"
+                                                                                        >
+                                                                                            <i class="fas fa-edit"></i>
+                                                                                            &nbsp;Edit
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>23766695682</td>
+                                                                                    <td>User Name 2</td>
+                                                                                    <td><span style="color: #28a745!important"><i class="far fa-dot-circle"></i> Is activated</span></td>
+                                                                                    <td>
+                                                                                        1000<sup style="font-size: 10px">FCFA</sup></span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a class="btn btn-defauult btn-sm participiant_edit_btn" href="#"
+                                                                                           data-participiant_id = "2" data-toggle="modal" data-target="#dati_create_participiant_modal"
+                                                                                           data-participiant_phone = "23588554587"
+                                                                                           data-participiant_name = "User Name 2"
+                                                                                        >
+                                                                                            <i class="fas fa-edit"></i>
+                                                                                            &nbsp;Edit
+                                                                                        </a>
+                                                                                    </td>
+
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>23762522154</td>
+                                                                                    <td>User Name 3</td>
+                                                                                    <td><span style="color: #dc3545!important"><i class="far fa-dot-circle"></i> Is not activated</span></td>
+                                                                                    <td>
+                                                                                        0<sup style="font-size: 10px">FCFA</sup></span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a class="btn btn-defauult btn-sm participiant_edit_btn" href="#"
+                                                                                           data-participiant_id = "3" data-toggle="modal" data-target="#dati_create_participiant_modal"
+                                                                                           data-participiant_phone = "23755584444"
+                                                                                           data-participiant_name = "User Name 3"
+                                                                                        >
+                                                                                            <i class="fas fa-edit"></i>
+                                                                                            &nbsp;Edit
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>23767658225</td>
+                                                                                    <td>User Name 4</td>
+                                                                                    <td><span style="color: #28a745!important"><i class="far fa-dot-circle"></i> Is activated</span></td>
+                                                                                    <td>
+                                                                                        5000<sup style="font-size: 10px">FCFA</sup></span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a class="btn btn-defauult btn-sm participiant_edit_btn" href="#"
+                                                                                           data-participiant_id = "4" data-toggle="modal" data-target="#dati_create_participiant_modal"
+                                                                                           data-participiant_phone = "23755588548"
+                                                                                           data-participiant_name = "User Name 4"
+                                                                                        >
+                                                                                            <i class="fas fa-edit"></i>
+                                                                                            &nbsp;Edit
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>23736662559</td>
+                                                                                    <td>User Name 6</td>
+                                                                                    <td><span style="color: #28a745!important"><i class="far fa-dot-circle"></i> Is activated</span></td>
+                                                                                    <td>
+                                                                                        4500<sup style="font-size: 10px">FCFA</sup></span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a class="btn btn-defauult btn-sm participiant_edit_btn" href="#"
+                                                                                           data-participiant_id = "5" data-toggle="modal" data-target="#dati_create_participiant_modal"
+                                                                                           data-participiant_phone = "23755585454"
+                                                                                           data-participiant_name = "User Name 5"
+                                                                                        >
+                                                                                            <i class="fas fa-edit"></i>
+                                                                                            &nbsp;Edit
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>23762145554</td>
+                                                                                    <td>User Name 7</td>
+                                                                                    <td><span style="color: #dc3545!important"><i class="far fa-dot-circle"></i> Is not activated</span></td>
+                                                                                    <td>
+                                                                                        0<sup style="font-size: 10px">FCFA</sup></span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a class="btn btn-defauult btn-sm participiant_edit_btn" href="#"
+                                                                                           data-participiant_id = "6" data-toggle="modal" data-target="#dati_create_participiant_modal"
+                                                                                           data-participiant_phone = "239555854889"
+                                                                                           data-participiant_name = "User Name 6"
+                                                                                        >
+                                                                                            <i class="fas fa-edit"></i>
+                                                                                            &nbsp;Edit
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>23762254154</td>
+                                                                                    <td>User Name 8</td>
+                                                                                    <td><span style="color: #dc3545!important"><i class="far fa-dot-circle"></i> Is not activated</span></td>
+                                                                                    <td>
+                                                                                        0<sup style="font-size: 10px">FCFA</sup></span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a class="btn btn-defauult btn-sm participiant_edit_btn" href="#"
+                                                                                           data-participiant_id = "7" data-toggle="modal" data-target="#dati_create_participiant_modal"
+                                                                                           data-participiant_phone = "231755584585"
+                                                                                           data-participiant_name = "User Name 7"
+                                                                                        >
+                                                                                            <i class="fas fa-edit"></i>
+                                                                                            &nbsp;Edit
+                                                                                        </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.col -->
+                                                        </div>
+                                                        <!-- /.row -->
+
+                                                    </div>
+                                                </div>
+
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+
+
+                            </div><!-- /.card-body -->
+                        </div>
+                        <!-- /.nav-tabs-custom -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+
+{% block javascripts %}
+
+    <!-- numeric keypad jQuery-->
+    <script src="{{ asset('assets/js/jquery.plugin.min.js') }}"></script>
+    <!-- numeric keypad script-->
+    <script src="{{ asset('assets/js/jquery.keypad.js') }}"></script>
+    <!-- International Telephone Input-->
+    <script src="{{ asset('assets/js/intlTelInput/intlTelInput.js') }}"></script>
+
+    <script type="text/javascript"><!--
+
+        /** Déclaration des fonctions et des vatiables**/
+        var daticash_current_phone_number;
+        function configure_intlTelInput(){
+            var phone_number = document.querySelector("#phone_number");
+            daticash_current_phone_number = window.intlTelInput(phone_number, {
+                // allowDropdown: false,
+                // autoHideDialCode: false,
+                // autoPlaceholder: "off",
+                // dropdownContainer: document.body,
+                // excludeCountries: ["us"],
+                // formatOnDisplay: false,
+                geoIpLookup: function(callback) {
+                    $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+                        var countryCode = (resp && resp.country) ? resp.country : "";
+                        callback(countryCode);
+                    });
+                },
+                // hiddenInput: "full_number",
+                // initialCountry: "auto",
+                // localizedCountries: { 'de': 'Deutschland' },
+                nationalMode: true,
+                // onlyCountries: ['cm', 'ng', 'eg', 'ci', 'sn'],
+                // placeholderNumberType: "MOBILE",
+                // preferredCountries: ['cn', 'jp'],
+                separateDialCode: true,
+                utilsScript: "{{ absolute_url(asset("assets/js/intlTelInput/utils.js")) }}",//get value
+            });
+
+            var output = document.querySelector("#phone-feedback");
+
+            var handleChange = function() {
+                //impose the numeric characters
+                var value = jQuery(this).val();
+                value = value.replace(/[^0-9]+/g, '');
+                jQuery(this).val(value);
+
+                //show message if incorrect phone number
+                var text = (daticash_current_phone_number.isValidNumber()) ? 'International: ' + daticash_current_phone_number.getNumber() + ' ✓ Valid': "Please enter a valid number below";
+                var textNode = document.createTextNode(text);
+                output.innerHTML = "";
+                output.appendChild(textNode);
+
+                /* change style color*/
+                if(daticash_current_phone_number.isValidNumber()){
+                    $("#phone-feedback").attr("class",'text-success');
+                    $("#phone_number").removeClass("error").addClass("success");
+
+                }else{
+                    $("#phone-feedback").attr("class",'text-danger');
+                    $("#phone_number").addClass("error").removeClass("success");
+                    $(this).parent().find("#input-group-text").css("color: #ff7c7c; border-color:#ff7c7c");
+                }
+
+            };
+
+            // listen to "keyup", but also "change" to update when the user selects a country
+            phone_number.addEventListener('change', handleChange);
+            phone_number.addEventListener('keyup', handleChange);
+        }
+
+        function autoChoose_country_code(country_code){
+            configure_intlTelInput()
+            $("#input_group_appendto_phone").remove()
+            $('#phone_number').after('<div class="input-group-append"><div class="input-group-text" style="border-bottom-left-radius: 0;border-top-left-radius: 0;"><span class="fas fa-phone"></span></div></div>');
+
+            $(".iti__selected-flag").trigger("click");
+            $(".iti__country[data-dial-code='"+country_code+"']").trigger("click");
+        }
+
+        function passwordLength(element, value){
+            //alert(element)
+            //alert(value)
+            var n = value.length;
+            if(n != 6){
+                $(element).empty().text("Invalid PIN, left characters: "+ (6 - value.length)).attr("class", "text-danger")
+                return false;
+            }else{
+                $(element).empty().text("Good! your pin is ✓ Valid").attr("class", "text-success");
+            }
+            return true;
+        }
+
+        function emailIsValid (email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        }
+
+        //Initialize Select2 Elements
+        $('.select2').select2({
+            placeholder: 'Enter list of events for this webhook endpoint',
+            allowClear: true,
+            tags: false,
+            tokenSeparators : [ ',' , '' ]
+        })
+
+        var left_time = 30
+        var second = 60;
+        var _rebordCount;
+        var user_email = "{{ _profile.email }}";
+        var user_id = "{{ _profile.id }}";
+
+        var daticash_current_phone_number;
+
+        $(document).ready(function(){
+            /*Textbox Events*/
+            var btn_add_new_merchant_activity_to_application = $('#waitMe_ex_effect').val();
+
+            $("body")
+                .on('click', '.iti__country' , function(e) {
+                    var $this = $(this);
+                    country_code = $this.find(".iti__dial-code").text();
+                    country_code = country_code.substring(1, country_code.length);
+
+                    if($this.parents('.form-group-sender_phone').length){
+                        $("#sender_country_code").val(country_code);
+                    }
+
+                    if($this.parents('.form-group-recipient_phone').length){
+                        $("#recipient_country_code").val(country_code);
+                    }
+
+                    if($this.parents('.form-daticash_phone').length){
+                        $("#country_code").val(country_code);
+                    }
+                    /*
+                    alert("sender_country_code = "+$("#sender_country_code").val())
+                    alert("recipient_country_code = "+$("#recipient_country_code").val())
+                    alert("country_code = "+$("#country_code").val())*/
+
+                })
+                .on('click', '#icon_add_service', function(e){
+                    var $this = $(this).find("option:selected");
+
+                    $('#service_selected_service-head').empty();
+                    $('#service_selected_service-content').empty().append(
+                        '<form class="form-horizontal service-form" name="add_service_form" action="" method="">'+
+                        '<div class="form-group row">'+
+                        '<label for="name" class="col-sm-2 col-form-label">Name</label>'+
+                        '<div class="col-sm-10">'+
+                        '<small id="service_name-feedback"></small>'+
+                        '<input type="text" class="form-control" id="imput_service_name" name="imput_service_name" placeholder="Name of service" value="">'+
+                        '</div>'+
+                        '</div>'+
+
+                        '<div class="form-group row">'+
+                        '<label for="description" class="col-sm-2 col-form-label">Description</label>'+
+                        '<div class="col-sm-10">'+
+                        '<small id="service_description-feedback"></small>'+
+                        '<textarea class="form-control" id="imput_service_description" name="imput_service_description" placeholder="Description" value=""></textarea>'+
+                        '</div>'+
+                        '</div>'+
+
+                        '<div class="form-group row">'+
+                        '<label class="col-sm-2 col-form-label">Logo</label>'+
+                        '<input type="file" name="service_logo" class="file" id="service_logo" />'+
+                        '</div>'+
+
+                        '<div class="form-group row">'+
+                        '<label for="name" class="col-sm-2 col-form-label">Amount</label>'+
+                        '<div class="col-sm-10">'+
+                        '<small id="service_cost-feedback"></small>'+
+                        '<input type="text" class="form-control" id="imput_service_cost" name="imput_service_cost" placeholder="Amount coast of service" value="">'+
+                        '</div>'+
+                        '</div>'+
+
+                        '<div class="form-group row">'+
+                        '<label for="imput_service_start" class="col-sm-2 col-form-label">Validity period</label>'+
+                        '<div class="col-sm-10">'+
+                        '<small id="service_period-feedback"></small>'+
+                        '<input type="hidden" class="form-control" id="imput_service_start" name="imput_service_start" placeholder="Date service start" value="">'+
+                        '<input type="hidden" class="form-control" id="imput_service_end" name="imput_service_end" placeholder="Date service end" value="">'+
+                        '<button type="button" class="btn btn-tool" id="service_daterange-btn" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">'+
+                        '<i class="far fa-calendar-alt mr-1" ></i><span id="reportrange"> Choose Date range </span>'+
+                        '<i class="fas fa-caret-down ml-1"></i>'+
+                        '</button>'+
+                        '</div>'+
+                        '</div>'+
+
+                        '<div class="form-group row">'+
+                        '<label for="service_activity_daticash__account-listbox" class="col-sm-2 col-form-label">Categorie/Activity</label>'+
+                        '<div class="col-sm-8">'+
+                        '<small id="service_activity-feedback"></small>'+
+                        '<select class="swal2-select daticash__account-listbox" style="display: flex; margin: 0; width: 100%;" name="service_activity_daticash__account-listbox" id="service_activity_daticash__account-listbox">'+
+                        '<option style="color:#17a2b8;" data-account_type="SERVICE" data-account_name="Service" data-account_description ="Merchant service"  data-account_id ="0" value="0" class="nav-link" selected>Please select activity</option>'+
+
+                            {% set _accountGroupForUser = _accountGroupAll %}
+                            {% for key1, accountGroupAll in _accountGroupAll %}
+                            {% if accountGroupAll.name == "ROLE_MERCHANT"%}
+                        '<optgroup style="color:gray;" label="My {{ accountGroupAll.description }}">'+
+                            {% set var = 0 %}
+                            {% for key2, accountGroupForUser in _accountGroupForUser %}
+                            {% if key2 == key1 %}
+                            {% for key2, account in _accounts %}
+                            {% if accountGroupAll.name in account.roles and accountGroupAll.name == "ROLE_MERCHANT"%}
+                            {% set var = var + 1 %}
+                        '<option style="color:#17a2b8;" data-account_type="{% if 'ROLE_MERCHANT' in account.roles %}ACTIVITY{% elseif 'ROLE_DEVELOPER' in account.roles  %}APPLICATION{% elseif 'ROLE_BUSINESS' in account.roles  %}POINT_OF_SALE{% endif %}" data-account_name="{{ account.name }}" data-account_description="{{ account.description }}"  data-account_id="{{ account.id }}" value="{{ account.id }}" class="nav-link">{{ account.name }}</option>'+
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            {% endfor %}
+                            {% if var == 0 %}
+                        '<option data-account_type="ACTIVITY" data-account_id="" value="" disabled="" >Empty</option>'+
+                            {% endif %}
+                            {% endif %}
+                        '</optgroup>'+
+                            {% endfor %}
+
+                        '</select>'+
+                        '</div>'+
+                        '</div>'+
+
+                        '<div class="form-group row">'+
+                        '<div class="offset-sm-2 col-sm-10">'+
+                        '<button type="submit" id="btn_service_add_service" class="btn btn-info float-right">Save</button>'+
+                        '<button type="submit" id="btn_service_cancel_service" class="btn btn-default float-right mr-2">Cancel</button>'+
+                        '</div>'+
+                        '</div>'+
+                        '</form>'
+                    );
+                    $(function () {
+                        //Date range as a button
+                        $('#service_daterange-btn').daterangepicker(
+                            {
+                                timePicker: true,
+                                ranges   : {
+                                    'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+                                },
+                                startDate: moment().subtract(29, 'days'),
+                                endDate  : moment()
+                            },
+                            function (start, end) {
+                                $('#reportrange').html(start.format('D-M-YYYY') + ' - ' + end.format('D-M-YYYY'));
+
+                                var starting_at  = start.format('D-M-YYYY')
+                                var ending_at = end.format('D-M-YYYY')
+
+                                $("#imput_service_start").val(starting_at)
+                                $("#imput_service_end").val(ending_at)
+
+                                $("#service_period-feedback").empty()
+                            }
+                        )
+                    })
+
+                })
+                .on('click', '#icon_edit_service', function(e){
+                    var $this = $('select#activity_daticash__account-listbox').find('option[selected]');
+                    var pid = $this.attr("data-service_id")
+
+                    $('#service_selected_service-content').empty().append(
+                        '<form class="form-horizontal service-form" name="add_service_form" action="" method="">'+
+                        '<div class="form-group row">'+
+                        '<label for="name" class="col-sm-2 col-form-label">Name</label>'+
+                        '<div class="col-sm-10">'+
+                        '<small id="service_name-feedback"></small>'+
+                        '<input type="text" class="form-control" id="imput_service_name" name="imput_service_name" placeholder="Name of service" value="">'+
+                        '</div>'+
+                        '</div>'+
+
+                        '<div class="form-group row">'+
+                        '<label for="description" class="col-sm-2 col-form-label">Description</label>'+
+                        '<div class="col-sm-10">'+
+                        '<small id="service_description-feedback"></small>'+
+                        '<textarea class="form-control" id="imput_service_description" name="imput_service_description" placeholder="Description" value=""></textarea>'+
+                        '</div>'+
+                        '</div>'+
+
+                        '<div class="form-group row">'+
+                        '<label class="col-sm-2 col-form-label">Logo</label>'+
+                        '<input type="file" name="service_logo" class="file" id="service_logo" />'+
+                        '</div>'+
+
+                        '<div class="form-group row">'+
+                        '<label for="name" class="col-sm-2 col-form-label">Amount</label>'+
+                        '<div class="col-sm-10">'+
+                        '<small id="service_cost-feedback"></small>'+
+                        '<input type="text" class="form-control" id="imput_service_cost" name="imput_service_cost" placeholder="Amount coast of service" value="">'+
+                        '</div>'+
+                        '</div>'+
+
+                        '<div class="form-group row">'+
+                        '<label for="imput_service_start" class="col-sm-2 col-form-label">Validity period</label>'+
+                        '<div class="col-sm-10">'+
+                        '<small id="service_period-feedback"></small>'+
+                        '<input type="hidden" class="form-control" id="imput_service_start" name="imput_service_start" placeholder="Date service start" value="">'+
+                        '<input type="hidden" class="form-control" id="imput_service_end" name="imput_service_end" placeholder="Date service end" value="">'+
+                        '<button type="button" class="btn btn-tool" id="service_daterange-btn" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">'+
+                        '<i class="far fa-calendar-alt mr-1" ></i><span id="reportrange"> Choose Date range </span>'+
+                        '<i class="fas fa-caret-down ml-1"></i>'+
+                        '</button>'+
+                        '</div>'+
+                        '</div>'+
+
+                        '<div class="form-group row">'+
+                        '<label for="service_activity_daticash__account-listbox" class="col-sm-2 col-form-label">Categorie/Activity</label>'+
+                        '<div class="col-sm-8">'+
+                        '<small id="service_activity-feedback"></small>'+
+                        '<select class="swal2-select daticash__account-listbox" style="display: flex; margin: 0; width: 100%;" name="service_activity_daticash__account-listbox" id="service_activity_daticash__account-listbox">'+
+                        '<option style="color:#17a2b8;" data-account_type="SERVICE" data-account_name="Service" data-account_description ="Merchant service"  data-account_id ="0" value="0" class="nav-link" selected>Please select activity</option>'+
+
+                            {% set _accountGroupForUser = _accountGroupAll %}
+                            {% for key1, accountGroupAll in _accountGroupAll %}
+                            {% if accountGroupAll.name == "ROLE_MERCHANT"%}
+                        '<optgroup style="color:gray;" label="My {{ accountGroupAll.description }}">'+
+                            {% set var = 0 %}
+                            {% for key2, accountGroupForUser in _accountGroupForUser %}
+                            {% if key2 == key1 %}
+                            {% for key2, account in _accounts %}
+                            {% if accountGroupAll.name in account.roles and accountGroupAll.name == "ROLE_MERCHANT"%}
+                            {% set var = var + 1 %}
+                        '<option style="color:#17a2b8;" data-account_type="{% if 'ROLE_MERCHANT' in account.roles %}ACTIVITY{% elseif 'ROLE_DEVELOPER' in account.roles  %}APPLICATION{% elseif 'ROLE_BUSINESS' in account.roles  %}POINT_OF_SALE{% endif %}" data-account_name="{{ account.name }}" data-account_description="{{ account.description }}"  data-account_id="{{ account.id }}" value="{{ account.id }}" class="nav-link">{{ account.name }}</option>'+
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            {% endfor %}
+                            {% if var == 0 %}
+                        '<option data-account_type="ACTIVITY" data-account_id="" value="" disabled="" >Empty</option>'+
+                            {% endif %}
+                            {% endif %}
+                        '</optgroup>'+
+                            {% endfor %}
+
+                        '</select>'+
+                        '</div>'+
+                        '</div>'+
+
+                        '<div class="form-group row">'+
+                        '<div class="offset-sm-2 col-sm-10">'+
+                        '<button type="submit" id="btn_service_update_service" class="btn btn-info float-right mr-2">Update</button>'+
+                        '<button type="submit" id="btn_service_cancel_service" class="btn btn-default float-right mr-2">Cancel</button>'+
+                        '</div>'+
+                        '</div>'+
+                        '</form>'
+                    );
+                    $(function () {
+                        //Date range as a button
+                        $('#service_daterange-btn').daterangepicker(
+                            {
+                                timePicker: true,
+                                ranges   : {
+                                    'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+                                },
+                                startDate: moment().subtract(29, 'days'),
+                                endDate  : moment()
+                            },
+                            function (start, end) {
+                                $('#reportrange').html(start.format('D-M-YYYY') + ' - ' + end.format('D-M-YYYY'));
+
+                                var starting_at  = start.format('D-M-YYYY')
+                                var ending_at = end.format('D-M-YYYY')
+
+                                $("#imput_service_start").val(starting_at)
+                                $("#imput_service_end").val(ending_at)
+
+                                $("#service_period-feedback").empty()
+                            }
+                        )
+                    })
+
+                })
+                .on('keyup', '#imput_service_cost' , function(e) {
+                    var value = jQuery(this).val();
+                    value = value.replace(/[^0-9]+/g, '');
+                    jQuery(this).val(value);
+
+                })
+
+
+
+                .on('click', '#btn_service_add_service' , function(e) {
+                    e.preventDefault();
+                    var $btn = $(this);
+
+                    var $form = $(this).closest(".service-form");
+                    var id = $form.find("#service_activity_daticash__account-listbox").val();
+                    var label = $form.find("#imput_service_name").val();
+                    var description = $form.find("#imput_service_description").val();
+                    var cost = $form.find("#imput_service_cost").val();
+                    var currency = "{{ _currency }}";
+                    var is_recurrent = "0";
+                    var recurrency_interval = "";
+                    var recurrency_interval_qty = "";
+                    var start_at = $form.find("#imput_service_start").val() ;
+                    var end_at = $form.find("#imput_service_end").val();
+                    var subscription_delay_at = $form.find("#imput_service_end").val();
+                    var priority = "0";
+
+                    console.log(id)
+                    console.log(label)
+                    console.log(description)
+                    console.log(cost)
+                    console.log(currency)
+                    console.log(is_recurrent)
+                    console.log(start_at)
+                    console.log(end_at)
+                    console.log(subscription_delay_at)
+                    console.log(priority)
+
+
+                    if (id !== "0" && id !== "" && label !== "" && description !== "" && cost !== "" && start_at !== "" && end_at !== "") {
+                        {#
+                            $(".service-form").append(
+                                '<input type="hidden" name="id" value="'+ id +'">'+
+                                '<input type="hidden" name="currency"  value="'+ currency +'">'+
+                                '<input type="hidden" name="is_recurrent" id="is_recurrent" value="'+ is_recurrent +'">'+
+                                '<input type="hidden" name="subscription_delay_at" id="subscription_delay_at" value="'+ subscription_delay_at +'">'+
+                                '<input type="hidden" name="priority" id="priority" value="'+ priority +'">'
+                            );
+
+                       //create new service
+                       var service_payment_create = '{{ path("service_payment_create", {'merchant_id':'merchant_id'}) }}';
+                            service_payment_create = service_payment_create.replace("merchant_id", id);
+
+                            $(".service-form").attr("action", service_payment_create)
+                            $(".service-form").attr("method", "POST")
+
+                            $("[name='add_service_form']")[0].submit();
+                            $("[name='add_service_form']").submit();
+                        #}
+
+                        var service_payment_create = '{{ path("service_payment_create", {'merchant_id':'merchant_id'}) }}';
+                        service_payment_create = service_payment_create.replace("merchant_id", id);
+                        //fetch("https://api.daticash.com/v1/api/payment-service/1212/new?label=label&description=description&cost=cost&currency=currency&is_recurrent=0&recurrency_interval=YEAR&start_at=31-01-2020&end_at=31-01-2020&subscription_delay_at=31-01-2020&priority=0", {"method": "POST", "headers":{"apikey":"sec_5ed93806dd2ca"}})//for test
+                        fetch(service_payment_create + "?label="+label+"&description="+description+"&cost="+cost+"&currency="+currency+"&is_recurrent="+is_recurrent+"&start_at="+start_at+"&end_at="+end_at+"&subscription_delay_at="+subscription_delay_at+"&priority="+priority, {"method": "POST", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                            .then(
+                                function(response) {
+                                    if (!response.ok) {
+                                        console.log("application response after confirm code submit = ");
+                                        console.log(response);
+                                    }else{
+                                        console.log("api response after confirm code submit = ");
+                                        console.log(response);
+
+                                        // Examine the text in the response
+                                        response.json().then(function(data) {
+                                            console.log("api response after submit  = " + data);
+                                            if(data.id){//activation reussi
+                                                $('.login-feedback').html(show_alert('success', "Succefully Create", 1));
+                                                scroll_to_(".login-feedback");
+                                                fetch("{{ path("user_refresh") }}/{{ _profile.id }}", {"method": "GET", "headers":{"apikey":"sec_5ed93806dd2ca"}})//user_refresh
+                                            }else{
+                                                console.log()
+                                                switch(data.code) {
+                                                    case 208:
+                                                        $('.login-feedback').append('<div class="alert alert-success alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp;another account user with the given mail or username already exists. Update Canceled.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        break;
+                                                    case 400:
+                                                        $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp;Something is wrong with the request, possibly missing or improperly formatted parameter.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        break;
+                                                    case 403:
+                                                        $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp;Used ApiKey owner does not have permission to access this resource.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        break;
+                                                    case 404:
+                                                        $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp;Merchant Account Not Found.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        break;
+                                                    case 409:
+                                                        $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp;A service already exists with the given label.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        break;
+                                                    case 412:
+                                                        $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp;the account given is not a valid merchant.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        break;
+                                                    default :
+                                                        $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp;Error Connection<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                }
+                                                scroll_to_(".login-feedback");
+                                            }
+                                        })
+                                    }
+                                    $btn.text("Save").prop("disabled", false);
+                                })
+                    }else{
+                        if (id == 0 || id == "" ) {
+                            $('#service_activity-feedback').html("<div class='text-danger'>Please select activity to link to the service</div>");
+                        }
+
+                        if (label == "") {
+                            $('#service_name-feedback').html("<div class='text-danger'>The field cannot be empty</div>");
+                        }
+
+                        if (description == "") {
+                            $('#service_description-feedback').html("<div class='text-danger'>The field cannot be empty</div>");
+                        }
+
+                        if (cost == "") {
+                            $('#service_cost-feedback').html("<div class='text-danger'>The field cannot be empty</div>");
+                        }
+
+                        if (start_at == "" || end_at == "") {
+                            $('#service_period-feedback').html("<div class='text-danger'>The field cannot be empty</div>");
+                        }
+
+                    }
+
+                })
+                .on('click', '#btn_service_delete_service' , function(e) {
+                    e.preventDefault();
+                    var $btn = $(this);
+
+                })
+                .on('click', '#participiant_add_btn' , function(e) {
+                    e.preventDefault();
+                    var $btn = $(this);
+                    alert('ok')
+
+                    $("#participiant_id").val("");
+                    $("#phone_number").val("");
+                    $("#lastname").val("");
+                    $("#firstname").val("");
+                    $("#email").val("");
+
+                    autoChoose_country_code("{{ app.user.countryCode }}");
+
+
+                    $(".participiant_action_div_btn").empty().append(
+                        '<button type="submit" class="daticash_btn btn-daticash float-right" id="daticash_register_if_not_exist_btn" name="daticash_register_if_not_exist_btn">Save</button>'
+                    )
+                    $("#dati_create_participiant_modal").modal("show")
+                })
+                .on('click', '.participiant_edit_btn' , function(e) {
+                    e.preventDefault();
+                    var $btn = $(this);
+
+                    $("#participiant_id").val($btn.attr("data-participiant_id"));
+                    $("#participiant_name").val($btn.attr("data-participiant_name"));
+                    $("#participiant_phone").val($btn.attr("data-participiant_phone"));
+
+                    $(".participiant_action_div_btn").empty().append(
+                        '<button type="submit" id="save_participiant_update_btn" class="btn btn-info float-right">Update</button>'
+                    )
+
+                })
+                .on('click', '#daticash_register_if_not_exist_btn', function(e) {
+                    e.preventDefault()
+                    var $btn = this;
+
+                    var $form = $(this).closest(".login-form");
+                    var phone_number = $("#phone_number").val().replace(/[^0-9]+/g, '');
+                    var country_code = $("#country_code").val();
+                    var lastname = $("#lastname").val();
+                    var firstname = $("#firstname").val();
+                    var email = $("#email").val();
+                    console.log("data_form = ------------------------")
+                    console.log(phone_number)
+                    console.log(country_code)
+                    console.log(lastname)
+                    console.log(firstname)
+                    console.log(email)
+
+                    if (daticash_current_phone_number.isValidNumber() && lastname !== "" && firstname !== "" ) {
+                        $btn.text("Processing...").prop("disabled", true);
+
+                        var updateProfilePath = '{{ path("profile_update", {'id':'user_id'}) }}';
+                        updateProfilePath = updateProfilePath.replace("user_id", user_id);
+
+                        fetch(updateProfilePath + "?firstname="+firstname+"&lastname="+lastname, {"method": "POST", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
+                            .then(
+                                function(response) {
+                                    if (!response.ok) {
+                                        console.log("application response after confirm code submit = ");
+                                        console.log(response);
+                                    }else{
+                                        console.log("api response after confirm code submit = ");
+                                        console.log(response);
+
+                                        // Examine the text in the response
+                                        response.json().then(function(data) {
+                                            console.log("api response after submit  = " + data);
+                                            if(data.id){//activation reussi
+                                                $('.login-feedback').html(show_alert('success', "Succefully update", 1));
+                                                scroll_to_(".login-feedback");
+                                                fetch("{{ path("user_refresh") }}/{{ _profile.id }}", {"method": "GET", "headers":{"apikey":"sec_5ed93806dd2ca"}})//user_refresh
+                                            }else{
+                                                console.log()
+                                                switch(data.code) {
+                                                    case 208:
+                                                        $('.login-feedback').append('<div class="alert alert-success alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspanother account user with the given mail or username already exists. Update Canceled.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        break;
+                                                    case 400:
+                                                        $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspSomething is wrong with the request, possibly missing or improperly formatted parameter.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        break;
+                                                    case 403:
+                                                        $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbspused ApiKey owner does not have permission to access this resource.<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                        break;
+                                                    default :
+                                                        $('.login-feedback').append('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>&nbsp Error Connection<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                                                }
+                                                scroll_to_(".login-feedback");
+                                            }
+                                        })
+                                    }
+                                    $btn.text("Save Changes").prop("disabled", false);
+                                })
+
+                    }else{
+
+                        if(lastname==""){
+                            $('#lastname-feedback').html("<div class='text-danger'>This field can\'t be empty</div>");
+                        }
+
+                        if(firstname==""){
+                            $('#firstname-feedback').html("<div class='text-danger'>This field can\'t be empty</div>");
+                        }
+
+                        if(!daticash_current_phone_number.isValidNumber()){
+                            $('#phone-feedback').html("<div class='text-danger'>Please enter a valid number below</div>");
+                        }
+
+                    }
+
+                })
+
+        });
+
+
+        function run_waitMe(el, num, effect){
+            text = '';
+            fontSize = '';
+            switch (num) {
+                case 1:
+                    maxSize = '';
+                    textPos = 'vertical';
+                    break;
+                case 2:
+                    text = '';
+                    maxSize = 30;
+                    textPos = 'vertical';
+                    break;
+                case 3:
+                    maxSize = 30;
+                    textPos = 'horizontal';
+                    fontSize = '18px';
+                    break;
+            }
+            el.waitMe({
+                effect: effect,
+                text: text,
+                bg: 'rgba(255,255,255,0.7)',
+                color: '#000',
+                maxSize: maxSize,
+                waitTime: -1,
+                source: 'img.svg',
+                textPos: textPos,
+                fontSize: fontSize,
+                onClose: function(el) {}
+            });
+        }
+
+        $(function () {
+            $("#participiant_list").DataTable({
+                "responsive": true,
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "order": [[0, "desc"]],
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+
+
+        $(function () {
+            //Date range as a button
+            $('#service_daterange-btn').daterangepicker(
+                {
+                    timePicker: true,
+                    ranges   : {
+                        'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+                    },
+                    startDate: moment().subtract(29, 'days'),
+                    endDate  : moment()
+                },
+                function (start, end) {
+                    $('#reportrange').html(start.format('D-M-YYYY') + ' - ' + end.format('D-M-YYYY'));
+
+                    var starting_at  = start.format('D-M-YYYY')
+                    var ending_at = end.format('D-M-YYYY')
+
+                    $("#imput_service_start").val(starting_at)
+                    $("#imput_service_end").val(ending_at)
+
+                    $("#service_period-feedback").empty()
+                }
+            )
+        })
+
+        --></script>
+
+{% endblock %}
+
+{% block topup_and_sweetalert %}
+
+
+{% endblock %}
