@@ -113,7 +113,8 @@
   bottom: 30px;
   left: 30px;
   right: 30px;
-  position: fixed; }
+  position: fixed;
+  z-index: 9999999; }
 
 .iti-mobile .iti__country-list {
   max-height: 100%;

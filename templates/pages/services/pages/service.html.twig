@@ -155,6 +155,11 @@
                                         <div id="error-text" class='text-danger'></div>
 
                                     </div>
+                                    <div id="error-history-div" style="display:none;">
+                                        <h6 class="text-danger">No history found! </h6>
+                                        <div id="error-text" class='text-danger'></div>
+
+                                    </div>
 
 
                                     <input type="submit" class="btnRegister"  value="login" id="login-button" />
@@ -254,6 +259,8 @@
     function showLoginLoader() {
         document.getElementById("loader").style.display = "block";
         document.getElementById("error-login-div").style.display = "none";
+        document.getElementById("error-history-div").style.display = "none";
+
         document.getElementById("login-button").style.display = "none";
         document.getElementById("success-login-div").style.display = "none";
         document.getElementById("telephone4").disabled = true;
@@ -293,8 +300,8 @@
     }
     function showLoginSuccess() {
         document.getElementById("success-login-div").style.display = "block";
-
         document.getElementById("error-login-div").style.display = "none";
+        document.getElementById("error-history-div").style.display = "none";
         document.getElementById("login-button").style.display = "none";
         document.getElementById("loader").style.display = "none";
         document.getElementById("telephone4").disabled = false;
@@ -333,6 +340,18 @@
         document.getElementById("success-login-div").style.display = "none";
         document.getElementById("loader").style.display = "none";
         document.getElementById("error-login-div").style.display = "block";
+        document.getElementById("error-history-div").style.display = "none";
+        document.getElementById("telephone4").disabled = false;
+        document.getElementById("password").disabled = false;
+        document.getElementById("login-button").style.display = "inline";
+    }
+
+    function showHistoryError() {
+        document.getElementById("success-login-div").style.display = "none";
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("error-login-div").style.display = "none";
+        document.getElementById("error-history-div").style.display = "block";
+
         document.getElementById("telephone4").disabled = false;
         document.getElementById("password").disabled = false;
         document.getElementById("login-button").style.display = "inline";
@@ -392,10 +411,7 @@
 
                             } else {
                                 notShowPage();
-                                showLoginError();
-
-                                theDiv = document.getElementById("error-text");
-                                theDiv.innerHTML = "Invalid password/Phone number";
+                                showHistoryError();
                                 return 0;
 
                             }

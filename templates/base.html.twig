@@ -319,7 +319,34 @@
             margin: 10px;
         }
 
+        /* loading image progress  ================================== */
+        #progress-wrp {
+            border: 1px solid #0099CC;
+            padding: 1px;
+            position: relative;
+            height: 30px;
+            border-radius: 3px;
+            margin: 10px;
+            text-align: left;
+            background: #fff;
+            box-shadow: inset 1px 3px 6px rgba(0, 0, 0, 0.12);
+        }
 
+        #progress-wrp .progress-bar {
+            height: 100%;
+            border-radius: 3px;
+            background-color: #f39ac7;
+            width: 0;
+            box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.11);
+        }
+
+        #progress-wrp .status {
+            top: 3px;
+            left: 50%;
+            position: absolute;
+            display: inline-block;
+            color: #000000;
+        }
     </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -2527,7 +2554,7 @@
                         service_payment_service_list = service_payment_service_list.replace("service_id", sid);
                     #}
                     var list_data = '';
-
+                    var stat_data = '';
                     //fetch(`${service_payment_service_list}`, {"method": "GET", "headers":{"apikey":"sec_5ed93806dd2ca"}})//check status url
                     fetch(`https://api.daticash.com/v1/api/payment-service/${sid}/view`, {"headers": {"apikey": "sec_5ed93806dd2ca"}, "method": "GET"})//for test
                         .then(response => {
@@ -2585,7 +2612,6 @@
                                     '<th>Phone Number</th>'+
                                     '<th>First Name</th>'+
                                     '<th>Last Name</th>'+
-                                    '<th>Middle Name</th>'+
                                     '<th></th>'+
                                     '</tr>'+
                                     '</thead>'+
@@ -2598,7 +2624,6 @@
                                         '<td>'+service.participants[p].phone+'</td>'+
                                         '<td>'+service.participants[p].firstname+'</td>'+
                                         '<td>'+service.participants[p].lastname+'</td>'+
-                                        '<td>'+service.participants[p].middle_name+'</td>'+
                                         '<td>'+
                                         '<a class="btn btn-defauult btn-sm participiant_edit_btn" href="#"'+
                                         'data-participiant_id = "'+service.participants[p].id+'" data-toggle="modal" data-target="#dati_create_participiant_modal"'+
@@ -2610,6 +2635,14 @@
                                         '<i class="fas fa-edit"></i>'+
                                         '&nbsp;Edit'+
                                         '</a>'+
+
+                                        '<a class="btn btn-defauult btn-sm entity_add_btn" href="#"'+
+                                        'data-participiant_id = "'+service.participants[p].id+'" data-toggle="modal" data-target="#dati_create_entity_modal"'+
+                                        '>'+
+                                        '<i class="fas fa-plus"></i>'+
+                                        '&nbsp;Add entity'+
+                                        '</a>'+
+
                                         '</td>'+
                                         '</tr>'
                                     );
@@ -2630,7 +2663,50 @@
                                     '</div>'
                                 );
 
+                                stat_data = stat_data + (
+                                    '<div class="card mt-2 mb-2" id="row_pricing_preview" style="padding: 24px 40px;">'+
+                                    '<div class="card-body p-1 m-0 font-weight-bold">'+
+                                    '<div class="float-left text-success">STATISTICS</div>'+
+                                    '<div class="float-right">'+
+                                    '<span id="span_mannuel_convert">'+
+                                    '<img id="mannuel_convert" src="{{ asset('assets/img/fleches.png') }}" style="position: relative;width: 20px; cursor: pointer;max-height: 50px;" title="Click here to actualise the pricing" />'+
+                                    '</span>'+
+                                    '</div>'+
+                                    '</div>'+
+                                    '<div class="card-body p-1 m-0 font-weight-bold">'+
+                                    '<div class="float-left">Total participiants</div>'+
+                                    '<div class="float-right"><span id="span_total_participiants">'+service.number_of_participants+'</span></div>'+
+                                    '</div>'+
+                                    '<div class="card-body p-1 m-0 font-weight-bold">'+
+                                    '<div class="float-left">Total contribution</div>'+
+                                    '<div class="float-right"><span id="span_amount_received_currency">{{ app.user.currency_code }}</span>&nbsp;<span id="span_total_countribution">0.0</span></div>'+
+                                    '</div>'+
+                                    '</div>'
+                                );
+
                                 $("#service_selected_service-content").append(list_data);
+                                $(".service_label").empty().append(service.label);
+                                $(".service_description").empty().append(service.description);
+                                $("#sevice_selected_statistic").empty().append(stat_data);
+
+
+
+                                if( service.logo !== null ){
+                                    $("#col_service_logo").empty().append(
+                                        '<a href="javascript:void(0);" class="thumbnail service-user-img">'+
+                                        '<img src="'+service.logo+'" class="img-responsive" style="max-height: 300px;">'+
+                                        '<span class="details text-center loading">Click here to update Logo </span>'+
+                                        '</a>'
+                                    );
+                                }else{
+                                    $("#col_service_logo").empty().append(
+                                        '<a href="javascript:void(0);" class="thumbnail service-user-img">'+
+                                        '<img src="http://placehold.it/500x300" class="img-responsive" style="max-height: 300px;">'+
+                                        '<span class="details text-center loading">Click here to Add Logo </span>'+
+                                        '</a>'
+                                    );
+                                }
+                                $('.profile input[type="file"]').attr("data-avatar_for_id", service.id)
 
 
                             }
@@ -2652,6 +2728,8 @@
                                     "responsive": true,
                                 });
                             });
+
+
 
                         })
                     }
@@ -3797,7 +3875,6 @@
     </div>
     <!-- /.modal -->
 
-
     <!-- /.modal of add participiant-->
     <div class="modal fade" id="dati_create_participiant_modal">
         <div class="modal-dialog modal-md">
@@ -3890,6 +3967,91 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
+
+    <!-- /.modal of add participiant-->
+    <div class="modal fade" id="dati_create_entity_modal">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header mb-2">
+                    <h4 class="modal-title">
+                        Add New Entity
+                    </h4>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 pl-5 pr-5">
+                            <div class="login-feedback"></div>
+                            <form method="post" class="form login-form" >
+                                <input type="hidden" class="form-control" id="service_id" name="service_id" value="">
+                                <input type="hidden" class="form-control" id="participiant_id" name="participiant_id" value="">
+
+                                <div id="auto_form">
+                                    {#
+    						<div class="input-group mb-3">
+    						  <label for="lastname" style="width: 100%; margin-bottom: .5rem;">
+    							<font style="vertical-align: inherit;">Last Name</font>
+    							<small id="lastname-feedback"></small>
+    						  </label>
+    						  <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name">
+    						  <div class="input-group-append">
+    							<div class="input-group-text">
+    							  <span class="fas fa-user"></span>
+    							</div>
+    						  </div>
+    						</div>
+
+    						<div class="input-group mb-3">
+    						  <label for="firstname" style="width: 100%; margin-bottom: .5rem;">
+    							<font style="vertical-align: inherit;">First Name&nbsp</font>
+    							<small id="firstname-feedback"></small>
+    						  </label>
+    						  <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name">
+    						  <div class="input-group-append">
+    							<div class="input-group-text">
+    							  <span class="fas fa-user"></span>
+    							</div>
+    						  </div>
+    						</div>
+
+    						<div class="input-group mb-3">
+    						  <label for="email" style="width: 100%; margin-bottom: .5rem;">
+    							<font style="vertical-align: inherit;">Email</font>
+    							<small id="email-feedback"></small>
+    						  </label>
+    						  <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+    						  <div class="input-group-append">
+    							<div class="input-group-text">
+    							  <span class="fas fa-envelope"></span>
+    							</div>
+    						  </div>
+    						</div>
+    						#}
+                                </div>
+
+                                <div id="re_captcha_container" class="text-center mb-2">
+                                    <div id="g-recaptcha"></div>
+                                </div>
+                                <hr>
+
+                                <div class="form-group_daticash_register_if_not_exist">
+                                    <div class="offset-sm-2 col-sm-10 entity_action_div_btn"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
 {% endif %}
 
 {% block topup_and_sweetalert %}

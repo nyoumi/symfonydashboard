@@ -402,6 +402,41 @@ class ServicePaymentController extends AbstractController
         return $response;
     }
 
+    public function logoUpdateAction(Request $request,$service_id)
+    {
+        $endpoint="payment-service/".$service_id."/logo-edit";
+        $headers=[
+            'Accept' => 'application/json',
+            "apikey"=> $this->apikey
+        ];
+        $data = $request->getContent();
+        $data = json_decode($data);
+        var_dump($data);
+
+        if (!is_object($data)) {
+            parse_str($request->getContent(), $output);
+            $data = (object)$output;
+        }
+        var_dump($data);
+
+        if ($this->emptyObj($data)) {
+            $data = $request->query->all();
+            $data = (object)$data;
+        }
+
+        var_dump($data);
+
+        $data = $request->getContent();
+        $request->query->get('name');
+
+
+        $params=(array)$data;
+        $response=$this->make_post_request($params,$headers,$endpoint,$params);
+        $response = $this->handle_response($response, false);
+        return $response;
+    }
+
+
     /**
      * @param array $parameters
      * @param array $header

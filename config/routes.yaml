@@ -260,6 +260,10 @@ service_payment_pay:
     path: /service_payments/pay/{service_id}
     controller: App\Controller\ServicePaymentController::payAction
     methods: POST
+service_payment_logo_update:
+    path: /service_payments/logo_update/{service_id}
+    controller: App\Controller\ServicePaymentController::logoUpdateAction
+    methods: POST
 service_payment_history:
     path: /service_payments_history
     controller: App\Controller\ServicePaymentController::payAction
