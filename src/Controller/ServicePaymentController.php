@@ -498,17 +498,6 @@ class ServicePaymentController extends AbstractController
 
 
 
-
-
-    private function createRandom($len)
-    {
-        $arr = str_split('152763736365372636373626209989092887267152635344710298736'); // get all the characters into an array
-        shuffle($arr); // randomize the array
-        $arr = array_slice($arr, 0, $len); // get the first six (random) characters out
-        $str = implode('', $arr);
-        return $str;
-    }
-
     public function createLocalAction($response, $transactionData,$service_id)
     {
         $entityManager = $this->getDoctrine()->getManager();
