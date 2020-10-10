@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b20ee31f-dade-4777-aad5-659a69035e5d" name="Default" comment="before bouba job start. end of afiliate accounts">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/ServicePaymentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ServicePaymentController.php" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -38,8 +37,8 @@
       <file leaf-file-name="ServicePaymentController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Controller/ServicePaymentController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="498" column="4" selection-start-line="498" selection-start-column="4" selection-end-line="498" selection-end-column="4" />
+            <state relative-caret-position="49">
+              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
               <folding>
                 <element signature="e#34#65#0#PHP" expanded="true" />
                 <element signature="e#2812#2852#0#PHP" expanded="true" />
@@ -608,12 +607,12 @@
       <workItem from="1601213217417" duration="39694000" />
       <workItem from="1601996723617" duration="1885000" />
       <workItem from="1602092880383" duration="243000" />
-      <workItem from="1602341878119" duration="1830000" />
+      <workItem from="1602341878119" duration="2180000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="966546000" />
+    <option name="totallyTimeSpent" value="966896000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1037,8 +1036,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/ServicePaymentController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="498" column="4" selection-start-line="498" selection-start-column="4" selection-end-line="498" selection-end-column="4" />
+        <state relative-caret-position="49">
+          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
           <folding>
             <element signature="e#34#65#0#PHP" expanded="true" />
             <element signature="e#2812#2852#0#PHP" expanded="true" />

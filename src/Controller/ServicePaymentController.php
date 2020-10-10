@@ -6,7 +6,6 @@ use App\Entity\DatiTransaction;
 use App\Entity\MyLogger;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,8 +17,6 @@ use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Component\Mime\Part\DataPart;
-use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 
 /**
  * Class ActivationController
@@ -428,8 +425,6 @@ class ServicePaymentController extends AbstractController
 
         $data = $request->getContent();
         $request->query->get('name');
-
-
         $params=(array)$data;
         $response=$this->make_post_request($params,$headers,$endpoint,$params);
         $response = $this->handle_response($response, false);
@@ -512,7 +507,6 @@ class ServicePaymentController extends AbstractController
 
         }
 
-
         $transaction->setId($response["id"]);
         $transaction->setStatus($response["status"]);
         if(isset($response["step_description"])) $transaction->setStepDescription($response["step_description"]);
@@ -531,9 +525,6 @@ class ServicePaymentController extends AbstractController
 
         // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
-        // $transaction = $this->serializer->deserialize($transaction, 'json');
-        //$transaction = $this->serializer->serialize($transaction, 'json');
-
         return $transaction;
 
     }
