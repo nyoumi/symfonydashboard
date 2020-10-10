@@ -200,11 +200,7 @@ class ServiceController extends AbstractController
                 "code"=>0
             ];
         }
-
-
-
     }
-
 
     public function make_post_request(array $parameters, array $header, $endpoint, $body)
     {
@@ -248,39 +244,5 @@ class ServiceController extends AbstractController
     }
 
 
-    private function handle_response($response, $resp)
-    {
-        if (isset($response) && is_int($response)) {
-            $res = [
-                "code" => (string)$response
-            ];
-        }
-        if (isset($response) && is_array($response)) {
-            $res = $response;
-        }
-        if (!isset($response)) {
-            $res = [
-                "code" => (string)0,
-                "message" => 'erreur interne au serveur'
-            ];
-        }
-        /*
-         * si la fonction demande un retour en array ou en reponse http
-         */
-        if (!($resp == "array")) {
-            return new Response(json_encode($res), Response::HTTP_CREATED, [
-                "Content-Type" => 'application/json'
-            ]);
-        }
-        return $res;
-    }
 
-    private function emptyObj( $obj ) {
-        foreach ( $obj AS $prop ) {
-            array($prop);
-            return FALSE;
-        }
-
-        return TRUE;
-    }
 }
