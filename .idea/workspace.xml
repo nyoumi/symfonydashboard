@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b20ee31f-dade-4777-aad5-659a69035e5d" name="Default" comment="before bouba job start. end of afiliate accounts">
-      <change beforePath="$PROJECT_DIR$/src/Controller/ServicePaymentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ServicePaymentController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ServiceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ServiceController.php" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,11 +34,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ServicePaymentController.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ServicePaymentController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Controller/ServicePaymentController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="49">
-              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+            <state relative-caret-position="100">
+              <caret line="22" column="26" lean-forward="true" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="26" />
               <folding>
                 <element signature="e#34#65#0#PHP" expanded="true" />
                 <element signature="e#2812#2852#0#PHP" expanded="true" />
@@ -48,11 +48,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ServiceController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ServiceController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Controller/ServiceController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1037">
-              <caret line="74" selection-start-line="74" selection-end-line="74" />
+            <state relative-caret-position="219">
+              <caret line="223" column="21" lean-forward="true" selection-start-line="223" selection-start-column="21" selection-end-line="223" selection-end-column="21" />
+              <folding>
+                <element signature="e#34#58#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -238,7 +241,6 @@
         <option value="$PROJECT_DIR$/src/Controller/DashboardController.php" />
         <option value="$PROJECT_DIR$/templates/pages/history.html.twig" />
         <option value="$PROJECT_DIR$/templates/pages/services/service_base.html.twig" />
-        <option value="$PROJECT_DIR$/src/Controller/ServiceController.php" />
         <option value="$PROJECT_DIR$/templates/pages/services/pages/service.html.twig" />
         <option value="$PROJECT_DIR$/config/routes.yaml" />
         <option value="$PROJECT_DIR$/templates/pages/service_manager.html.twig" />
@@ -246,6 +248,7 @@
         <option value="$PROJECT_DIR$/templates/body/navbar.html.twig" />
         <option value="$PROJECT_DIR$/templates/body/sidebar.html.twig" />
         <option value="$PROJECT_DIR$/src/Controller/ServicePaymentController.php" />
+        <option value="$PROJECT_DIR$/src/Controller/ServiceController.php" />
       </list>
     </option>
   </component>
@@ -607,12 +610,12 @@
       <workItem from="1601213217417" duration="39694000" />
       <workItem from="1601996723617" duration="1885000" />
       <workItem from="1602092880383" duration="243000" />
-      <workItem from="1602341878119" duration="2180000" />
+      <workItem from="1602341878119" duration="3199000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="966896000" />
+    <option name="totallyTimeSpent" value="967915000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -625,7 +628,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="0" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32838285" />
@@ -975,13 +977,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Controller/ServiceController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1037">
-          <caret line="74" selection-start-line="74" selection-end-line="74" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/routes.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4454">
@@ -1036,12 +1031,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/ServicePaymentController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="49">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+        <state relative-caret-position="100">
+          <caret line="22" column="26" lean-forward="true" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="26" />
           <folding>
             <element signature="e#34#65#0#PHP" expanded="true" />
             <element signature="e#2812#2852#0#PHP" expanded="true" />
             <element signature="e#4357#5198#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Controller/ServiceController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="223" column="21" lean-forward="true" selection-start-line="223" selection-start-column="21" selection-end-line="223" selection-end-column="21" />
+          <folding>
+            <element signature="e#34#58#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
