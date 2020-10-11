@@ -5,4 +5,5 @@ a symfony dashboard with authentication from an api (custom provider).
 - user provider contact the API the to get authentication object in JSON or "NOT FOUND" response
 - loginformauthenticator that overwrite authentication methods can verify if user can login
 - user objct have ROLES and user informations.
+- this repos can't be public it is not exploitatble
 - to test you can log in with user/pass
